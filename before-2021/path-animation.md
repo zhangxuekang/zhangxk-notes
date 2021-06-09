@@ -2,15 +2,15 @@
 
 # 一、从一次需求说起
 
-在做一个在线课件的项目，类似于 web 端在线的 ppt 制作工具。制作课件避免不了各种进入退出动画，ppt 有的，公司工具也必须有。各种淡入淡出，从上、下、左、右方向飞出飞入，css3 动画安排上！正在我写的不亦乐乎，觉得微软入场动画也不过如此的时候，产品经理来了。“ppt 有的动画咱们工具必须有，ppt 没有的动画，咱么也要有！我们要让老师自定义动画，制作课件的时候用鼠标画出路径，然后保存路径数据，播放的时候元素沿着路径飞进来。” <img alt="飞入曲线" src="https://zhangxuekang.com/src/blog/path-animation/fly-path.png" width="40%"> 在我意识到产品经理不是在开玩笑的时候，我断然拒绝了接需求。当产品经理带着老板又来提这个需求的时候，我感觉到事情没这么简单······
+在做一个在线课件的项目，类似于 web 端在线的 ppt 制作工具。制作课件避免不了各种进入退出动画，ppt 有的，公司工具也必须有。各种淡入淡出，从上、下、左、右方向飞出飞入，css3 动画安排上！正在我写的不亦乐乎，觉得微软入场动画也不过如此的时候，产品经理来了。“ppt 有的动画咱们工具必须有，ppt 没有的动画，咱么也要有！我们要让老师自定义动画，制作课件的时候用鼠标画出路径，然后保存路径数据，播放的时候元素沿着路径飞进来。” <img alt="飞入曲线" src="https://zhangxuekang.github.io/src/blog/path-animation/fly-path.png" width="40%"> 在我意识到产品经理不是在开玩笑的时候，我断然拒绝了接需求。当产品经理带着老板又来提这个需求的时候，我感觉到事情没这么简单······
 
 最终还是我妥协了，自认为我还是刚不过老板的。
 
-<img alt="学会妥协" src="https://zhangxuekang.com/src/blog/path-animation/tuoxie.jpg" width="30%"> 这个需求，将我初中的知识用的淋漓尽致（感谢初中老师）。
+<img alt="学会妥协" src="https://zhangxuekang.github.io/src/blog/path-animation/tuoxie.jpg" width="30%"> 这个需求，将我初中的知识用的淋漓尽致（感谢初中老师）。
 
 # 二、解决技术难题
 
-要记录鼠标轨迹，一定要用到鼠标的 mousemove 事件，mousemove 事件能获取一系列的鼠标位置点，就可以控制元素一个点一个点“蹦”过去。在我脑补了一个青蛙沿着一个一个黑点跳过去的画面后，我马上放弃了这个想法。 <img alt="青蛙" src="https://zhangxuekang.com/src/blog/path-animation/qingwa.jpg" width="50%"> 动画移动是平滑的，绝对不是离散的。开始搜“如何将一系列离散的位置点拟合成平滑的曲线？”移步博客[_记录鼠标轨迹, 生成 svg 路径_](https://zhangxuekang.com/2019/03/30/mouse-svg/)。
+要记录鼠标轨迹，一定要用到鼠标的 mousemove 事件，mousemove 事件能获取一系列的鼠标位置点，就可以控制元素一个点一个点“蹦”过去。在我脑补了一个青蛙沿着一个一个黑点跳过去的画面后，我马上放弃了这个想法。 <img alt="青蛙" src="https://zhangxuekang.github.io/src/blog/path-animation/qingwa.jpg" width="50%"> 动画移动是平滑的，绝对不是离散的。开始搜“如何将一系列离散的位置点拟合成平滑的曲线？”移步博客[_记录鼠标轨迹, 生成 svg 路径_](https://zhangxuekang.github.io/mouse-svg/)。
 
 路径数据有了，是三次贝塞尔曲线，剩下的就是构建 svg 路径，让元素动起来了。
 
@@ -48,11 +48,11 @@ function step() {
 }
 ```
 
-[看 demo](https://zhangxuekang.com/mouse-svg/index.html) <img alt="胜利" src="https://zhangxuekang.com/src/blog/path-animation/shengli.jpg" width="50%">
+[看 demo](https://zhangxuekang.github.io/mouse-svg/) <img alt="胜利" src="https://zhangxuekang.github.io/src/blog/path-animation/shengli.jpg" width="50%">
 
 # 又一次需求
 
-一个元素收起的动画，动点从不同的位置沿着不同的路径飞入同一个目标，就像这个样子。 <img alt="路径图" src="https://zhangxuekang.com/src/blog/path-animation/path.png" width="40%"> 有了上边的经验，实现起来就不慌了。 <img alt="不慌" src="https://zhangxuekang.com/src/blog/path-animation/buhuang.jpeg"> 沿着上边的思路，先确定 svg 路径，再确定时间（动效老师直接给出），完全没问题！
+一个元素收起的动画，动点从不同的位置沿着不同的路径飞入同一个目标，就像这个样子。 <img alt="路径图" src="https://zhangxuekang.github.io/src/blog/path-animation/path.png" width="40%"> 有了上边的经验，实现起来就不慌了。 <img alt="不慌" src="https://zhangxuekang.github.io/src/blog/path-animation/buhuang.jpeg"> 沿着上边的思路，先确定 svg 路径，再确定时间（动效老师直接给出），完全没问题！
 
 ## 确定路径
 
@@ -60,9 +60,9 @@ function step() {
 
 理想情况是根据某种规律，由起点和终点的坐标计算出控制点坐标，起点和终点前端可以自己获取。经过观察，元素的移动路径是有规律的，起点在终点左边的点移动曲线向左弯曲，起点在终点右边的曲线向右弯曲，起点和终点的 x 坐标绝对值越大，曲线弧度越大，根据这些规律，完全可以得出一个公式。同时动效老师妥协了一步，将三次贝塞尔曲线改成了二次贝塞尔曲线（只需要一个控制点）。
 
-由我提出控制点的计算公式，进过动效老师的确认，示意图如下。 <img alt="控制点示意图" src="https://zhangxuekang.com/src/blog/path-animation/jiexi.png" width="50%"> 接下来就是列公式求坐标了！ <img alt="控制点示意图1" src="https://zhangxuekang.com/src/blog/path-animation/f1.jpeg" width="50%"> 起始两点连线的中点坐标可以计算出来，还能计算出 L1 斜率，相差 90 度就是 L2 的斜率。那么，知道直线上一点坐标和直线的斜率，理论上可以计算出直线的解析方程，又知道在这个直线上一点计算另一个距离该点一定距离点的坐标······好麻烦！不会算 😂😂😂，要不要求助一下初中的数学老师 🤔？为了维护大学生的尊严，我又换了一种思路。
+由我提出控制点的计算公式，进过动效老师的确认，示意图如下。 <img alt="控制点示意图" src="https://zhangxuekang.github.io/src/blog/path-animation/jiexi.png" width="50%"> 接下来就是列公式求坐标了！ <img alt="控制点示意图1" src="https://zhangxuekang.github.io/src/blog/path-animation/f1.jpeg" width="50%"> 起始两点连线的中点坐标可以计算出来，还能计算出 L1 斜率，相差 90 度就是 L2 的斜率。那么，知道直线上一点坐标和直线的斜率，理论上可以计算出直线的解析方程，又知道在这个直线上一点计算另一个距离该点一定距离点的坐标······好麻烦！不会算 😂😂😂，要不要求助一下初中的数学老师 🤔？为了维护大学生的尊严，我又换了一种思路。
 
-<img alt="控制点示意图2" src="https://zhangxuekang.com/src/blog/path-animation/f2.jpeg" width="50%"> 大家都知道，三角形 1 和三角形 2 是相似三角形（不知道为什么的同学，主动去问初中数学老师），根据相似三角形理论写出代码：
+<img alt="控制点示意图2" src="https://zhangxuekang.github.io/src/blog/path-animation/f2.jpeg" width="50%"> 大家都知道，三角形 1 和三角形 2 是相似三角形（不知道为什么的同学，主动去问初中数学老师），根据相似三角形理论写出代码：
 
 ```js
 function getControl(from, to) {
@@ -102,7 +102,7 @@ pathEl.setAttribute('d', path);
 
 # 解决元素大小和角度变化的问题
 
-大小是时间的函数，动效老师给了起始的大小 0.4，中间的大小 1，最后的大小 0.3。将变化曲线标识在坐标轴上就是这样。 <img alt="时间-大小函数" src="https://zhangxuekang.com/src/blog/path-animation/f3.jpeg" width="50%"> 变化函数分为两段，每段线段都知道两个端点坐标，数学老师告诉我，这些条件可以求出函数表达式，两段就是两个式子，最后求出是
+大小是时间的函数，动效老师给了起始的大小 0.4，中间的大小 1，最后的大小 0.3。将变化曲线标识在坐标轴上就是这样。 <img alt="时间-大小函数" src="https://zhangxuekang.github.io/src/blog/path-animation/f3.jpeg" width="50%"> 变化函数分为两段，每段线段都知道两个端点坐标，数学老师告诉我，这些条件可以求出函数表达式，两段就是两个式子，最后求出是
 
 ```js
 if (t < 0.5) {
@@ -122,7 +122,7 @@ $e.style.transform = `translate(${curPosition.x}px, ${curPosition.y}px scale(${s
 
 剩下的就是旋转角度了，元素的长轴永远是沿着曲线的切线，也就是旋转角度和当时的切线斜率是一致的。如何求曲线的切线？
 
-<img alt="切线斜率" src="https://zhangxuekang.com/src/blog/path-animation/f4.jpeg"> 几何学上，曲线的**割线**无限短时，就是曲线的**切线**。这就将切线问题转化为割线问题，如果我们记录元素移动过程中相邻的两个位置点，根据这两个点求割线的斜率，就接近于真实的切线斜率。
+<img alt="切线斜率" src="https://zhangxuekang.github.io/src/blog/path-animation/f4.jpeg"> 几何学上，曲线的**割线**无限短时，就是曲线的**切线**。这就将切线问题转化为割线问题，如果我们记录元素移动过程中相邻的两个位置点，根据这两个点求割线的斜率，就接近于真实的切线斜率。
 
 ```js
 let lastPosition = { x: from.x, y: from.y }; // 记录上一个位置点

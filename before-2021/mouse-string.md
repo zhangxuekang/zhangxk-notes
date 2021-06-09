@@ -58,6 +58,6 @@ window.addEventListener('mousemove', (e) => {
 
 &emsp;&emsp;原理很简单, 也就是入门一周的水平, 但是设计好了会产生比较炫酷的效果.
 
-&emsp;&emsp;28 行 js 代码实现的一个小[demo](https://zhangxuekang.com/mouse-show/index.html).
+&emsp;&emsp;28 行 js 代码实现的一个小[demo](https://zhangxuekang.github.io/mouse-show/).
 
 &emsp;&emsp;[github 地址](https://github.com/zhangxuekang/mouse-show).

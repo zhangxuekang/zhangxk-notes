@@ -15,4 +15,4 @@
 
 width:50%,宽度是父元素宽度的 50%;height:0,内容高度设置为 0,使元素所占空间完全由 padding 决定;padding-bottom: 50%,元素的下部 padding 的宽度是父元素宽度的 50%,这个计算标准和元素的高度保持一致,所以就能实现一个正方型的区域.
 
-其实,虽然元素的内容区域高度是 0,只要 padding 有位置,内部还是可以正常放置子元素的. [在线 demo](https://zhangxuekang.com/src/blog/width-height/index.html)
+其实,虽然元素的内容区域高度是 0,只要 padding 有位置,内部还是可以正常放置子元素的. [在线 demo](https://zhangxuekang.github.io/src/blog/width-height/index.html)
