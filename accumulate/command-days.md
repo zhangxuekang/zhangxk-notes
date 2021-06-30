@@ -6,6 +6,8 @@
 
 ```shell
 git checkout -- <file>
+
+git checkout .
 ```
 
 ### 撤销 commit
@@ -29,6 +31,8 @@ git reset HEAD~1 --hard
 
 ```shell
 git reset HEAD <file>
+
+git reset .
 ```
 
 ### 2019-04-08
