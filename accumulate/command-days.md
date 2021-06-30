@@ -1,5 +1,36 @@
 # 每天一个命令行
 
+## 撤销修改
+
+### 撤销工作区的修改
+
+```shell
+git checkout -- <file>
+```
+
+### 撤销 commit
+
+**reset 不加路径**撤销 commit
+
+```shell
+# 撤销 commit, 回退到上一次 commit, 保留工作区的修改, 不保留暂存区的修改, 相当与回退到 add 前的状态
+git reset HEAD~1
+
+# 撤销 commit, 回退到上一次 commit, 保留工作区和暂存区的修改
+git reset HEAD~1 --soft
+
+# 撤销 commit, 回退到上一次 commit, 不保留工作区和暂存区的修改
+git reset HEAD~1 --hard
+```
+
+### 撤销 add .
+
+**reset 加路径**将跳过撤销 commit
+
+```shell
+git reset HEAD <file>
+```
+
 ### 2019-04-08
 
 ```shell
