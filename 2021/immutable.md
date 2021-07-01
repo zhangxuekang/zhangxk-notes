@@ -1,11 +1,11 @@
-- [不可变数据结构简介](#不可变数据结构简介)
+- [不可变数据简介](#不可变数据简介)
 - [优势](#优势)
 - [弊端](#弊端)
 - [简单 API](#简单-api)
 - [实现](#实现)
 - [官方使用实践](#官方使用实践)
 
-### 不可变数据结构简介
+### 不可变数据简介
 
 > Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logic. Persistent data presents a mutative API which does not update the data in-place, but instead always yields new updated data. --- immutable.js 官网
 
