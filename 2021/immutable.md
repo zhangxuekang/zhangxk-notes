@@ -59,6 +59,6 @@ class MyEditor extends React.Component {
 }
 ```
 
-> - https://immutable-js.com/
-> - https://zhuanlan.zhihu.com/p/24951621
-> - https://zhangxuekang.github.io/rich-text/
+> - [https://immutable-js.com/](https://immutable-js.com/)
+> - [https://zhuanlan.zhihu.com/p/24951621](https://zhuanlan.zhihu.com/p/24951621)
+> - [https://zhangxuekang.github.io/rich-text/](https://zhangxuekang.github.io/rich-text/)
