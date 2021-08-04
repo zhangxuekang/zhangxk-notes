@@ -5,3 +5,4 @@
 - [NestJS](nestjs.md)
 - [不可变数据 Immutable Data](immutable.md)
 - [霍夫曼编码(Huffman coding)](Huffman-coding.md)
+- [运算符优先级](operator-precedence.md)
