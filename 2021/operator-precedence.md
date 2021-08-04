@@ -69,3 +69,6 @@ a = b = 5; // 相当于 a = (b = 5);
 | 3      | 赋值                                                              | 从右到左 | … = … … += … … -= … … \*_= … … _= … … /= … … %= … … <<= … … >>= … … >>>= … … &= … … ^= … … \| = … … &&= … … \| \| = … … ??= … |
 | 2      | yield yield\*                                                     | 从右到左 | yield … yield\* …                                                                                                             |
 | 1      | 逗号 / 序列                                                       | 从左到右 | … , …                                                                                                                         |
+
+
+> <https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence>
