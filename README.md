@@ -4,5 +4,6 @@
 
 ## [久远的笔记](before-2021/a-summary.md)
 
+## [Effective TypeScript 读书笔记](effective-typescript/a-summary.md)
 
 ## [demo](demo/a-summary.md)
