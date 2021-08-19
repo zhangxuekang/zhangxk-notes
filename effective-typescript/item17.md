@@ -80,7 +80,7 @@ function foo(a: readonly number[]) {
   // Argument of type 'readonly number[]' is not assignable to parameter of type 'number'.
 }
 
-function bar(b: number) {}
+function bar(b: number[]) {}
 
 foo([1, 2, 3]);
 ```
