@@ -36,11 +36,11 @@ git checkout .
 **reset 不加路径**撤销 commit
 
 ```shell
-# 撤销 commit, 回退到上一次 commit, 保留工作区的修改, 不保留暂存区的修改, 相当与回退到 add 前的状态
-git reset HEAD~1
-
 # 撤销 commit, 回退到上一次 commit, 保留工作区和暂存区的修改
 git reset HEAD~1 --soft
+
+# 撤销 commit, 回退到上一次 commit, 保留工作区的修改, 不保留暂存区的修改, 相当与回退到 add 前的状态
+git reset HEAD~1
 
 # 撤销 commit, 回退到上一次 commit, 不保留工作区和暂存区的修改
 git reset HEAD~1 --hard
