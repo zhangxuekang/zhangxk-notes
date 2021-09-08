@@ -70,3 +70,22 @@ function isValidBST(root) {
 function addComma(str: string) {
   return str.replace(/(\d)(?=(?:\d{3})+$)/g, "$1,");
 }
+
+/* 判断是不是对称二叉树 */
+function isSymmetric(root) {
+  function check(left, right) {
+    if (!left && !right) {
+      return true;
+    }
+    if (!left || !right) {
+      return false;
+    }
+    return (
+      left.value === right.value &&
+      check(left.left, right.right) &&
+      check(left.right, right.left)
+    );
+  }
+
+  return check(root, root);
+}
