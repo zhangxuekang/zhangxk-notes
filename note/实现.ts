@@ -133,3 +133,39 @@ MyPromise.prototype.then = function (resolveCall, rejectCall) {
     rejectCall(this.value);
   }
 };
+
+/* Promise.all */
+function promiseAll(promises: Promise<any>[]) {
+  return new Promise((resolve, reject) => {
+    if (!Array.isArray(promises)) {
+      reject(new TypeError("参数错误"));
+    }
+    const len = promises.length;
+    const result = new Array(len);
+    let n = 0;
+    promises.forEach((promise, i) => {
+      Promise.resolve(promise)
+        .then((v) => {
+          result[i] = v;
+          if (++n === len) {
+            resolve(result);
+          }
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
+  });
+}
+
+/* flag */
+function myFlag(arr: any[], n?: number) {
+  n = n === undefined ? 1 : n;
+  return arr.reduce((acc, cur) => {
+    if (Array.isArray(cur) && n > 1) {
+      acc.concat(myFlag(cur, n - 1));
+    } else {
+      return acc.concat(cur);
+    }
+  }, []);
+}
