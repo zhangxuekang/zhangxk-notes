@@ -110,3 +110,41 @@ function fullPermutation(str: string) {
     }
   }
 }
+
+/* 合并有序链表 */
+function mergeList(l1, l2) {
+  if (l1 === null) {
+    return l2;
+  } else if (l2 === null) {
+    return l1;
+  } else if (l1.value > l2.value) {
+    l2.next = mergeList(l1, l2.next);
+    return l2;
+  } else {
+    l1.next = mergeList(l1.next, l2);
+  }
+}
+
+/* 反转链表 */
+function reverseList(head) {
+  if (head === null || head.next === null) {
+    return head;
+  }
+  const newHead = reverseList(head.next);
+  head.next.next = head;
+  head.next = null;
+
+  return newHead;
+}
+
+/* 最大的连续子序列 */
+function maxSubArray(nums: number[]) {
+  let pre = 0;
+  let maxAns = nums[0];
+  nums.forEach((n) => {
+    pre = Math.max(pre + n, n);
+    maxAns = Math.max(maxAns, pre);
+  });
+
+  return maxAns;
+}
