@@ -1,5 +1,5 @@
 /* 尝试获取数据,失败后重试 */
-function myPromise(getData, time, delay) {
+function tryPromise(getData, time, delay) {
   return new Promise((resolve, reject) => {
     function fn() {
       getData()
@@ -43,27 +43,3 @@ function debounce(fn, wait) {
     }, wait);
   };
 }
-
-/* call */
-(Function.prototype as any).myCall = function (context, ...args) {
-  if (typeof this !== "function") {
-    throw new TypeError("Error");
-  }
-  context = context || window;
-  context._fn_ = this;
-  const result = context._fn_(...args);
-  delete context._fn_;
-  return result;
-};
-
-/* apply */
-(Function.prototype as any).myApply = function (context, args) {
-  if (typeof this !== "function") {
-    throw new TypeError("Error");
-  }
-  context = context || window;
-  context._fn_ = this;
-  const result = context._fn_(...args);
-  delete context._fn_;
-  return result;
-};

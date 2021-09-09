@@ -27,3 +27,109 @@ function myNew2(constructor, ...args) {
   const result = constructor.apply(obj, args);
   return result instanceof Object ? result : obj;
 }
+
+/* call */
+(Function.prototype as any).myCall = function (context, ...args) {
+  if (typeof this !== "function") {
+    throw new TypeError("Error");
+  }
+  context = context || window;
+  context._fn_ = this;
+  const result = context._fn_(...args);
+  delete context._fn_;
+  return result;
+};
+
+/* apply */
+(Function.prototype as any).myApply = function (context, args) {
+  if (typeof this !== "function") {
+    throw new TypeError("Error");
+  }
+  context = context || window;
+  context._fn_ = this;
+  const result = context._fn_(...args);
+  delete context._fn_;
+  return result;
+};
+
+/* bind */
+(Function.prototype as any).myBind = function (context, ...args) {
+  if (typeof this !== "function") {
+    throw new TypeError("Error");
+  }
+  const _this = this;
+  // 返回一个函数
+  return function f() {
+    // 用 new 调用
+    if (this instanceof f) {
+      return new _this(...args, ...arguments);
+    }
+    return _this.apply(context, args.concat(...arguments));
+  };
+};
+
+/* promise */
+
+// 三个常量用来表示三种状态
+const PENDING = "pending";
+const REJECT = "reject";
+const RESOLVE = "resolve";
+
+function MyPromise(fn) {
+  const that = this;
+  // 回调接收的值
+  this.value = undefined;
+  // 标记状态
+  this.status = PENDING;
+  // 回调列表
+  this.rejectCallBacks = [];
+  this.resolveCallBacks = [];
+
+  function resolve(value) {
+    if (that.status === PENDING) {
+      that.status = RESOLVE;
+      that.value = value;
+      setTimeout(() => {
+        that.resolveCallBacks.forEach((cb) => cb(that.value));
+      }, 0);
+    }
+  }
+
+  function reject(value) {
+    if (that.status === PENDING) {
+      that.status = REJECT;
+      that.value = value;
+      setTimeout(() => {
+        that.rejectCallBacks.forEach((cb) => cb(that.value));
+      }, 0);
+    }
+  }
+
+  try {
+    fn(resolve, reject);
+  } catch (error) {
+    reject(error);
+  }
+}
+
+MyPromise.prototype.then = function (resolveCall, rejectCall) {
+  // 参数校验,因为参数不是必填的
+  resolveCall = typeof resolveCall === "function" ? resolveCall : (v) => v;
+  rejectCall =
+    typeof rejectCall === "function"
+      ? resolveCall
+      : (e) => {
+          throw e;
+        };
+
+  if (this.status === PENDING) {
+    this.resolveCallBacks.push(resolveCall);
+    this.rejectCallBacks.push(rejectCall);
+  }
+  if (this.status === RESOLVE) {
+    rejectCall(this.value);
+  }
+  if (this.status === RESOLVE) {
+    rejectCall(this.value);
+  }
+};
