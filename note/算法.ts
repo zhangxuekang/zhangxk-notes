@@ -89,3 +89,24 @@ function isSymmetric(root) {
 
   return check(root, root);
 }
+
+/* 全排列 */
+function fullPermutation(str: string) {
+  const result = [];
+  const len = str.length;
+  if (len === 0) {
+    return [];
+  } else if (len === 1) {
+    return [str];
+  } else {
+    for (let i = 0; i < len; i++) {
+      const target = str[i];
+      const rest = str.substring(0, i) + str.substring(i + 1, len);
+      const restPermutation = fullPermutation(rest);
+      restPermutation.forEach((v) => {
+        result.push(v + target);
+      });
+      return result;
+    }
+  }
+}

@@ -17,27 +17,6 @@
     }
   }
 }
-// 字符串全排列
-{
-  function fullPermutation(str) {
-    let result = [];
-    if (str.length === 0) {
-      return [];
-    } else if (str.length === 1) {
-      return [str];
-    } else {
-      for (let i = 0; i < str.length; i++) {
-        let target = str[i]; // 循环字符串,取出每一个值
-        let rest = str.slice(0, i) + str.slice(i + 1, str.length); // 剩下的字符串
-        const full = fullPermutation(rest); // 将剩下的字符串进行全排列
-        full.forEach((v) => {
-          result.push(target + v); // 将本次取出的字符与剩下的字符串全排列的结果进行拼接
-        });
-      }
-    }
-    return result;
-  }
-}
 // 数字变化函数
 {
   function countUp(options, spitOut) {
