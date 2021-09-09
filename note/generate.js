@@ -11,6 +11,7 @@ try {
 } catch (error) {}
 const path = "note/code/";
 const path_g = "note/code-g/";
+const link_g = "code-g/";
 
 const fileList = fs.readdirSync(path);
 fileList.forEach((name, i) => {
@@ -24,7 +25,7 @@ fileList.forEach((name, i) => {
   } catch (error) {}
   fs.writeFileSync(name_p, content);
   log("create: " + name_p);
-  const linkName = "- [" + fileNmae + "](" + name_p + ")\n";
+  const linkName = "- [" + fileNmae + "](" + link_g + ")\n";
   fs.appendFileSync(path_summary, linkName);
   if (i === fileList.length - 1) {
     console.log("");
