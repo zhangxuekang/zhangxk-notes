@@ -1,3 +1,4 @@
+console.log("\n----------------\n");
 var fs = require("fs");
 
 //要遍历的文件夹所在的路径
@@ -38,3 +39,5 @@ fileList.forEach((name) => {
     });
   });
 });
+
+console.log("\n----------------\n");
