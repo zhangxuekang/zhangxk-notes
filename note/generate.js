@@ -13,36 +13,20 @@ const path = "note/code/";
 const path_g = "note/code-g/";
 
 const fileList = fs.readdirSync(path);
-let n = 0;
+fileList.forEach((name, i) => {
+  const data = fs.readFileSync(path + name, "utf8");
 
-fileList.forEach((name) => {
-  fs.readFile(path + name, "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    const content = "```ts\n" + data + "\n```";
-    const fileNmae = name.replace(/\.ts$/, "");
-    const name_p = path_g + fileNmae + ".md";
-    try {
-      fs.unlinkSync(name_p);
-    } catch (error) {}
-    fs.writeFile(name_p, content, (err) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      log("create: " + name_p);
-      const linkName = "- [" + fileNmae + "](" + name_p + ")\n";
-      fs.appendFile(path_summary, linkName, (err) => {
-        if (++n >= fileList.length) {
-          console.log("");
-        }
-        if (err) {
-          console.error(err);
-          return;
-        }
-      });
-    });
-  });
+  const content = "```ts\n" + data + "\n```";
+  const fileNmae = name.replace(/\.ts$/, "");
+  const name_p = path_g + fileNmae + ".md";
+  try {
+    fs.unlinkSync(name_p);
+  } catch (error) {}
+  fs.writeFileSync(name_p, content);
+  log("create: " + name_p);
+  const linkName = "- [" + fileNmae + "](" + name_p + ")\n";
+  fs.appendFileSync(path_summary, linkName);
+  if (i === fileList.length - 1) {
+    console.log("");
+  }
 });
