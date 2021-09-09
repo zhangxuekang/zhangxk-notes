@@ -1,19 +1,40 @@
-var path = require("path");
 var fs = require("fs");
 
-var pathName = "./code";
-fs.readdir(pathName, function (_, files) {
-  var dirs = [];
-  (function iterator(i) {
-    if (i == files.length) {
-      console.log(dirs);
+//要遍历的文件夹所在的路径
+const path_summary = "note/a-summary.md";
+try {
+  fs.writeFileSync(path_summary, "# 学习笔记\n\n");
+} catch (error) {}
+const path = "note/code/";
+const path_g = "note/code-g/";
+
+const fileList = fs.readdirSync(path);
+
+fileList.forEach((name) => {
+  fs.readFile(path + name, "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
       return;
     }
-    fs.stat(path.join(pathName, files[i]), function (err, data) {
-      if (data.isFile()) {
-        dirs.push(files[i]);
+    const content = "```ts\n" + data + "\n```";
+    const fileNmae = name.replace(/\.ts$/, "");
+    const name_p = path_g + fileNmae + ".md";
+    try {
+      fs.unlinkSync(name_p);
+    } catch (error) {}
+    fs.writeFile(name_p, content, (err) => {
+      if (err) {
+        console.error(err);
+        return;
       }
-      iterator(i + 1);
+      console.log("create: " + name_p);
+      const linkName = "- [" + fileNmae + "](" + name_p + ")\n";
+      fs.appendFile(path_summary, linkName, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
     });
-  })(0);
+  });
 });
