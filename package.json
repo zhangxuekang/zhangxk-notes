@@ -1,0 +1,23 @@
+{
+  "name": "zhangxk-notes",
+  "version": "1.0.0",
+  "description": "zhangxk 笔记本",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "node "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhangxuekang/zhangxk-notes.git"
+  },
+  "author": "zhangxk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhangxuekang/zhangxk-notes/issues"
+  },
+  "homepage": "https://github.com/zhangxuekang/zhangxk-notes#readme",
+  "dependencies": {
+    "husky": "^7.0.2"
+  }
+}
