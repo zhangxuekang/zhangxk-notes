@@ -20,12 +20,13 @@ fileList.forEach((name, i) => {
   const content = "```ts\n" + data + "\n```";
   const fileNmae = name.replace(/\.ts$/, "");
   const name_p = path_g + fileNmae + ".md";
+  const linkName_p = link_g + fileNmae + ".md";
   try {
     fs.unlinkSync(name_p);
   } catch (error) {}
   fs.writeFileSync(name_p, content);
   log("create: " + name_p);
-  const linkName = "- [" + fileNmae + "](" + link_g + ")\n";
+  const linkName = "- [" + fileNmae + "](" + linkName_p + ")\n";
   fs.appendFileSync(path_summary, linkName);
   if (i === fileList.length - 1) {
     console.log("");
