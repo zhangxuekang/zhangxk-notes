@@ -1,5 +1,8 @@
-console.log("\n----------------\n");
-var fs = require("fs");
+const fs = require("fs");
+const chalk = require("chalk");
+const log = (content) => {
+  console.log(chalk.green(content));
+};
 
 //要遍历的文件夹所在的路径
 const path_summary = "note/a-summary.md";
@@ -10,6 +13,7 @@ const path = "note/code/";
 const path_g = "note/code-g/";
 
 const fileList = fs.readdirSync(path);
+let n = 0;
 
 fileList.forEach((name) => {
   fs.readFile(path + name, "utf8", (err, data) => {
@@ -28,9 +32,12 @@ fileList.forEach((name) => {
         console.error(err);
         return;
       }
-      console.log("create: " + name_p);
+      log("create: " + name_p);
       const linkName = "- [" + fileNmae + "](" + name_p + ")\n";
       fs.appendFile(path_summary, linkName, (err) => {
+        if (++n >= fileList.length) {
+          console.log("");
+        }
         if (err) {
           console.error(err);
           return;
@@ -39,5 +46,3 @@ fileList.forEach((name) => {
     });
   });
 });
-
-console.log("\n----------------\n");

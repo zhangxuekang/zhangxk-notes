@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/zhangxuekang/zhangxk-notes#readme",
   "dependencies": {
+    "chalk": "^4.1.2",
     "husky": "^7.0.2"
   }
 }
