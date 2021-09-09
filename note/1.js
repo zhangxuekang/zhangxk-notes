@@ -68,41 +68,6 @@
     }
   };
 }
-// 自己实现call
-{
-  Function.prototype.myCall = function (context) {
-    if (typeof this !== "function") {
-      throw new TypeError("Error");
-    }
-    context = context || window;
-    // 参数是一个对象, 将需要调用的函数赋给这个对象的一个属性去调用
-    context._fn_ = this;
-    const args = [...arguments].slice(1);
-    const result = context._fn_(...args);
-    // 调用完后删除影响
-    delete context._fn_;
-    return result;
-  };
-}
-// 自己实现apply
-{
-  Function.prototype.myApply = function (context) {
-    if (typeof this !== "function") {
-      throw new TypeError("Error");
-    }
-    context = context || window;
-    context.fn = this;
-    let result;
-    // 处理参数和 call 有区别
-    if (arguments[1]) {
-      result = context.fn(...arguments[1]);
-    } else {
-      result = context.fn();
-    }
-    delete context.fn;
-    return result;
-  };
-}
 // 自己实现bind
 {
   Function.prototype.myBind = function (context) {
@@ -118,44 +83,6 @@
         return new _this(...args, ...arguments);
       }
       return _this.apply(context, args.concat(...arguments));
-    };
-  };
-}
-// 节流和防抖
-{
-  // 节流
-  const throttle = (func, wait = 50) => {
-    // 上一次执行该函数的时间
-    let lastTime = 0;
-    return function (...args) {
-      // 当前时间
-      let now = +new Date();
-      // 将当前时间和上一次执行函数时间对比
-      // 如果差值大于设置的等待时间就执行函数
-      if (now - lastTime > wait) {
-        lastTime = now;
-        func.apply(this, args);
-      }
-    };
-  };
-  setInterval(
-    throttle(() => {
-      console.log(1);
-    }, 500),
-    1
-  );
-  // 防抖
-  const debounce = (func, wait = 50) => {
-    // 缓存一个定时器引用
-    let timer = null;
-    // 这里返回的函数是每次用户实际调用的防抖函数
-    // 如果已经设定过定时器了就清空上一次的定时器
-    // 开始一个新的定时器，延迟执行用户传入的方法
-    return function (...args) {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        func.apply(this, args);
-      }, wait);
     };
   };
 }
