@@ -43,3 +43,30 @@ function debounce(fn, wait) {
     }, wait);
   };
 }
+
+/* 模板渲染函数 */
+const tpl = `
+<div>
+  {data.a}
+  <span>{data.a}</span>
+  <span>{data.b.c}</span>
+  <span>{data.b.d}</span>
+</div>`;
+const data: any = {
+  a: "aaa",
+  b: { c: "ccc", d: "ddd" },
+};
+
+function render(tpl: string, data: any) {
+  return tpl.replace(/\{.*?\}/g, (substr) => {
+    substr = substr.replace(/\{|\}/g, "");
+    const list = substr.split(".").map((v) => v.trim());
+    let v = data;
+    list.forEach((p, i) => {
+      if (i > 0) {
+        v = v[p];
+      }
+    });
+    return v;
+  });
+}
