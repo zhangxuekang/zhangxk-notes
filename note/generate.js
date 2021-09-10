@@ -37,10 +37,6 @@ function generateTitles(content, type = "ts") {
   /** 尝试获取数据,失败后重试 **/
   const reg = /(\/\*\*\s.*?\s\*\*\/)((?:.|\n)*?)(?=\/\*\*\s.*?\s\*\*\/|$)/g;
   return content.replace(reg, (match, p1, p2) => {
-    // console.log(p1, "1---40--mark2021");
-    // console.log(p2, "2---40--mark2021");
-    // console.log(p3, "3---40--mark2021");
-    console.log(match, "---43--mark2021");
     const title = "## " + p1.replace(/(\/\*\*\s)|(\s\*\*\/)/g, "") + "\n";
     return title + "\n```" + type + p2 + "```\n";
   });
