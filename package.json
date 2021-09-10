@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "node ./note/generate.js && git add ."
+    "generate": "node ./generate-note.js && git add ."
   },
   "repository": {
     "type": "git",

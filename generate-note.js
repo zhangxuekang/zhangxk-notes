@@ -4,14 +4,16 @@ const log = (content) => {
   console.log(chalk.green(content));
 };
 
-//要遍历的文件夹所在的路径
-const path_summary = "note/code-g/a-summary.md";
+// 新建目录文件
+const path_summary = "src/note/code-g/a-summary.md";
 try {
   fs.writeFileSync(path_summary, "# CODE\n\n");
 } catch (error) {}
-const path = "note/code/";
-const path_g = "note/code-g/";
 
+const path = "src/note/code/";
+const path_g = "src/note/code-g/";
+
+//要遍历的文件夹所在的路径
 const fileList = fs.readdirSync(path);
 fileList.forEach((name, i) => {
   // 读取内容

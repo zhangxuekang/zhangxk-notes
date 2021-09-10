@@ -1,5 +1,6 @@
-# 久远的笔记
+# 2021 年之前
 
+- [每天一个命令行](command-days.md)
 - [当你在 javascript 中用"=="的时候, 你在比较什么?](coercion.md)
 - [思考如何设计好维护的前端组件](component-design.md)
 - [使用 draft.js 构建富文本编辑器](draft-rich-text.md)
