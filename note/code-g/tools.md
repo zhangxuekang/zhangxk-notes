@@ -1,5 +1,4 @@
 ```ts
-
 function tryPromise(getData, time, delay) {
   return new Promise((resolve, reject) => {
     function fn() {
@@ -20,10 +19,8 @@ function tryPromise(getData, time, delay) {
   });
 }
 
-
 ```
 ```ts
-
 function throttle(fn, wait) {
   let lastTime = 0;
   return function (...args) {
@@ -35,10 +32,8 @@ function throttle(fn, wait) {
   };
 }
 
-
 ```
 ```ts
-
 function debounce(fn, wait) {
   let timer = null;
   return function (...args) {
@@ -50,7 +45,6 @@ function debounce(fn, wait) {
     }, wait);
   };
 }
-
 
 ```
 /** 模板渲染函数 **/
