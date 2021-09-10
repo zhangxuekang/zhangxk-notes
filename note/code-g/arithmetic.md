@@ -1,4 +1,5 @@
-/** 快排序 **/
+```ts
+
 function quickSort(arr: any[]) {
   const len = arr.length;
   if (len <= 1) {
@@ -40,7 +41,8 @@ function binaryTreePaths(root) {
   return paths;
 }
 
-/** 二叉树的深度 **/
+
+```
 function maxDepth(root) {
   if (!root) {
     return 0;
@@ -49,7 +51,8 @@ function maxDepth(root) {
   }
 }
 
-/** 判断二叉搜索树 **/
+```ts
+
 function isValidBST(root) {
   return helper(root, -Infinity, Infinity);
 
@@ -66,12 +69,14 @@ function isValidBST(root) {
   }
 }
 
-/** 给数字字符串加逗号 **/
+
+```
 function addComma(str: string) {
   return str.replace(/(\d)(?=(?:\d{3})+$)/g, "$1,");
 }
 
-/** 判断是不是对称二叉树 **/
+```ts
+
 function isSymmetric(root) {
   function check(left, right) {
     if (!left && !right) {
@@ -90,7 +95,8 @@ function isSymmetric(root) {
   return check(root, root);
 }
 
-/** 全排列 **/
+
+```
 function fullPermutation(str: string) {
   const result = [];
   const len = str.length;
@@ -111,7 +117,8 @@ function fullPermutation(str: string) {
   }
 }
 
-/** 合并有序链表 **/
+```ts
+
 function mergeList(l1, l2) {
   if (l1 === null) {
     return l2;
@@ -125,7 +132,8 @@ function mergeList(l1, l2) {
   }
 }
 
-/** 反转链表 **/
+
+```
 function reverseList(head) {
   if (head === null || head.next === null) {
     return head;

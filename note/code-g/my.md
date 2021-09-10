@@ -1,4 +1,5 @@
-/** instanceof **/
+```ts
+
 function myInstanceof(left, right) {
   const prototype = right.prototype;
   left = left.__proto__;
@@ -9,7 +10,8 @@ function myInstanceof(left, right) {
   }
 }
 
-/** new **/
+
+```
 
 /*
   创建一个空的简单JavaScript对象（即{}）；
@@ -29,7 +31,8 @@ function myNew2(constructor, ...args) {
   return result instanceof Object ? result : obj;
 }
 
-/** call **/
+```ts
+
 (Function.prototype as any).myCall = function (context, ...args) {
   if (typeof this !== "function") {
     throw new TypeError("Error");
@@ -41,7 +44,8 @@ function myNew2(constructor, ...args) {
   return result;
 };
 
-/** apply **/
+
+```
 (Function.prototype as any).myApply = function (context, args) {
   if (typeof this !== "function") {
     throw new TypeError("Error");
@@ -53,7 +57,8 @@ function myNew2(constructor, ...args) {
   return result;
 };
 
-/** bind **/
+```ts
+
 (Function.prototype as any).myBind = function (context, ...args) {
   if (typeof this !== "function") {
     throw new TypeError("Error");
@@ -69,7 +74,8 @@ function myNew2(constructor, ...args) {
   };
 };
 
-/** promise **/
+
+```
 
 // 三个常量用来表示三种状态
 const PENDING = "pending";
@@ -135,7 +141,8 @@ MyPromise.prototype.then = function (resolveCall, rejectCall) {
   }
 };
 
-/** Promise.all **/
+```ts
+
 function promiseAll(promises: Promise<any>[]) {
   return new Promise((resolve, reject) => {
     if (!Array.isArray(promises)) {
@@ -159,7 +166,8 @@ function promiseAll(promises: Promise<any>[]) {
   });
 }
 
-/** flag **/
+
+```
 function myFlag(arr: any[], n?: number) {
   n = n === undefined ? 1 : n;
   return arr.reduce((acc, cur) => {

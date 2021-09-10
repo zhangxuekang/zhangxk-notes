@@ -34,10 +34,12 @@ fileList.forEach((name, i) => {
 });
 
 function generateTitles(content, type = "ts") {
-  const reg = /(\/\*\*\s.*?\s\*\*\/)(.*?)(\/\*\*\s.*?\s\*\*\/)/g;
-  console.log(1, "---38--mark2021");
+  /** 尝试获取数据,失败后重试 **/
+  const reg = /(\/\*\*\s.*?\s\*\*\/)((?:.|\n)*?)(\/\*\*\s.*?\s\*\*\/)/g;
   return content.replace(reg, (match, p1, p2, p3) => {
-    console.log("```" + type + "\n" + p2 + "\n```", "---39--mark2021");
+    console.log(p1, "1---40--mark2021");
+    console.log(p2, "2---40--mark2021");
+    console.log(p3, "3---40--mark2021");
     return "```" + type + "\n" + p2 + "\n```";
   });
 }
