@@ -1,4 +1,4 @@
-/* instanceof */
+/** instanceof **/
 function myInstanceof(left, right) {
   const prototype = right.prototype;
   left = left.__proto__;
@@ -9,8 +9,9 @@ function myInstanceof(left, right) {
   }
 }
 
+/** new **/
+
 /*
-  new
   创建一个空的简单JavaScript对象（即{}）；
   链接该对象（即设置该对象的构造函数）到另一个对象 ；
   将步骤1新创建的对象作为this的上下文 ；

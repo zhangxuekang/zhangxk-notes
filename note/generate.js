@@ -17,7 +17,7 @@ const fileList = fs.readdirSync(path);
 fileList.forEach((name, i) => {
   const data = fs.readFileSync(path + name, "utf8");
 
-  const content = "```ts\n" + data + "\n```";
+  const content = generateTitles(data);
   const fileNmae = name.replace(/\.ts$/, "");
   const name_p = path_g + fileNmae + ".md";
   const linkName_p = link_g + fileNmae + ".md";
@@ -32,3 +32,10 @@ fileList.forEach((name, i) => {
     console.log("");
   }
 });
+
+function generateTitles(content, type = "ts") {
+  const reg = /(\/\*\*\s.*?\s\*\*\/)(.*?)(\/\*\*\s.*?\s\*\*\/)/g;
+  return content.replace(reg, (match, p1, p2, p3) => {
+    return "```" + type + "\n" + p2 + "\n```";
+  });
+}
