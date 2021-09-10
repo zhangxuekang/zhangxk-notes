@@ -21,7 +21,8 @@ function quickSort(arr: any[]) {
   return [...quickSort(left), ...quickSort(same), ...quickSort(right)];
 }
 
-/** 打印树节点路径 ***/
+
+```
 function binaryTreePaths(root) {
   const paths = [];
   const help = (node, path) => {
@@ -41,8 +42,8 @@ function binaryTreePaths(root) {
   return paths;
 }
 
+```ts
 
-```
 function maxDepth(root) {
   if (!root) {
     return 0;
@@ -51,8 +52,8 @@ function maxDepth(root) {
   }
 }
 
-```ts
 
+```
 function isValidBST(root) {
   return helper(root, -Infinity, Infinity);
 
@@ -69,14 +70,14 @@ function isValidBST(root) {
   }
 }
 
+```ts
 
-```
 function addComma(str: string) {
   return str.replace(/(\d)(?=(?:\d{3})+$)/g, "$1,");
 }
 
-```ts
 
+```
 function isSymmetric(root) {
   function check(left, right) {
     if (!left && !right) {
@@ -95,8 +96,8 @@ function isSymmetric(root) {
   return check(root, root);
 }
 
+```ts
 
-```
 function fullPermutation(str: string) {
   const result = [];
   const len = str.length;
@@ -117,8 +118,8 @@ function fullPermutation(str: string) {
   }
 }
 
-```ts
 
+```
 function mergeList(l1, l2) {
   if (l1 === null) {
     return l2;
@@ -132,8 +133,8 @@ function mergeList(l1, l2) {
   }
 }
 
+```ts
 
-```
 function reverseList(head) {
   if (head === null || head.next === null) {
     return head;
@@ -145,7 +146,8 @@ function reverseList(head) {
   return newHead;
 }
 
-/** 最大的连续子序列 **/
+
+```
 function maxSubArray(nums: number[]) {
   let pre = 0;
   let maxAns = nums[0];

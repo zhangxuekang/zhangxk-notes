@@ -20,7 +20,7 @@ function quickSort(arr: any[]) {
   return [...quickSort(left), ...quickSort(same), ...quickSort(right)];
 }
 
-/** 打印树节点路径 ***/
+/** 打印树节点路径 **/
 function binaryTreePaths(root) {
   const paths = [];
   const help = (node, path) => {
