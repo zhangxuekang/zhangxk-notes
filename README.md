@@ -8,4 +8,4 @@
 
 ## [demo](demo/a-summary.md)
 
-## [学习笔记](note/a-summary.md)
+## [学习笔记](note/code-g/a-summary.md)
