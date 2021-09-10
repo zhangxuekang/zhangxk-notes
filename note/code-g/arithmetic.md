@@ -22,7 +22,7 @@ function quickSort(arr: any[]) {
 }
 
 
-```
+```/** 打印树节点路径 **/
 function binaryTreePaths(root) {
   const paths = [];
   const help = (node, path) => {
@@ -53,7 +53,7 @@ function maxDepth(root) {
 }
 
 
-```
+```/** 判断二叉搜索树 **/
 function isValidBST(root) {
   return helper(root, -Infinity, Infinity);
 
@@ -77,7 +77,7 @@ function addComma(str: string) {
 }
 
 
-```
+```/** 判断是不是对称二叉树 **/
 function isSymmetric(root) {
   function check(left, right) {
     if (!left && !right) {
@@ -119,7 +119,7 @@ function fullPermutation(str: string) {
 }
 
 
-```
+```/** 合并有序链表 **/
 function mergeList(l1, l2) {
   if (l1 === null) {
     return l2;
@@ -147,7 +147,7 @@ function reverseList(head) {
 }
 
 
-```
+```/** 最大的连续子序列 **/
 function maxSubArray(nums: number[]) {
   let pre = 0;
   let maxAns = nums[0];
