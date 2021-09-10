@@ -21,7 +21,9 @@ function tryPromise(getData, time, delay) {
 }
 
 
-```/** 节流 **/
+```
+```ts
+
 function throttle(fn, wait) {
   let lastTime = 0;
   return function (...args) {
@@ -33,6 +35,8 @@ function throttle(fn, wait) {
   };
 }
 
+
+```
 ```ts
 
 function debounce(fn, wait) {
@@ -48,7 +52,8 @@ function debounce(fn, wait) {
 }
 
 
-```/** 模板渲染函数 **/
+```
+/** 模板渲染函数 **/
 const tpl = `
 <div>
   {data.a}
