@@ -193,4 +193,44 @@ function myFlag(arr: any[], n?: number) {
     }
   }, []);
 }
+
+```
+## Object.create()
+
+```ts
+function myCreat(obj) {
+  // 声明一个工具函数
+  function F() {}
+
+  F.prototype = obj;
+
+  return new F();
+}
+
+```
+## Ajax
+
+```ts
+function ajax(url, method, body, headers) {
+  return new Promise((resolve, reject) => {
+    const req = new XMLHttpRequest();
+    req.open(method, url);
+
+    for (let key in headers) {
+      req.setRequestHeader(key, headers[key]);
+    }
+
+    req.onreadystatechange((() => {
+      if (req.readyState === 4) {
+        if (req.status >= 200 && req.status <= 300) {
+          resolve(req.responseText);
+        } else {
+          reject(req);
+        }
+      }
+    }) as any);
+
+    req.send(body);
+  });
+}
 ```
