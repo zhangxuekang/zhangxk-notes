@@ -1,4 +1,4 @@
-##instanceof
+## instanceof
 ```ts
 function myInstanceof(left, right) {
   const prototype = right.prototype;
@@ -11,7 +11,7 @@ function myInstanceof(left, right) {
 }
 
 ```
-##new
+## new
 ```ts
 
 /*
@@ -33,7 +33,7 @@ function myNew2(constructor, ...args) {
 }
 
 ```
-##call
+## call
 ```ts
 (Function.prototype as any).myCall = function (context, ...args) {
   if (typeof this !== "function") {
@@ -47,7 +47,7 @@ function myNew2(constructor, ...args) {
 };
 
 ```
-##apply
+## apply
 ```ts
 (Function.prototype as any).myApply = function (context, args) {
   if (typeof this !== "function") {
@@ -61,7 +61,7 @@ function myNew2(constructor, ...args) {
 };
 
 ```
-##bind
+## bind
 ```ts
 (Function.prototype as any).myBind = function (context, ...args) {
   if (typeof this !== "function") {
@@ -79,7 +79,7 @@ function myNew2(constructor, ...args) {
 };
 
 ```
-##promise
+## promise
 ```ts
 
 // 三个常量用来表示三种状态
@@ -147,7 +147,7 @@ MyPromise.prototype.then = function (resolveCall, rejectCall) {
 };
 
 ```
-##Promise.all
+## Promise.all
 ```ts
 function promiseAll(promises: Promise<any>[]) {
   return new Promise((resolve, reject) => {
@@ -173,11 +173,13 @@ function promiseAll(promises: Promise<any>[]) {
 }
 
 ```
-/** flag **/
+## flag
+```ts
 function myFlag(arr: any[], n?: number) {
   n = n === undefined ? 1 : n;
   return arr.reduce((acc, cur) => {
-    if (Array.isArray(cur) && n > 1) {
+    if (Array.isArray(cur) ```
+&& n > 1) {
       acc.concat(myFlag(cur, n - 1));
     } else {
       return acc.concat(cur);

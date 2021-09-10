@@ -1,4 +1,4 @@
-##尝试获取数据,失败后重试
+## 尝试获取数据,失败后重试
 ```ts
 function tryPromise(getData, time, delay) {
   return new Promise((resolve, reject) => {
@@ -21,7 +21,7 @@ function tryPromise(getData, time, delay) {
 }
 
 ```
-##节流
+## 节流
 ```ts
 function throttle(fn, wait) {
   let lastTime = 0;
@@ -35,7 +35,7 @@ function throttle(fn, wait) {
 }
 
 ```
-##防抖
+## 防抖
 ```ts
 function debounce(fn, wait) {
   let timer = null;
