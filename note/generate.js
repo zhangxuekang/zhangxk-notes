@@ -15,28 +15,40 @@ const link_g = "code-g/";
 
 const fileList = fs.readdirSync(path);
 fileList.forEach((name, i) => {
+  // 读取内容
   const data = fs.readFileSync(path + name, "utf8");
 
+  // 获取文件名和文件类型
   const nameList = name.split(".");
   const fileNmae = nameList.slice(0, nameList.length - 1).join(".");
-  console.log(fileNmae, "---22--mark2021");
   const fileType = nameList[nameList.length - 1];
-  console.log(fileType, "---24--mark2021");
+
+  // 获取转化成 md 格式的内容
   const content = generateTitles(data, fileType);
+
+  // md 文件路径和名称
   const name_p = path_g + fileNmae + ".md";
-  const linkName_p = link_g + fileNmae + ".md";
+
+  // 删除旧文件
   try {
     fs.unlinkSync(name_p);
   } catch (error) {}
+
+  // 写新的内容
   fs.writeFileSync(name_p, content);
   log("create: " + name_p);
+
+  // 写入目录链接
+  const linkName_p = link_g + fileNmae + ".md";
   const linkName = "- [" + fileNmae + "](" + linkName_p + ")\n";
   fs.appendFileSync(path_summary, linkName);
+
   if (i === fileList.length - 1) {
     console.log("");
   }
 });
 
+/* 转化内容 */
 function generateTitles(content, type = "ts") {
   const reg = /(\/\*\*\s.*?\s\*\*\/)((?:.|\n)*?)(?=\/\*\*\s.*?\s\*\*\/|$)/g;
   return content.replace(reg, (match, p1, p2) => {
