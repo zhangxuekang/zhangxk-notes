@@ -1,4 +1,4 @@
-##/** 快排序 **/
+##快排序
 ```ts
 function quickSort(arr: any[]) {
   const len = arr.length;
@@ -22,7 +22,7 @@ function quickSort(arr: any[]) {
 }
 
 ```
-##/** 打印树节点路径 **/
+##打印树节点路径
 ```ts
 function binaryTreePaths(root) {
   const paths = [];
@@ -44,7 +44,7 @@ function binaryTreePaths(root) {
 }
 
 ```
-##/** 二叉树的深度 **/
+##二叉树的深度
 ```ts
 function maxDepth(root) {
   if (!root) {
@@ -55,7 +55,7 @@ function maxDepth(root) {
 }
 
 ```
-##/** 判断二叉搜索树 **/
+##判断二叉搜索树
 ```ts
 function isValidBST(root) {
   return helper(root, -Infinity, Infinity);
@@ -74,14 +74,14 @@ function isValidBST(root) {
 }
 
 ```
-##/** 给数字字符串加逗号 **/
+##给数字字符串加逗号
 ```ts
 function addComma(str: string) {
   return str.replace(/(\d)(?=(?:\d{3})+$)/g, "$1,");
 }
 
 ```
-##/** 判断是不是对称二叉树 **/
+##判断是不是对称二叉树
 ```ts
 function isSymmetric(root) {
   function check(left, right) {
@@ -102,7 +102,7 @@ function isSymmetric(root) {
 }
 
 ```
-##/** 全排列 **/
+##全排列
 ```ts
 function fullPermutation(str: string) {
   const result = [];
@@ -125,7 +125,7 @@ function fullPermutation(str: string) {
 }
 
 ```
-##/** 合并有序链表 **/
+##合并有序链表
 ```ts
 function mergeList(l1, l2) {
   if (l1 === null) {
@@ -141,7 +141,7 @@ function mergeList(l1, l2) {
 }
 
 ```
-##/** 反转链表 **/
+##反转链表
 ```ts
 function reverseList(head) {
   if (head === null || head.next === null) {
