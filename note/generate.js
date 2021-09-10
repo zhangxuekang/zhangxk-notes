@@ -5,7 +5,7 @@ const log = (content) => {
 };
 
 //要遍历的文件夹所在的路径
-const path_summary = "note/a-summary.md";
+const path_summary = "note/code-g/a-summary.md";
 try {
   fs.writeFileSync(path_summary, "# 学习笔记\n\n");
 } catch (error) {}
@@ -39,7 +39,7 @@ fileList.forEach((name, i) => {
   log("create: " + name_p);
 
   // 写入目录链接
-  const linkName_p = link_g + fileNmae + ".md";
+  const linkName_p = fileNmae + ".md";
   const linkName = "- [" + fileNmae + "](" + linkName_p + ")\n";
   fs.appendFileSync(path_summary, linkName);
 
