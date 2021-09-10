@@ -11,7 +11,6 @@ try {
 } catch (error) {}
 const path = "note/code/";
 const path_g = "note/code-g/";
-const link_g = "code-g/";
 
 const fileList = fs.readdirSync(path);
 fileList.forEach((name, i) => {
