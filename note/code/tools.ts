@@ -1,4 +1,4 @@
-/* 尝试获取数据,失败后重试 */
+/** 尝试获取数据,失败后重试 **/
 function tryPromise(getData, time, delay) {
   return new Promise((resolve, reject) => {
     function fn() {
@@ -19,7 +19,7 @@ function tryPromise(getData, time, delay) {
   });
 }
 
-/* 节流 */
+/** 节流 **/
 function throttle(fn, wait) {
   let lastTime = 0;
   return function (...args) {
@@ -31,7 +31,7 @@ function throttle(fn, wait) {
   };
 }
 
-/* 防抖 */
+/** 防抖 **/
 function debounce(fn, wait) {
   let timer = null;
   return function (...args) {
@@ -44,7 +44,7 @@ function debounce(fn, wait) {
   };
 }
 
-/* 模板渲染函数 */
+/** 模板渲染函数 **/
 const tpl = `
 <div>
   {data.a}

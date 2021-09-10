@@ -29,7 +29,7 @@ function myNew2(constructor, ...args) {
   return result instanceof Object ? result : obj;
 }
 
-/* call */
+/** call **/
 (Function.prototype as any).myCall = function (context, ...args) {
   if (typeof this !== "function") {
     throw new TypeError("Error");
@@ -41,7 +41,7 @@ function myNew2(constructor, ...args) {
   return result;
 };
 
-/* apply */
+/** apply **/
 (Function.prototype as any).myApply = function (context, args) {
   if (typeof this !== "function") {
     throw new TypeError("Error");
@@ -53,7 +53,7 @@ function myNew2(constructor, ...args) {
   return result;
 };
 
-/* bind */
+/** bind **/
 (Function.prototype as any).myBind = function (context, ...args) {
   if (typeof this !== "function") {
     throw new TypeError("Error");
@@ -69,7 +69,7 @@ function myNew2(constructor, ...args) {
   };
 };
 
-/* promise */
+/** promise **/
 
 // 三个常量用来表示三种状态
 const PENDING = "pending";
@@ -135,7 +135,7 @@ MyPromise.prototype.then = function (resolveCall, rejectCall) {
   }
 };
 
-/* Promise.all */
+/** Promise.all **/
 function promiseAll(promises: Promise<any>[]) {
   return new Promise((resolve, reject) => {
     if (!Array.isArray(promises)) {
@@ -159,7 +159,7 @@ function promiseAll(promises: Promise<any>[]) {
   });
 }
 
-/* flag */
+/** flag **/
 function myFlag(arr: any[], n?: number) {
   n = n === undefined ? 1 : n;
   return arr.reduce((acc, cur) => {
