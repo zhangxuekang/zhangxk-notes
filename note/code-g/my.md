@@ -1,3 +1,4 @@
+##/** instanceof **/
 ```ts
 function myInstanceof(left, right) {
   const prototype = right.prototype;
@@ -10,6 +11,7 @@ function myInstanceof(left, right) {
 }
 
 ```
+##/** new **/
 ```ts
 
 /*
@@ -31,6 +33,7 @@ function myNew2(constructor, ...args) {
 }
 
 ```
+##/** call **/
 ```ts
 (Function.prototype as any).myCall = function (context, ...args) {
   if (typeof this !== "function") {
@@ -44,6 +47,7 @@ function myNew2(constructor, ...args) {
 };
 
 ```
+##/** apply **/
 ```ts
 (Function.prototype as any).myApply = function (context, args) {
   if (typeof this !== "function") {
@@ -57,6 +61,7 @@ function myNew2(constructor, ...args) {
 };
 
 ```
+##/** bind **/
 ```ts
 (Function.prototype as any).myBind = function (context, ...args) {
   if (typeof this !== "function") {
@@ -74,6 +79,7 @@ function myNew2(constructor, ...args) {
 };
 
 ```
+##/** promise **/
 ```ts
 
 // 三个常量用来表示三种状态
@@ -141,6 +147,7 @@ MyPromise.prototype.then = function (resolveCall, rejectCall) {
 };
 
 ```
+##/** Promise.all **/
 ```ts
 function promiseAll(promises: Promise<any>[]) {
   return new Promise((resolve, reject) => {

@@ -41,6 +41,7 @@ function generateTitles(content, type = "ts") {
     // console.log(p2, "2---40--mark2021");
     // console.log(p3, "3---40--mark2021");
     console.log(match, "---43--mark2021");
-    return "```" + type + p2 + "```\n";
+    const title = "##" + p1;
+    return title + "\n```" + type + p2 + "```\n";
   });
 }
