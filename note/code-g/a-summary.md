@@ -1,4 +1,4 @@
-# 学习笔记
+# CODE
 
 - [arithmetic](arithmetic.md)
 - [my](my.md)

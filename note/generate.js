@@ -7,7 +7,7 @@ const log = (content) => {
 //要遍历的文件夹所在的路径
 const path_summary = "note/code-g/a-summary.md";
 try {
-  fs.writeFileSync(path_summary, "# 学习笔记\n\n");
+  fs.writeFileSync(path_summary, "# CODE\n\n");
 } catch (error) {}
 const path = "note/code/";
 const path_g = "note/code-g/";
