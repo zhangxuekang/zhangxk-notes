@@ -35,7 +35,9 @@ fileList.forEach((name, i) => {
 
 function generateTitles(content, type = "ts") {
   const reg = /(\/\*\*\s.*?\s\*\*\/)(.*?)(\/\*\*\s.*?\s\*\*\/)/g;
+  console.log(1, "---38--mark2021");
   return content.replace(reg, (match, p1, p2, p3) => {
+    console.log("```" + type + "\n" + p2 + "\n```", "---39--mark2021");
     return "```" + type + "\n" + p2 + "\n```";
   });
 }
