@@ -50,7 +50,8 @@ function debounce(fn, wait) {
 }
 
 ```
-/** 模板渲染函数 **/
+## 模板渲染函数
+```ts
 const tpl = `
 <div>
   {data.a}
@@ -76,3 +77,4 @@ function render(tpl: string, data: any) {
     return v;
   });
 }
+```

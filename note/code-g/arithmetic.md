@@ -29,8 +29,7 @@ function binaryTreePaths(root) {
   const help = (node, path) => {
     if (node) {
       path += node.val.toString();
-      if (node.left === null ```
-&& node.right === null) {
+      if (node.left === null && node.right === null) {
         // 当前节点是叶子节点
         paths.push(path); // 把路径加入到答案中
       } else {
@@ -44,6 +43,7 @@ function binaryTreePaths(root) {
   return paths;
 }
 
+```
 ## 二叉树的深度
 ```ts
 function maxDepth(root) {
@@ -68,12 +68,12 @@ function isValidBST(root) {
       return false;
     }
     return (
-      helper(node.left, lower, node.val) ```
-&& helper(node.right, node.val, upper)
+      helper(node.left, lower, node.val) && helper(node.right, node.val, upper)
     );
   }
 }
 
+```
 ## 给数字字符串加逗号
 ```ts
 function addComma(str: string) {
@@ -85,8 +85,7 @@ function addComma(str: string) {
 ```ts
 function isSymmetric(root) {
   function check(left, right) {
-    if (!left ```
-&& !right) {
+    if (!left && !right) {
       return true;
     }
     if (!left || !right) {
@@ -102,6 +101,7 @@ function isSymmetric(root) {
   return check(root, root);
 }
 
+```
 ## 全排列
 ```ts
 function fullPermutation(str: string) {
@@ -155,7 +155,8 @@ function reverseList(head) {
 }
 
 ```
-/** 最大的连续子序列 **/
+## 最大的连续子序列
+```ts
 function maxSubArray(nums: number[]) {
   let pre = 0;
   let maxAns = nums[0];
@@ -166,3 +167,4 @@ function maxSubArray(nums: number[]) {
 
   return maxAns;
 }
+```
