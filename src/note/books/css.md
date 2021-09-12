@@ -1,7 +1,7 @@
 外边距重叠：块的上外边距(margin-top)和下外边距(margin-bottom)有时合并(折叠)为单个边距
 
 1. 同一层相邻元素之间
-2. 没有内容将父元素和后代元素分开，父元素没有行内内容，没有 padding 和 border，没有 bfc
+2. 没有内容将父元素和后代元素分开，父元素没有行内内容，没有 padding 和 border，没有 bfc(块级格式化上下文)
 3. 空的块级元素，含有 margin-top 和 margin-bottom
 
 ---
@@ -25,7 +25,7 @@ padding: env(safe-area-inset-top) env(safe-area-inset-right) env(
 
 动画：
 @keyframes
-animation 属性是 name，duration, timing-function，delay，iteration-count 次数，direction，fill-mode 结束状态
+animation 属性是 name 名称，duration 时长, timing-function 时间模式，delay 延迟，iteration-count 次数，direction 方向，fill-mode 结束状态
 
 ---
 
