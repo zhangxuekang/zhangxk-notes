@@ -182,7 +182,7 @@ function maxSubArray(nums: number[]) {
 ## 有效的括号
 
 ```ts
-function isValidBracket(str: string) {
+function isValidBracket1(str: string) {
   const n = str.length;
   // 奇数肯定不对
   if (n % 2 === 1) {
@@ -196,7 +196,7 @@ function isValidBracket(str: string) {
   const stk = [];
   for (let ch of str) {
     if (pairs.has(ch)) {
-      if (!stk.length || stk[stk.length - 1] !== pairs.get(ch)) {
+      if (stk.length === 0 || stk[stk.length - 1] !== pairs.get(ch)) {
         return false;
       }
       stk.pop();
@@ -205,5 +205,20 @@ function isValidBracket(str: string) {
     }
   }
   return !stk.length;
+}
+
+function isValidBracket2(str: string) {
+  const n = str.length;
+  // 奇数肯定不对
+  if (n % 2 === 1) {
+    return false;
+  }
+
+  const regExp = /(\(\))|(\[\])|(\{\})/g;
+
+  while (regExp.test(str)) {
+    str = str.replace(regExp, "");
+  }
+  return str.length === 0;
 }
 ```
