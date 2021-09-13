@@ -81,4 +81,50 @@ function render(tpl: string, data: any) {
     return v;
   });
 }
+
+```
+## 发布订阅
+
+```ts
+class myEvent {
+  _cache: any;
+
+  constructor() {
+    this._cache = {};
+  }
+
+  on(type, callback) {
+    this._cache[type] = this._cache[type] || [];
+    if (this._cache[type].indexOf(callback) === -1) {
+      this._cache[type].push(callback);
+    }
+    return this;
+  }
+
+  off(type, callback) {
+    const fns = this._cache[type];
+    if (Array.isArray(fns)) {
+      if (callback) {
+        const index = fns.indexOf(callback);
+        if (index !== -1) {
+          fns.splice(index, 1);
+        }
+      } else {
+        // 全部清空
+        fns.length = 0;
+      }
+    }
+    return this;
+  }
+
+  emit(type, data) {
+    const fns = this._cache[type];
+    if (Array.isArray(fns)) {
+      fns.forEach((fn) => {
+        fn(data);
+      });
+    }
+    return this;
+  }
+}
 ```
