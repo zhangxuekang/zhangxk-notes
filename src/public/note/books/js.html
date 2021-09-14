@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <p>声明提升，相同的函数会覆盖上一个函数，并且函数声明优先于变量声明。</p>
+<hr>
+<p>箭头函数其实是没有 this 的，this 在箭头函数里就是个普通变量，取的是最近的非箭头函数环境的 this 值。</p>
+<hr>
+<p>setTimeout 和 setInterval 都返回一个整数，这个整数就是 id 值，这个值是两者公用的</p>
+<p>返回值 timeoutID 是一个正整数，表示定时器的编号。这个值可以传递给 clearTimeout()来取消该定时器。需要注意的是 setTimeout()和 setInterval()共用一个编号池，技术上，clearTimeout()和 clearInterval() 可以互换。但是，为了避免混淆，不要混用取消定时函数。</p>
+<hr>
+<h2 id="事件循环">事件循环</h2>
+<ol>
+<li>首先 js 是<strong>单线程</strong>运行的，在代码执行的时候，通过将不同函数的<strong>执行上下文</strong>压入<strong>执行栈</strong>中来保证代码的有序执行。</li>
+<li>在执行<strong>同步代码</strong>的时候，如果遇到了<strong>异步事件</strong>，js 引擎并不会一直等待其返回结果，而是会将这个事件<strong>挂起</strong>，继续执行执行栈中的其他任务</li>
+<li>当<strong>同步事件</strong>执行完毕后，再将异步事件对应的回调加入到与<strong>当前执行栈中不同的另一个任务队列</strong>中等待执行。</li>
+<li>任务队列可以分为<strong>宏任务</strong>队列和<strong>微任务</strong>队列，当前执行栈中的事件执行完毕后，js 引擎首先会判断微任务对列中是否有任务可以执行，如果有就将微任务队首的事件压入栈中执行。</li>
+<li>当微任务对列中的任务都执行完成后再去判断宏任务对列中的任务。</li>
+</ol>
+<p>宏任务是由宿主发起的，而微任务由 JavaScript 自身发起。</p>
+<p>在 ES3 以及以前的版本中，JavaScript 本身没有发起异步请求的能力，也就没有微任务的存在。在 ES5 之后，JavaScript 引入了 Promise，这样，不需要浏览器，JavaScript 引擎自身也能够发起异步任务了。</p>
+<p>Node 里面对 setTimeout 的特殊处理：setTimeout(fn, 0)会被强制改为 setTimeout(fn, 1)。</p>
+<p>HTML 5 里面 setTimeout 最小的时间限制是 4ms</p>
+<p>nextTick 和 Promise 同时出现时，肯定是 nextTick 先执行，原因是 nextTick 的队列比 Promise 队列优先级更高。</p>
+<p>执行每个宏任务之前都要检查下微任务队列是否有任务，如果有，优先执行微任务队列。</p>
+<ol>
+<li>一个 Event Loop 可以有一个或多个事件队列，但是只有一个微任务队列。</li>
+<li>微任务队列全部执行完会重新渲染一次</li>
+<li>每个宏任务执行完都会重新渲染一次</li>
+<li>requestAnimationFrame 处于渲染阶段，不在微任务队列，也不在宏任务队列</li>
+</ol>
+<h3 id="宏任务">宏任务:</h3>
+<ol>
+<li>script (可以理解为外层同步代码)</li>
+<li>setTimeout/setInterval</li>
+<li>setImmediate(Node.js)</li>
+<li>I/O</li>
+<li>UI 事件</li>
+<li>postMessage</li>
+</ol>
+<h3 id="微任务">微任务:</h3>
+<ol>
+<li>Promise</li>
+<li>process.nextTick(Node.js)</li>
+<li>Object.observe</li>
+<li>MutaionObserver</li>
+</ol>
+<h3 id="nodejs-的-event-loop">Node.js 的 Event Loop:</h3>
+<ol>
+<li>timers: 执行 setTimeout 和 setInterval 的回调</li>
+<li>pending callbacks: 执行延迟到下一个循环迭代的 I/O 回调</li>
+<li>idle, prepare: 仅系统内部使用</li>
+<li>poll: 检索新的 I/O 事件;执行与 I/O 相关的回调。事实上除了其他几个阶段处理的事情，其他几乎所有的异步都在这个阶段处理。</li>
+<li>check: setImmediate 在这里执行</li>
+<li>close callbacks: 一些关闭的回调函数，如：socket.on(&#39;close&#39;, ...)</li>
+</ol>
+<h3 id="setimmediate-vs-settimeout">setImmediate VS setTimeout</h3>
+<p><strong>在一个异步流程</strong>里，setImmediate 会比定时器先执行</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;outer&quot;</span>);
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;setTimeout&quot;</span>);
+  }, <span class="hljs-number">0</span>);
+  <span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;setImmediate&quot;</span>);
+  });
+}, <span class="hljs-number">0</span>);
+
+<span class="hljs-comment">// outer</span>
+<span class="hljs-comment">// setImmediate</span>
+<span class="hljs-comment">// setTimeout</span>
+</code></pre>
+<ol>
+<li>外层是一个 setTimeout，所以执行他的回调的时候已经在 timers 阶段了</li>
+<li>处理里面的 setTimeout，因为本次循环的 timers 正在执行，所以他的回调其实加到了下个 timers 阶段</li>
+<li>处理里面的 setImmediate，将它的回调加入 check 阶段的队列</li>
+<li>外层 timers 阶段执行完，进入 pending callbacks，idle, prepare，poll，这几个队列都是空的，所以继续往下</li>
+<li>到了 check 阶段，发现了 setImmediate 的回调，拿出来执行</li>
+<li>然后是 close callbacks，队列是空的，跳过</li>
+<li>又是 timers 阶段，执行我们的 console</li>
+</ol>
+<p>写在最外层:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;outer&quot;</span>);
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;setTimeout&quot;</span>);
+}, <span class="hljs-number">0</span>);
+
+<span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;setImmediate&quot;</span>);
+});
+</code></pre>
+<p>// outer
+// setTimeout 和 setImmediate 顺序不定</p>
+<ol>
+<li>外层同步代码一次性全部执行完，遇到异步 API 就塞到对应的阶段</li>
+<li>遇到 setTimeout，虽然设置的是 0 毫秒触发，但是被 node.js 强制改为 1 毫秒，塞入 times 阶段</li>
+<li>遇到 setImmediate 塞入 check 阶段</li>
+<li>同步代码执行完毕，进入 Event Loop</li>
+<li>先进入 times 阶段，检查当前时间过去了 1 毫秒没有，如果过了 1 毫秒，满足 setTimeout 条件，执行回调，如果没过 1 毫秒，跳过</li>
+<li>跳过空的阶段，进入 check 阶段，执行 setImmediate 回调</li>
+</ol>
+<hr>
+
+  </body>
+</html>

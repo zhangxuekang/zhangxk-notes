@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <ul>
+<li><a href="#git">git</a><ul>
+<li><a href="#%E6%92%A4%E9%94%80%E5%B7%A5%E4%BD%9C%E5%8C%BA%E7%9A%84%E4%BF%AE%E6%94%B9">撤销工作区的修改</a></li>
+<li><a href="#%E6%92%A4%E9%94%80-commit">撤销 commit</a></li>
+<li><a href="#%E6%92%A4%E9%94%80-add-">撤销 add .</a></li>
+<li><a href="#%E6%92%A4%E9%94%80%E5%B7%A5%E4%BD%9C%E5%8C%BA%E7%9A%84%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6">撤销工作区的新建文件</a></li>
+<li><a href="#%E6%92%A4%E9%94%80-commit-%E5%90%8E%E6%8F%90%E4%BA%A4">撤销 commit 后提交</a></li>
+<li><a href="#%E6%92%A4%E9%94%80%E6%9F%90%E6%AC%A1%E6%8F%90%E4%BA%A4">撤销某次提交</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BA%E5%88%A0%E9%99%A4%E6%9C%AC%E5%9C%B0%E5%88%86%E6%94%AF">新建/删除本地分支</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E8%BF%9C%E7%AB%AF%E5%88%86%E6%94%AF%E5%9C%A8%E6%9C%AC%E5%9C%B0%E6%96%B0%E5%BB%BA%E5%90%8C%E5%90%8D%E5%88%86%E6%94%AF">基于远端分支在本地新建同名分支</a></li>
+<li><a href="#%E5%B0%86%E6%89%80%E6%9C%89%E6%96%87%E4%BB%B6%E4%BB%8E%E7%89%88%E6%9C%AC%E5%BA%93%E9%87%8C%E7%A7%BB%E9%99%A4">将所有文件从版本库里移除</a></li>
+<li><a href="#%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF%E4%B8%8D%E5%B8%A6%E5%88%86%E6%94%AF%E6%8F%90%E4%BA%A4%E8%AE%B0%E5%BD%95">合并分支(不带分支提交记录)</a></li>
+<li><a href="#%E9%83%A8%E5%88%86%E6%8F%90%E4%BA%A4%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF">部分提交合并分支</a></li>
+</ul>
+</li>
+<li><a href="#npm">npm</a><ul>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E5%85%A8%E5%B1%80%E5%AE%89%E8%A3%85%E7%9A%84-npm-%E5%8C%85">查看<strong>全局</strong>安装的 npm 包</a></li>
+</ul>
+</li>
+<li><a href="#linux">Linux</a><ul>
+<li><a href="#%E5%9C%A8%E6%96%87%E4%BB%B6%E4%B8%AD%E5%86%99%E5%85%A5%E5%86%85%E5%AE%B9">在文件中写入内容</a></li>
+<li><a href="#%E6%98%BE%E7%A4%BA%E7%BB%88%E7%AB%AF%E4%B8%AD%E8%BF%90%E8%A1%8C%E8%BF%87%E7%9A%84%E5%91%BD%E4%BB%A4">显示终端中运行过的命令</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E6%96%87%E4%BB%B6">创建新文件</a></li>
+<li><a href="#%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B">结束进程</a></li>
+<li><a href="#%E5%88%97%E5%87%BA%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E7%9A%84%E6%96%87%E4%BB%B6%E4%BF%A1%E6%81%AF">列出文件夹内的文件信息</a></li>
+<li><a href="#%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E8%B7%AF%E5%BE%84">显示当前目录路径</a></li>
+<li><a href="#%E6%9F%A5%E8%AF%A2%E7%AB%AF%E5%8F%A3%E5%8F%B7%E7%9A%84%E5%8D%A0%E7%94%A8%E6%83%85%E5%86%B5">查询端口号的占用情况</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="git">git</h2>
+<h3 id="撤销工作区的修改">撤销工作区的修改</h3>
+<pre><code class="language-shell">git checkout -- &lt;file&gt;
+
+git checkout .
+</code></pre>
+<h3 id="撤销-commit">撤销 commit</h3>
+<p><strong>reset 不加路径</strong>撤销 commit</p>
+<pre><code class="language-shell"><span class="hljs-meta"># </span><span class="language-bash">撤销 commit, 回退到上一次 commit, 保留工作区和暂存区的修改</span>
+git reset HEAD~1 --soft
+<span class="hljs-meta">
+# </span><span class="language-bash">撤销 commit, 回退到上一次 commit, 保留工作区的修改, 不保留暂存区的修改, 相当与回退到 add 前的状态</span>
+git reset HEAD~1
+<span class="hljs-meta">
+# </span><span class="language-bash">撤销 commit, 回退到上一次 commit, 不保留工作区和暂存区的修改</span>
+git reset HEAD~1 --hard
+</code></pre>
+<h3 id="撤销-add-">撤销 add .</h3>
+<p><strong>reset 加路径</strong>将跳过撤销 commit</p>
+<pre><code class="language-shell">git reset HEAD &lt;file&gt;
+
+git reset .
+</code></pre>
+<h3 id="撤销工作区的新建文件">撤销工作区的新建文件</h3>
+<pre><code class="language-shell"><span class="hljs-meta"># </span><span class="language-bash">删除 untracked files</span>
+git clean -f
+<span class="hljs-meta">
+# </span><span class="language-bash">连 untracked 的目录也一起删掉</span>
+git clean -fd
+<span class="hljs-meta">
+# </span><span class="language-bash">连 gitignore 的 untrack 文件/目录也一起删掉 （慎用，一般这个是用来删掉编译出来的 .o之类的文件用的）</span>
+git clean -xfd
+<span class="hljs-meta">
+# </span><span class="language-bash">在用上述 git clean 前，墙裂建议加上 -n 参数来先看看会删掉哪些文件，防止重要文件被误删</span>
+git clean -nxfd
+git clean -nf
+git clean -nfd
+</code></pre>
+<h3 id="撤销-commit-后提交">撤销 commit 后提交</h3>
+<pre><code class="language-shell">git push origin &lt;xx&gt; -f
+</code></pre>
+<p>reset --hard 版本回退后，只是本地回退。push 的时候加-f 参数，将远端代码也进行回退。不加参数 push 不了。</p>
+<h3 id="撤销某次提交">撤销某次提交</h3>
+<pre><code class="language-shell">git revert &lt;commit id&gt;
+</code></pre>
+<p>反做一个版本，以达到撤销该版本修改的目的。比如，我们 commit 了三个版本（版本一、版本二、 版本三），突然发现版本二不行（如：有 bug），想要撤销版本二，但又不想影响撤销版本三的提交，就可以用 git revert 命令来反做版本二，生成新的版本四，这个版本四里会保留版本三的东西，但撤销了版本二的东西。revert 是回滚某个 commit ，不是回滚“到”某个。</p>
+<h3 id="新建删除本地分支">新建/删除本地分支</h3>
+<pre><code class="language-shell"><span class="hljs-meta"># </span><span class="language-bash">新建本地分支</span>
+git branch -b &lt;branch-name&gt;
+<span class="hljs-meta">
+# </span><span class="language-bash">删除本地分支</span>
+git branch -d &lt;branch-name&gt;
+</code></pre>
+<h3 id="基于远端分支在本地新建同名分支">基于远端分支在本地新建同名分支</h3>
+<pre><code class="language-shell">git pull
+
+git checkout &lt;origin-branch-name&gt;
+</code></pre>
+<p>git pull 将远端仓库和本地仓库同步, 本地仓库有了远端新仓库的记录. 之后再 checkout</p>
+<h3 id="将所有文件从版本库里移除">将所有文件从版本库里移除</h3>
+<pre><code class="language-shell">git rm -r --cached .
+</code></pre>
+<p>将所有文件从版本库里移除，-r 表示递归，深入文件内部。</p>
+<p>之后再运行<code>git add .</code>和<code>git commit</code>后，新的.gitignore 规则就会生效。</p>
+<h3 id="合并分支不带分支提交记录">合并分支(不带分支提交记录)</h3>
+<pre><code class="language-shell">git merge --squash another
+</code></pre>
+<p>将 another 分支上的多个 commit 合并成一个，放在当前分支上，原来的 commit 历史则没有拿过来，需要填写一个 commite 记录。</p>
+<h3 id="部分提交合并分支">部分提交合并分支</h3>
+<pre><code class="language-shell">git cherry-pick
+</code></pre>
+<p>你需要另一个分支的所有代码变动，那么就采用合并（git merge）。另一种情况是，你只需要部分代码变动（某几个提交），这时可以采用 Cherry pick。</p>
+<pre><code class="language-shell">git cherry-pick &lt;commitHash&gt;
+</code></pre>
+<p>上面命令就会将指定的提交 commitHash，应用于当前分支。这会在当前分支产生一个新的提交，当然它们的哈希值会不一样。</p>
+<h2 id="npm">npm</h2>
+<h3 id="查看全局安装的-npm-包">查看<strong>全局</strong>安装的 npm 包</h3>
+<pre><code class="language-shell">npm list [-g] --depth 0
+</code></pre>
+<p>查看[全局]安装的 npm 包，depth 0 表示查看最外层的包，depth 1 展开一层看看这些模块各自又依赖了哪些模块，以此类推。</p>
+<h2 id="linux">Linux</h2>
+<h3 id="在文件中写入内容">在文件中写入内容</h3>
+<pre><code class="language-shell"><span class="hljs-meta"># </span><span class="language-bash">将内容<span class="hljs-string">&quot;xxx&quot;</span>写入 file-name.txt 文件中，覆盖写入。</span>
+echo &quot;xxx&quot; &gt; file-name.txt
+<span class="hljs-meta">
+# </span><span class="language-bash">将内容<span class="hljs-string">&quot;xxx&quot;</span>写入 file-name.txt 文件中，追加写入，<span class="hljs-built_in">echo</span> 自动加换行。</span>
+echo &quot;xxx&quot; &gt;&gt; file-name.txt
+</code></pre>
+<h3 id="显示终端中运行过的命令">显示终端中运行过的命令</h3>
+<pre><code class="language-shell">history
+</code></pre>
+<h3 id="创建新文件">创建新文件</h3>
+<pre><code class="language-shell">touch file-name
+</code></pre>
+<p>touch 命令用于修改文件或者目录的时间属性，包括存取时间和更改时间，若文件不存在，系统会建立一个新的文件。</p>
+<p>也就是说该命令将文件的最后更改时间设置为系统当前时间。</p>
+<h3 id="结束进程">结束进程</h3>
+<pre><code class="language-shell">kill -9 PID
+</code></pre>
+<p>结束指定 PID 的进程，mac 可以打开活动监视器查看进程 PID。</p>
+<h3 id="列出文件夹内的文件信息">列出文件夹内的文件信息</h3>
+<pre><code class="language-shell">ls -l
+</code></pre>
+<h3 id="显示当前目录路径">显示当前目录路径</h3>
+<pre><code class="language-shell">pwd
+</code></pre>
+<h3 id="查询端口号的占用情况">查询端口号的占用情况</h3>
+<pre><code class="language-shell">lsof -i tcp:&lt;端口号&gt;
+</code></pre>
+<p>查询端口号的占用情况，会显示出 PID，方便 kill。</p>
+
+  </body>
+</html>

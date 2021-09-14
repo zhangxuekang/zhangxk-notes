@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <ul>
+<li><a href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%AF%B9%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC%E7%9A%84%E5%BD%B1%E5%93%8D">上下文对类型推导的影响</a></li>
+<li><a href="#%E6%9B%B4%E5%A4%9A%E4%BE%8B%E5%AD%90">更多例子</a><ul>
+<li><a href="#tuple-types">Tuple Types</a></li>
+<li><a href="#objects">Objects</a></li>
+<li><a href="#callbacks">Callbacks</a></li>
+</ul>
+</li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
+<h2 id="上下文对类型推导的影响">上下文对类型推导的影响</h2>
+<p>TypeScript 不止是根据变量的值进行类型推导的，上下文也对类型推导有影响。如果你不清楚上下文如何影响类型推导，可能会对推导出的类型产生疑惑。</p>
+<pre><code class="language-ts"><span class="hljs-title function_">setLanguage</span>(<span class="hljs-string">&quot;JavaScript&quot;</span>);
+<span class="hljs-comment">// 在 js 里是等价的操作</span>
+<span class="hljs-keyword">let</span> language = <span class="hljs-string">&quot;JavaScript&quot;</span>;
+<span class="hljs-title function_">setLanguage</span>(language);
+
+<span class="hljs-comment">// 在 ts 里，这样做也没有什么问题</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">setLanguage</span>(<span class="hljs-params">language: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-comment">/* ... */</span>
+}
+
+<span class="hljs-title function_">setLanguage</span>(<span class="hljs-string">&quot;JavaScript&quot;</span>); <span class="hljs-comment">// OK</span>
+
+<span class="hljs-keyword">let</span> language = <span class="hljs-string">&quot;JavaScript&quot;</span>;
+<span class="hljs-title function_">setLanguage</span>(language); <span class="hljs-comment">// OK</span>
+</code></pre>
+<p>稍微对例子进行一些修改：</p>
+<pre><code class="language-js">type <span class="hljs-title class_">Language</span> = <span class="hljs-string">&quot;JavaScript&quot;</span> | <span class="hljs-string">&quot;TypeScript&quot;</span> | <span class="hljs-string">&quot;Python&quot;</span>;
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">setLanguage</span>(<span class="hljs-params">language: Language</span>) {
+  <span class="hljs-comment">/* ... */</span>
+}
+
+<span class="hljs-title function_">setLanguage</span>(<span class="hljs-string">&quot;JavaScript&quot;</span>); <span class="hljs-comment">// OK</span>
+
+<span class="hljs-keyword">let</span> language = <span class="hljs-string">&quot;JavaScript&quot;</span>;
+<span class="hljs-title function_">setLanguage</span>(language);
+<span class="hljs-comment">// ~~~~~~~~ Argument of type &#x27;string&#x27; is not assignable</span>
+<span class="hljs-comment">//          to parameter of type &#x27;Language&#x27;</span>
+</code></pre>
+<p><code>let language = &#39;JavaScript&#39;;</code> 语句意味着，ts 推断出 <code>language</code> 是 <code>string</code> 类型的，这很合理。但是 <code>setLanguage</code> 函数想要的是 <code>Language</code> 类型，所以会出错。</p>
+<p>要解决这个问题，有两种方法：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">let</span> <span class="hljs-attr">language</span>: <span class="hljs-title class_">Language</span> = <span class="hljs-string">&quot;JavaScript&quot;</span>;
+<span class="hljs-title function_">setLanguage</span>(language); <span class="hljs-comment">// OK</span>
+
+<span class="hljs-keyword">const</span> language = <span class="hljs-string">&quot;JavaScript&quot;</span>;
+<span class="hljs-title function_">setLanguage</span>(language); <span class="hljs-comment">// OK</span>
+</code></pre>
+<blockquote>
+<p>The fundamental issue here is that we’ve separated the value from the context in which it’s used.</p>
+</blockquote>
+<h2 id="更多例子">更多例子</h2>
+<h3 id="tuple-types">Tuple Types</h3>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">panTo</span>(<span class="hljs-params">where: [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>]</span>) {
+  <span class="hljs-comment">/* ... */</span>
+}
+
+<span class="hljs-title function_">panTo</span>([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>]); <span class="hljs-comment">// OK</span>
+
+<span class="hljs-keyword">const</span> loc = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>];
+<span class="hljs-title function_">panTo</span>(loc);
+<span class="hljs-comment">//    ~~~ Argument of type &#x27;number[]&#x27; is not assignable to</span>
+<span class="hljs-comment">//        parameter of type &#x27;[number, number]&#x27;</span>
+</code></pre>
+<p>解决：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-attr">loc</span>: [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>] = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>];
+<span class="hljs-title function_">panTo</span>(loc); <span class="hljs-comment">// OK</span>
+</code></pre>
+<p>但是如果想使用 <code>const</code> 会有别的问题：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> loc = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>] <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>;
+<span class="hljs-title function_">panTo</span>(loc);
+<span class="hljs-comment">// ~~~ Type &#x27;readonly [10, 20]&#x27; is &#x27;readonly&#x27;</span>
+<span class="hljs-comment">//     and cannot be assigned to the mutable type &#x27;[number, number]&#x27;</span>
+</code></pre>
+<p>为了解决以上问题，函数得声明成这样 <code>function panTo(where: readonly [number, number]) { /* ... */ }</code>。</p>
+<h3 id="objects">Objects</h3>
+<pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Language</span> = <span class="hljs-string">&quot;JavaScript&quot;</span> | <span class="hljs-string">&quot;TypeScript&quot;</span> | <span class="hljs-string">&quot;Python&quot;</span>;
+<span class="hljs-keyword">interface</span> GovernedLanguage {
+  <span class="hljs-attr">language</span>: <span class="hljs-title class_">Language</span>;
+  <span class="hljs-attr">organization</span>: <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">complain</span>(<span class="hljs-params">language: GovernedLanguage</span>) {
+  <span class="hljs-comment">/* ... */</span>
+}
+
+<span class="hljs-title function_">complain</span>({ <span class="hljs-attr">language</span>: <span class="hljs-string">&quot;TypeScript&quot;</span>, <span class="hljs-attr">organization</span>: <span class="hljs-string">&quot;Microsoft&quot;</span> }); <span class="hljs-comment">// OK</span>
+
+<span class="hljs-keyword">const</span> ts = {
+  <span class="hljs-attr">language</span>: <span class="hljs-string">&quot;TypeScript&quot;</span>,
+  <span class="hljs-attr">organization</span>: <span class="hljs-string">&quot;Microsoft&quot;</span>,
+};
+<span class="hljs-title function_">complain</span>(ts);
+<span class="hljs-comment">//       ~~ Argument of type &#x27;{ language: string; organization: string; }&#x27;</span>
+<span class="hljs-comment">//            is not assignable to parameter of type &#x27;GovernedLanguage&#x27;</span>
+<span class="hljs-comment">//          Types of property &#x27;language&#x27; are incompatible</span>
+<span class="hljs-comment">//            Type &#x27;string&#x27; is not assignable to type &#x27;Language&#x27;</span>
+</code></pre>
+<p>可以使用 <code>const ts: GovernedLanguage</code> 和 <code>language: &#39;TypeScript&#39; as const,</code>解决。</p>
+<h3 id="callbacks">Callbacks</h3>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">callWithRandomNumbers</span>(<span class="hljs-params">fn: (n1: <span class="hljs-built_in">number</span>, n2: <span class="hljs-built_in">number</span>) =&gt; <span class="hljs-built_in">void</span></span>) {
+  <span class="hljs-title function_">fn</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>());
+}
+
+<span class="hljs-comment">// TypeScript 根据回调函数的上下文推断出参数的类型</span>
+<span class="hljs-title function_">callWithRandomNumbers</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> {
+  a; <span class="hljs-comment">// Type is number</span>
+  b; <span class="hljs-comment">// Type is number</span>
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a + b);
+});
+</code></pre>
+<p>如果没有回调函数上下文，ts 不能推断出参数的类型，只能说是 <code>any</code> 类型的。</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title function_">fn</span> = (<span class="hljs-params">a, b</span>) =&gt; {
+  <span class="hljs-comment">// ~    Parameter &#x27;a&#x27; implicitly has an &#x27;any&#x27; type</span>
+  <span class="hljs-comment">//    ~ Parameter &#x27;b&#x27; implicitly has an &#x27;any&#x27; type</span>
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a + b);
+};
+<span class="hljs-title function_">callWithRandomNumbers</span>(fn);
+</code></pre>
+<h2 id="总结">总结</h2>
+<ul>
+<li>注意上下文对类型推断的影响</li>
+<li>如果出现上下文类型推断错误，考虑在变量声明的时候显式声明类型</li>
+<li>如果变量在声明后就不会再变，可以使用 <code>const</code> 声明（<code>as const</code>），给 ts 更多信息作出正确的类型推导。但是这种方法会将报错信息留到参数使用的时候暴露，如果使用上面的方法，值与类型不符的情况在变量声明的时候就会暴露出来。</li>
+</ul>
+
+  </body>
+</html>

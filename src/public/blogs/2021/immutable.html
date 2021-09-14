@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <ul>
+<li><a href="#%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%95%B0%E6%8D%AE%E7%AE%80%E4%BB%8B">不可变数据简介</a></li>
+<li><a href="#%E4%BC%98%E5%8A%BF">优势</a></li>
+<li><a href="#%E5%BC%8A%E7%AB%AF">弊端</a></li>
+<li><a href="#%E7%AE%80%E5%8D%95-api">简单 API</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0">实现</a></li>
+<li><a href="#%E5%AE%98%E6%96%B9%E4%BD%BF%E7%94%A8%E5%AE%9E%E8%B7%B5">官方使用实践</a></li>
+</ul>
+<h3 id="不可变数据简介">不可变数据简介</h3>
+<blockquote>
+<p>Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logic. Persistent data presents a mutative API which does not update the data in-place, but instead always yields new updated data. --- immutable.js 官网</p>
+</blockquote>
+<p>Immutable Data 就是一旦创建，就不能再被更改的数据。如果尝试调用方法去修改，就会返回一个新的数据，原来的数据不会改变。想达到的效果基本和 deepCopy 一样，但是没有 deepCopy 将所有节点进行复制一遍带来的性能损耗。</p>
+<p>immutable.js 和 immer.js 使用了一样的“深复制”策略，即如果对象树中一个节点发生变化，只修改这个节点和受它影响的父节点，其它节点则进行共享。</p>
+<p><img src="../assets/immutable" alt="clone"></p>
+<h3 id="优势">优势</h3>
+<ol>
+<li>构建线程安全的数据。Immutable 的引用数据可以同时在多处安全的被使用，不必担心出现意外的数据变化。</li>
+<li>和 react 结合使用，避免过多的 render 过程，提高 react 项目性能。</li>
+<li>方便记录数据变化过程，很容易就可以实现“撤回”操作。</li>
+<li>符合函数式编程的原则</li>
+</ol>
+<h3 id="弊端">弊端</h3>
+<ol>
+<li>学习成本，入手不易。</li>
+<li>不便于调试，数据打印在控制台后，不得不翻来覆去深层次的找。</li>
+<li>不符合主流 ES6 原生代码的格式，不能解构，不能使用扩展语法。</li>
+<li>侵入性强，例如引用第三方组件的时候，不得不进行数据转换，当数据量大时，必然导致性能问题。</li>
+</ol>
+<h3 id="简单-api">简单 API</h3>
+<p><em>To Be Continued</em></p>
+<h3 id="实现">实现</h3>
+<p><em>To Be Continued</em></p>
+<h3 id="官方使用实践">官方使用实践</h3>
+<blockquote>
+<p>Draft.js is a framework for building rich text editors in React, powered by an immutable model and abstracting over cross-browser differences. --- Draft.js 官网</p>
+</blockquote>
+<p>Draft.js 是 Facebook 开源的用于构建富文本编辑器的 JavaScript 框架。Draft.js 基于 React，Draft.js 提供的 Editor 对象是一个 React 组件，可以完美融入 React 项目之中。</p>
+<p>使用 Draft.js，富文本的状态被封装到一个 EditorState 类型的 immutable 对象中，这个对象作为组件属性（函数参数）输入给 Editor 组件（函数）。一旦用户进行操作，比如敲一个回车，Editor 组件的 onChange 事件触发，onChange 函数返回一个全新的 EditorState 实例，Editor 接收这个新的输入，渲染新的内容。这种机制使得撤回操作很容易被实现。</p>
+<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyEditor</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">React.Component</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">props</span>) {
+    <span class="hljs-variable language_">super</span>(props);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">state</span> = { <span class="hljs-attr">editorState</span>: <span class="hljs-title class_">EditorState</span>.<span class="hljs-title function_">createEmpty</span>() }; <span class="hljs-comment">// 创建空的 EditorState 对象</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">onChange</span> = <span class="hljs-function">(<span class="hljs-params">editorState</span>) =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">setState</span>({ editorState }); <span class="hljs-comment">// 用全新的 EditorState 实例替换</span>
+  }
+  <span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> { editorState } = <span class="hljs-variable language_">this</span>.<span class="hljs-property">state</span>;
+    <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Editor</span> <span class="hljs-attr">editorState</span>=<span class="hljs-string">{editorState}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{this.onChange}</span> /&gt;</span></span>;
+  }
+}
+</code></pre>
+<blockquote>
+<ul>
+<li><a href="https://immutable-js.com/">https://immutable-js.com/</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/24951621">https://zhuanlan.zhihu.com/p/24951621</a></li>
+<li><a href="https://zhangxuekang.github.io/rich-text/">https://zhangxuekang.github.io/rich-text/</a></li>
+</ul>
+</blockquote>
+
+  </body>
+</html>

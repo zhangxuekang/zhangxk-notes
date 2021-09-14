@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <h1 id="js-简单实现的鼠标跟随效果">js 简单实现的鼠标跟随效果</h1>
+<p>&emsp;&emsp;记得早年风靡装饰非主流 QQ 空间, 各种克隆空间的网站大行其道. 如果复制了某个狂拽酷炫的空间(必须有 DJ 背景音乐, 必须有轮播的视频图片, 配色必须黑底花字, 最好有鼠标跟随特效...)那么感觉自己就像是这条街最帅的仔了. 现在回忆起往事, 感慨万千, 时光一去不复返, 如果能穿越回去, 我一定扇死自己:)</p>
+<p>&emsp;&emsp;虽然回忆起来就辣眼睛, 但是鼠标跟随特效还是很有应用前途的(强迫让自己相信). 曾经见过一个我认为最牛逼的纯 css 实现方案, 将页面铺满小 div 元素, 根据窗口绝对定位, 每个 div 都有:hover 反应, 只要你的 div 足够小足够多, 看起来就像是鼠标跟随特效的, 如果再加上点延迟效果, 前途不可限量.</p>
+<p>&emsp;&emsp;既然 css 方案这么牛逼, 所以我选择用 js 实现(逃). 思路就是给 window 加鼠标移动监听事件, 获取鼠标的位置信息, 将位置信息赋给一个绝对定位的元素.</p>
+<p>&emsp;&emsp;来看下代码, 先 creat 个相对于 body 绝对定位的元素:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> $follow = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;div&#x27;</span>);
+$follow.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;class&#x27;</span>, <span class="hljs-string">&#x27;follow&#x27;</span>);
+$body.<span class="hljs-title function_">appendChild</span>($follow);
+</code></pre>
+<pre><code class="language-css"><span class="hljs-selector-class">.follow</span> {
+  <span class="hljs-attribute">position</span>: absolute;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">100px</span>;
+  <span class="hljs-attribute">background-color</span>: red;
+}
+</code></pre>
+<p>&emsp;&emsp;元素已经有了, 现在添加事件:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mousemove&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> x = <span class="hljs-built_in">parseFloat</span>(e.<span class="hljs-property">clientX</span>);
+  <span class="hljs-keyword">const</span> y = <span class="hljs-built_in">parseFloat</span>(e.<span class="hljs-property">clientY</span>);
+  $follow.<span class="hljs-property">style</span>.<span class="hljs-property">left</span> = x + <span class="hljs-string">&#x27;px&#x27;</span>;
+  $follow.<span class="hljs-property">style</span>.<span class="hljs-property">top</span> = y + <span class="hljs-string">&#x27;px&#x27;</span>;
+});
+</code></pre>
+<p>&emsp;&emsp;移动跟随效果有了, 但是要多丑有多丑. 还有个小问题, 刚进入页面鼠标还没有移动的时候, 方块显示在左上角位置. 在 css 中加条规则:</p>
+<pre><code class="language-css"><span class="hljs-selector-class">.follow</span> {
+  // ...
+  <span class="hljs-attribute">display</span>: none;
+}
+</code></pre>
+<p>&emsp;&emsp;然后在事件中设置显示. 为了看起来更和谐, 将元素定位在鼠标的右边 20px 和下边 20px 处.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mousemove&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+  $follow.<span class="hljs-property">style</span>.<span class="hljs-property">display</span> = <span class="hljs-string">&#x27;block&#x27;</span>;
+  $follow.<span class="hljs-property">style</span>.<span class="hljs-property">left</span> = x + <span class="hljs-number">20</span> + <span class="hljs-string">&#x27;px&#x27;</span>;
+  $follow.<span class="hljs-property">style</span>.<span class="hljs-property">top</span> = y + <span class="hljs-number">20</span> + <span class="hljs-string">&#x27;px&#x27;</span>;
+});
+</code></pre>
+<p>&emsp;&emsp;可以将丑爆的背景颜色替换成背景图片, 最好还是动态的 gif 图, 看起来更有逼格.</p>
+<p>&emsp;&emsp;原理很简单, 也就是入门一周的水平, 但是设计好了会产生比较炫酷的效果.</p>
+<p>&emsp;&emsp;28 行 js 代码实现的一个小<a href="https://zhangxuekang.github.io/mouse-show/">demo</a>.</p>
+<p>&emsp;&emsp;<a href="https://github.com/zhangxuekang/mouse-show">github 地址</a>.</p>
+
+  </body>
+</html>

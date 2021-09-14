@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <h1 id="记录鼠标轨迹-生成-svg-路径">记录鼠标轨迹, 生成 svg 路径</h1>
+<p>&emsp;&emsp;业务上遇到了这样的问题, 在浏览器中, 使元素沿着用户画出的路径移动. 因为让元素沿着 svg 路径移动已经实现了, 所以需要做的是用鼠标画出路径. 鼠标方法只能获取鼠标在页面中的实时坐标, 是离散的坐标点, 如何将这些坐标点转化成平滑的路径是问题的关键.</p>
+<p><img src="https://zhangxuekang.github.io/src/blog/mouse-svg/svg.png" alt="三次贝塞尔曲线"> &emsp;&emsp;svg 的三次贝塞尔曲线需要定义一个点和两个控制点, 所以用 C 命令创建三次贝塞尔曲线, 需要设置三组坐标参数(c dx1 dy1, dx2 dy2, dx dy). <em><a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial/Paths#Curve_commands">这里的最后一个坐标(dx, dy)表示的是曲线的终点, 另外两个坐标是控制点, (dx1, dy1)是起点的控制点, (dx2, dy2)是终点的控制点</a></em>. 终点的坐标点好说, 也就是获取的鼠标位置点, 难的是如何得到两个控制点.</p>
+<p>&emsp;&emsp;网上搜索解决办法, 在百度文库上发现了一篇文章介绍控制点的确定方法(<em><a href="https://wenku.baidu.com/view/c790f8d46bec0975f565e211.html">贝塞尔曲线控制点确定的方法</a></em>). 现在来尝试下用这个方法转化坐标.</p>
+<p>&emsp;&emsp;假设获取的一系列鼠标坐标保存在数组 data[]中.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> data = [x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, ...];
+</code></pre>
+<p>以(x3, y3)点为例.</p>
+<pre><code class="language-js"><span class="hljs-comment">/**
+ * a为系数，可以尝试不同系数，观察结果
+ */</span>
+<span class="hljs-comment">// 后控制点计算</span>
+<span class="hljs-keyword">const</span> dx1 = x3 + <span class="hljs-title function_">a</span>(x4 - x2);
+<span class="hljs-keyword">const</span> dy1 = y3 + <span class="hljs-title function_">a</span>(y4 - y2);
+<span class="hljs-comment">// 前控制点计算</span>
+<span class="hljs-keyword">const</span> dx2 = x4 - <span class="hljs-title function_">a</span>(x5 - x3);
+<span class="hljs-keyword">const</span> dy2 = y4 - <span class="hljs-title function_">a</span>(y5 - y3);
+</code></pre>
+<p>那么依次求出每对点的控制点，就能连成一条平滑的曲线了. 开始的一对点作为起点不用求，第二对和最后一对点作为计算点，不做为记录点.</p>
+<p>贴上完整代码:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">solve</span>(<span class="hljs-params">data, k = <span class="hljs-number">1</span></span>) {
+  <span class="hljs-keyword">const</span> size = data.<span class="hljs-property">length</span>;
+  <span class="hljs-keyword">const</span> last = size - <span class="hljs-number">4</span>;
+  <span class="hljs-keyword">let</span> path = <span class="hljs-string">`M<span class="hljs-subst">${data[<span class="hljs-number">0</span>]}</span>,<span class="hljs-subst">${data[<span class="hljs-number">1</span>]}</span>`</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; size - <span class="hljs-number">2</span>; i += <span class="hljs-number">2</span>) {
+    <span class="hljs-keyword">const</span> x0 = i ? data[i - <span class="hljs-number">2</span>] : data[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">const</span> y0 = i ? data[i - <span class="hljs-number">1</span>] : data[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">const</span> x1 = data[i + <span class="hljs-number">0</span>];
+    <span class="hljs-keyword">const</span> y1 = data[i + <span class="hljs-number">1</span>];
+    <span class="hljs-comment">// x2 和 y2 作为终点坐标</span>
+    <span class="hljs-keyword">const</span> x2 = data[i + <span class="hljs-number">2</span>];
+    <span class="hljs-keyword">const</span> y2 = data[i + <span class="hljs-number">3</span>];
+    <span class="hljs-keyword">const</span> x3 = i !== last ? data[i + <span class="hljs-number">4</span>] : x2;
+    <span class="hljs-keyword">const</span> y3 = i !== last ? data[i + <span class="hljs-number">5</span>] : y2;
+    <span class="hljs-comment">// 计算控制点</span>
+    <span class="hljs-keyword">const</span> cp1x = x1 + ((x2 - x0) / <span class="hljs-number">6</span>) * k;
+    <span class="hljs-keyword">const</span> cp1y = y1 + ((y2 - y0) / <span class="hljs-number">6</span>) * k;
+    <span class="hljs-keyword">const</span> cp2x = x2 - ((x3 - x1) / <span class="hljs-number">6</span>) * k;
+    <span class="hljs-keyword">const</span> cp2y = y2 - ((y3 - y1) / <span class="hljs-number">6</span>) * k;
+    path += <span class="hljs-string">` C<span class="hljs-subst">${cp1x}</span>,<span class="hljs-subst">${cp1y}</span>,<span class="hljs-subst">${cp2x}</span>,<span class="hljs-subst">${cp2y}</span>,<span class="hljs-subst">${x2}</span>,<span class="hljs-subst">${y2}</span>`</span>;
+  }
+
+  <span class="hljs-keyword">return</span> path;
+}
+</code></pre>
+<p><em><a href="https://zhangxuekang.github.io/mouse-svg/">查看在线 demo</a></em></p>
+
+  </body>
+</html>

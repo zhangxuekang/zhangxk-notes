@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <h1 id="思考如何设计好维护的前端组件">思考如何设计好维护的前端组件</h1>
+<p>在写平时工作写业务代码的时候，为了开发效率而忽略了前端组件的合理设计。导致后期需求迭代和修改 bug 的时候，维护困难，更不用说维护代码的人可能并不是代码的开发者。思考了一下如何设计出更好维护的前端组件，适用于 react 和 vue。以下只是我个人的粗浅观点，分享出来大家一起交流。</p>
+<ol>
+<li>写下任何代码前画出整个业务组件设计的 UML 图，显示每个组件的 state、props、methods 和其他组件的关系。即使不写下来，也要在大脑中有清晰的图示。这些工作强制让你思考一个组件的渲染需要哪些外部数据（props），自身应该拥有的功能属性（state），和组件可能有的动作（methods）。这些思考对接下来的写代码很重要。</li>
+<li>props 的传递，尽量不传“大对象”。避免将多个互相没有关联的数据封装成一个对象传递给子组件，子组件应该设置不同的 props，分别接收。这样在操作的时候更有目的性，一眼就能看出你在操作什么。分清楚什么是 state 和什么是组件外的变量，与组件渲染无关的或者固定的数据应该是组件外的数据，state 和 props 应该只是和渲染有强相关的变量数据。</li>
+<li>state 的改变只能是用户事件来触发或者是 api 请求事件回调触发，不应该是监听另一个 state 变化而变化。state 的变化应该是纯粹的。不能滥用 watch，尽量使用 computed，能不用 watch 就不用，watch 的不正确使用会使状态的变化更加难以控制。</li>
+<li>降低耦合度，好的组件只需要关心自己收的到 props 和传递给子组件的 props。降低耦合度的好处不只是体现在重用性上，功能模块的解耦使整个业务逻辑更加清晰，降低了维护成本。尽可能将相对独立的功能模块单独处理成组件。不要什么功能都写在一个大组件里，文件变得特别大，维护起来真是一言难尽。抽离组件肯定会花费部分时间和精力，但是比之后维护混乱的逻辑容易的多。</li>
+<li>未完待补充</li>
+</ol>
+
+  </body>
+</html>

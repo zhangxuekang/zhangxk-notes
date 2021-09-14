@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BD%BF%E7%94%A8-readonly">什么时候使用 <code>readonly</code></a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-readonly-%E5%90%8E%E7%9A%84%E5%BD%B1%E5%93%8D">使用 <code>readonly</code> 后的影响</a></li>
+<li><a href="#readonly-is-shallow"><code>readonly</code> is shallow</a></li>
+<li><a href="#readonly-vs-const"><code>readonly</code> VS <code>const</code></a></li>
+</ul>
+<h2 id="什么时候使用-readonly">什么时候使用 <code>readonly</code></h2>
+<p>如果你想打印一个数列 (1, 1+2, 1+2+3, etc.)，你可能会这么写代码：</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">printTriangles</span>(<span class="hljs-params">n: number</span>) {
+  <span class="hljs-keyword">const</span> nums = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) {
+    nums.<span class="hljs-title function_">push</span>(i);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">arraySum</span>(nums));
+  }
+}
+</code></pre>
+<p>结果打印出了：</p>
+<pre><code class="language-shell">0
+1
+2
+3
+4
+</code></pre>
+<p>问题出在 <code>arraySum</code> 函数里：
+（谁会写这种必然出 bug 的代码啊？😂 ）</p>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">arraySum</span>(<span class="hljs-params">arr: <span class="hljs-built_in">number</span>[]</span>) {
+  <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>,
+    num;
+  <span class="hljs-comment">// 这里修改了 arr 的原始值。</span>
+  <span class="hljs-keyword">while</span> ((num = arr.<span class="hljs-title function_">pop</span>()) !== <span class="hljs-literal">undefined</span>) {
+    sum += num;
+  }
+  <span class="hljs-keyword">return</span> sum;
+}
+</code></pre>
+<p>如果想保证入参的值不会被修改，可以给参数加上 <code>readonly</code> 声明：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">arraySum</span>(<span class="hljs-params">arr: <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">number</span>[]</span>) {
+  <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>,
+    num;
+  <span class="hljs-keyword">while</span> ((num = arr.<span class="hljs-title function_">pop</span>()) !== <span class="hljs-literal">undefined</span>) {
+    <span class="hljs-comment">// ~~~ &#x27;pop&#x27; does not exist on type &#x27;readonly number[]&#x27;</span>
+    sum += num;
+  }
+  <span class="hljs-keyword">return</span> sum;
+}
+</code></pre>
+<p><code>readonly</code> 是为了保证某个变量不会被意外的修改。嗯···<strong>纯函数</strong>里的使用，在业务中很难不修改某个 <code>VO</code> 的值。</p>
+<h2 id="使用-readonly-后的影响">使用 <code>readonly</code> 后的影响</h2>
+<p>不带 <code>readonly</code> 声明的类型是带 <code>readonly</code> 声明的同种类型的子类型：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>[] = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+<span class="hljs-keyword">const</span> <span class="hljs-attr">b</span>: <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">number</span>[] = a;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">c</span>: <span class="hljs-built_in">number</span>[] = b;
+<span class="hljs-comment">// ~ Type &#x27;readonly number[]&#x27; is &#x27;readonly&#x27; and cannot be</span>
+<span class="hljs-comment">//   assigned to the mutable type &#x27;number[]&#x27;</span>
+</code></pre>
+<p>如果你的函数能保证不修改入参的值，可以使用 <code>readonly</code>，函数的调用者可以放心的使用你的函数，而不用担心入参会被修改。</p>
+<p>如果函数入参中使用了 <code>readonly</code>，再将入参传入其他函数的时候，其他函数的参数声明也必须是 <code>readonly</code>，需要注意以下情况：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params">a: <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">number</span>[]</span>) {
+  <span class="hljs-title function_">bar</span>(a);
+  <span class="hljs-comment">// Argument of type &#x27;readonly number[]&#x27; is not assignable to parameter of type &#x27;number&#x27;.</span>
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">bar</span>(<span class="hljs-params">b: <span class="hljs-built_in">number</span>[]</span>) {}
+
+<span class="hljs-title function_">foo</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
+</code></pre>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params">a: <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">number</span>[]</span>) {
+  <span class="hljs-keyword">return</span> a;
+}
+
+<span class="hljs-keyword">let</span> <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>[];
+b = <span class="hljs-title function_">foo</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
+<span class="hljs-comment">// The type &#x27;readonly number[]&#x27; is &#x27;readonly&#x27; and cannot be assigned to the mutable type &#x27;number[]&#x27;.</span>
+</code></pre>
+<h2 id="readonly-is-shallow"><code>readonly</code> is shallow</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-attr">dates</span>: <span class="hljs-keyword">readonly</span> <span class="hljs-title class_">Date</span>[] = [<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>()];
+dates.<span class="hljs-title function_">push</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>());
+<span class="hljs-comment">// ~~~~ Property &#x27;push&#x27; does not exist on type &#x27;readonly Date[]&#x27;</span>
+dates[<span class="hljs-number">0</span>].<span class="hljs-title function_">setFullYear</span>(<span class="hljs-number">2037</span>); <span class="hljs-comment">// OK</span>
+</code></pre>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> Outer {
+  <span class="hljs-attr">inner</span>: {
+    <span class="hljs-attr">x</span>: <span class="hljs-built_in">number</span>;
+  };
+}
+<span class="hljs-keyword">const</span> <span class="hljs-attr">o</span>: <span class="hljs-title class_">Readonly</span>&lt;<span class="hljs-title class_">Outer</span>&gt; = { <span class="hljs-attr">inner</span>: { <span class="hljs-attr">x</span>: <span class="hljs-number">0</span> } };
+o.<span class="hljs-property">inner</span> = { <span class="hljs-attr">x</span>: <span class="hljs-number">1</span> };
+<span class="hljs-comment">// ~~~~ Cannot assign to &#x27;inner&#x27; because it is a read-only property</span>
+o.<span class="hljs-property">inner</span>.<span class="hljs-property">x</span> = <span class="hljs-number">1</span>; <span class="hljs-comment">// OK</span>
+
+<span class="hljs-keyword">type</span> T = <span class="hljs-title class_">Readonly</span>&lt;<span class="hljs-title class_">Outer</span>&gt;;
+<span class="hljs-comment">// Type T = {</span>
+<span class="hljs-comment">//   readonly inner: {</span>
+<span class="hljs-comment">//     x: number;</span>
+<span class="hljs-comment">//   };</span>
+<span class="hljs-comment">// }</span>
+</code></pre>
+<h2 id="readonly-vs-const"><code>readonly</code> VS <code>const</code></h2>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Arr</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+<span class="hljs-title class_">Arr</span>[<span class="hljs-number">0</span>] = <span class="hljs-number">10</span>; <span class="hljs-comment">//OK</span>
+<span class="hljs-title class_">Arr</span>.<span class="hljs-title function_">push</span>(<span class="hljs-number">12</span>); <span class="hljs-comment">// OK</span>
+<span class="hljs-title class_">Arr</span>.<span class="hljs-title function_">pop</span>(); <span class="hljs-comment">//Ok</span>
+<span class="hljs-comment">//But</span>
+<span class="hljs-title class_">Arr</span> = [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>]; <span class="hljs-comment">// ERROR</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-attr">arr1</span>: <span class="hljs-title class_">Readonly</span>&lt;<span class="hljs-built_in">number</span>&gt; = [<span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">12</span>];
+arr1.<span class="hljs-title function_">pop</span>(); <span class="hljs-comment">//ERROR</span>
+arr1.<span class="hljs-title function_">push</span>(<span class="hljs-number">15</span>); <span class="hljs-comment">//ERROR</span>
+arr1[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>; <span class="hljs-comment">//ERROR</span>
+<span class="hljs-comment">// But</span>
+arr1 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+</code></pre>
+<pre><code class="language-ts"><span class="hljs-keyword">let</span> <span class="hljs-attr">obj1</span>: { <span class="hljs-keyword">readonly</span> [<span class="hljs-attr">k</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">number</span> } = {};
+obj1.<span class="hljs-property">hi</span> = <span class="hljs-number">45</span>; <span class="hljs-comment">// ndex signature in type &#x27;{ readonly [k: string]: number; }&#x27; only permits reading.</span>
+obj1 = { ...obj1, <span class="hljs-attr">hi</span>: <span class="hljs-number">12</span> }; <span class="hljs-comment">// OK</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">obj2</span>: { [<span class="hljs-attr">k</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">number</span> } = {};
+obj2.<span class="hljs-property">hi</span> = <span class="hljs-number">45</span>; <span class="hljs-comment">// OK</span>
+obj2 = { ...obj2, <span class="hljs-attr">hi</span>: <span class="hljs-number">12</span> }; <span class="hljs-comment">// Cannot assign to &#x27;obj2&#x27; because it is a constant.</span>
+</code></pre>
+
+  </body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <h2 id="instanceof">instanceof</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">myInstanceof</span>(<span class="hljs-params">left, right</span>) {
+  <span class="hljs-keyword">const</span> prototype = right.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>;
+  left = left.<span class="hljs-property">__proto__</span>;
+  <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+    <span class="hljs-keyword">if</span> (left === <span class="hljs-literal">null</span> || left === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">if</span> (prototype === left) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    left = left.<span class="hljs-property">__proto__</span>;
+  }
+}
+</code></pre>
+<h2 id="new">new</h2>
+<pre><code class="language-ts">
+<span class="hljs-comment">/*
+  创建一个空的简单JavaScript对象（即{}）；
+  链接该对象（即设置该对象的构造函数）到另一个对象 ；
+  将步骤1新创建的对象作为this的上下文 ；
+  如果该函数没有返回对象，则返回this。
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">myNew1</span>(<span class="hljs-params">constructor, ...args</span>) {
+  <span class="hljs-keyword">const</span> obj = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">create</span>(constructor.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>);
+  <span class="hljs-keyword">const</span> result = constructor.<span class="hljs-title function_">apply</span>(obj, args);
+  <span class="hljs-keyword">return</span> result <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Object</span> ? result : obj;
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">myNew2</span>(<span class="hljs-params">constructor, ...args</span>) {
+  <span class="hljs-keyword">const</span> <span class="hljs-attr">obj</span>: <span class="hljs-built_in">any</span> = {};
+  obj.<span class="hljs-property">__proto__</span> = constructor.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>;
+  <span class="hljs-keyword">const</span> result = constructor.<span class="hljs-title function_">apply</span>(obj, args);
+  <span class="hljs-keyword">return</span> result <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Object</span> ? result : obj;
+}
+</code></pre>
+<h2 id="call">call</h2>
+<pre><code class="language-ts">(<span class="hljs-title class_">Function</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>).<span class="hljs-property">myCall</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">context, ...args</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">this</span> !== <span class="hljs-string">&quot;function&quot;</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&quot;Error&quot;</span>);
+  }
+  context = context || <span class="hljs-variable language_">window</span>;
+  context.<span class="hljs-property">_fn_</span> = <span class="hljs-variable language_">this</span>;
+  <span class="hljs-keyword">const</span> result = context.<span class="hljs-title function_">_fn_</span>(...args);
+  <span class="hljs-keyword">delete</span> context.<span class="hljs-property">_fn_</span>;
+  <span class="hljs-keyword">return</span> result;
+};
+</code></pre>
+<h2 id="apply">apply</h2>
+<pre><code class="language-ts">(<span class="hljs-title class_">Function</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>).<span class="hljs-property">myApply</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">context, args</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">this</span> !== <span class="hljs-string">&quot;function&quot;</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&quot;Error&quot;</span>);
+  }
+  context = context || <span class="hljs-variable language_">window</span>;
+  context.<span class="hljs-property">_fn_</span> = <span class="hljs-variable language_">this</span>;
+  <span class="hljs-keyword">const</span> result = context.<span class="hljs-title function_">_fn_</span>(...args);
+  <span class="hljs-keyword">delete</span> context.<span class="hljs-property">_fn_</span>;
+  <span class="hljs-keyword">return</span> result;
+};
+</code></pre>
+<h2 id="bind">bind</h2>
+<pre><code class="language-ts">(<span class="hljs-title class_">Function</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>).<span class="hljs-property">myBind</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">context, ...args</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">this</span> !== <span class="hljs-string">&quot;function&quot;</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&quot;Error&quot;</span>);
+  }
+  <span class="hljs-keyword">const</span> _this = <span class="hljs-variable language_">this</span>;
+  <span class="hljs-comment">// 返回一个函数</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">f</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 用 new 调用</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span> <span class="hljs-keyword">instanceof</span> f) {
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">_this</span>(...args, ...<span class="hljs-variable language_">arguments</span>);
+    }
+    <span class="hljs-keyword">return</span> _this.<span class="hljs-title function_">apply</span>(context, args.<span class="hljs-title function_">concat</span>(...<span class="hljs-variable language_">arguments</span>));
+  };
+};
+</code></pre>
+<h2 id="promise">promise</h2>
+<pre><code class="language-ts">
+<span class="hljs-comment">// 三个常量用来表示三种状态</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PENDING</span> = <span class="hljs-string">&quot;pending&quot;</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">REJECT</span> = <span class="hljs-string">&quot;reject&quot;</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">RESOLVE</span> = <span class="hljs-string">&quot;resolve&quot;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">MyPromise</span>(<span class="hljs-params">fn</span>) {
+  <span class="hljs-keyword">const</span> that = <span class="hljs-variable language_">this</span>;
+  <span class="hljs-comment">// 回调接收的值</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span> = <span class="hljs-literal">undefined</span>;
+  <span class="hljs-comment">// 标记状态</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> = <span class="hljs-variable constant_">PENDING</span>;
+  <span class="hljs-comment">// 回调列表</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">rejectCallBacks</span> = [];
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">resolveCallBacks</span> = [];
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">resolve</span>(<span class="hljs-params">value</span>) {
+    <span class="hljs-keyword">if</span> (that.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">PENDING</span>) {
+      that.<span class="hljs-property">status</span> = <span class="hljs-variable constant_">RESOLVE</span>;
+      that.<span class="hljs-property">value</span> = value;
+      <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+        that.<span class="hljs-property">resolveCallBacks</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">cb</span>) =&gt;</span> <span class="hljs-title function_">cb</span>(that.<span class="hljs-property">value</span>));
+      }, <span class="hljs-number">0</span>);
+    }
+  }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">reject</span>(<span class="hljs-params">value</span>) {
+    <span class="hljs-keyword">if</span> (that.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">PENDING</span>) {
+      that.<span class="hljs-property">status</span> = <span class="hljs-variable constant_">REJECT</span>;
+      that.<span class="hljs-property">value</span> = value;
+      <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+        that.<span class="hljs-property">rejectCallBacks</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">cb</span>) =&gt;</span> <span class="hljs-title function_">cb</span>(that.<span class="hljs-property">value</span>));
+      }, <span class="hljs-number">0</span>);
+    }
+  }
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-title function_">fn</span>(resolve, reject);
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-title function_">reject</span>(error);
+  }
+}
+
+<span class="hljs-title class_">MyPromise</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">then</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">resolveCall, rejectCall</span>) {
+  <span class="hljs-comment">// 参数校验,因为参数不是必填的</span>
+  resolveCall = <span class="hljs-keyword">typeof</span> resolveCall === <span class="hljs-string">&quot;function&quot;</span> ? resolveCall : <span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> v;
+  rejectCall =
+    <span class="hljs-keyword">typeof</span> rejectCall === <span class="hljs-string">&quot;function&quot;</span>
+      ? resolveCall
+      : <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+          <span class="hljs-keyword">throw</span> e;
+        };
+
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">PENDING</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">resolveCallBacks</span>.<span class="hljs-title function_">push</span>(resolveCall);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">rejectCallBacks</span>.<span class="hljs-title function_">push</span>(rejectCall);
+  }
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">RESOLVE</span>) {
+    <span class="hljs-title function_">rejectCall</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>);
+  }
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> === <span class="hljs-variable constant_">RESOLVE</span>) {
+    <span class="hljs-title function_">rejectCall</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>);
+  }
+};
+</code></pre>
+<h2 id="promiseall">Promise.all</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">promiseAll</span>(<span class="hljs-params">promises: <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">any</span>&gt;[]</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(promises)) {
+      <span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&quot;参数错误&quot;</span>));
+    }
+    <span class="hljs-keyword">const</span> len = promises.<span class="hljs-property">length</span>;
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(len);
+    <span class="hljs-keyword">let</span> n = <span class="hljs-number">0</span>;
+    promises.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">promise, i</span>) =&gt;</span> {
+      <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(promise)
+        .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> {
+          result[i] = v;
+          <span class="hljs-keyword">if</span> (++n === len) {
+            <span class="hljs-title function_">resolve</span>(result);
+          }
+        })
+        .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+          <span class="hljs-title function_">reject</span>(e);
+        });
+    });
+  });
+}
+</code></pre>
+<h2 id="flag">flag</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">myFlag</span>(<span class="hljs-params">arr: <span class="hljs-built_in">any</span>[], n?: <span class="hljs-built_in">number</span></span>) {
+  n = n === <span class="hljs-literal">undefined</span> ? <span class="hljs-number">1</span> : n;
+  <span class="hljs-keyword">return</span> arr.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, cur</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(cur) &amp;&amp; n &gt; <span class="hljs-number">1</span>) {
+      acc.<span class="hljs-title function_">concat</span>(<span class="hljs-title function_">myFlag</span>(cur, n - <span class="hljs-number">1</span>));
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">return</span> acc.<span class="hljs-title function_">concat</span>(cur);
+    }
+  }, []);
+}
+</code></pre>
+<h2 id="objectcreate">Object.create()</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">myCreat</span>(<span class="hljs-params">obj</span>) {
+  <span class="hljs-comment">// 声明一个工具函数</span>
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">F</span>(<span class="hljs-params"></span>) {}
+
+  F.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span> = obj;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">F</span>();
+}
+</code></pre>
+<h2 id="ajax">Ajax</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ajax</span>(<span class="hljs-params">url, method, body, headers</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> req = <span class="hljs-keyword">new</span> <span class="hljs-title function_">XMLHttpRequest</span>();
+    req.<span class="hljs-title function_">open</span>(method, url);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> headers) {
+      req.<span class="hljs-title function_">setRequestHeader</span>(key, headers[key]);
+    }
+
+    req.<span class="hljs-title function_">onreadystatechange</span>((<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-keyword">if</span> (req.<span class="hljs-property">readyState</span> === <span class="hljs-number">4</span>) {
+        <span class="hljs-keyword">if</span> (req.<span class="hljs-property">status</span> &gt;= <span class="hljs-number">200</span> &amp;&amp; req.<span class="hljs-property">status</span> &lt;= <span class="hljs-number">300</span>) {
+          <span class="hljs-title function_">resolve</span>(req.<span class="hljs-property">responseText</span>);
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-title function_">reject</span>(req);
+        }
+      }
+    }) <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>);
+
+    req.<span class="hljs-title function_">send</span>(body);
+  });
+}
+</code></pre>
+
+  </body>
+</html>

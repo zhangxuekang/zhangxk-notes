@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <ul>
+<li><a href="#%E4%B8%8D%E8%A6%81%E6%A0%B9%E6%8D%AE%E6%95%B0%E6%8D%AE%E8%87%AA%E5%B7%B1%E5%86%99-types%E8%80%8C%E6%98%AF%E4%BD%BF%E7%94%A8%E5%AE%98%E6%96%B9-types">不要根据数据自己写 Types，而是使用官方 Types</a></li>
+<li><a href="#%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E7%B2%BE%E7%A1%AE%E7%9A%84-types">自动生成精确的 Types</a></li>
+<li><a href="#%E6%B2%A1%E6%9C%89%E5%AE%98%E6%96%B9%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C-graphql-schema">没有官方的定义和 GraphQL schema？</a></li>
+</ul>
+<h2 id="不要根据数据自己写-types，而是使用官方-types">不要根据数据自己写 Types，而是使用官方 Types</h2>
+<p>TypeScript 的类型对编程的好处不用多说了。在一些情况下，数据来源可能是 <code>file formats</code>, <code>APIs</code>, or <code>specs</code>，如果你直接从数据上“抽象”出 Types，可能会漏掉某些边界情况。</p>
+<p>有一个 <code>GeoJSON</code> 的例子：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">calculateBoundingBox</span>(<span class="hljs-params">f: GeoJSONFeature</span>): <span class="hljs-title class_">BoundingBox</span> | <span class="hljs-literal">null</span> {
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">box</span>: <span class="hljs-title class_">BoundingBox</span> | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span>;
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">helper</span> = (<span class="hljs-params">coords: <span class="hljs-built_in">any</span>[]</span>) =&gt; {
+    <span class="hljs-comment">// ...</span>
+  };
+
+  <span class="hljs-keyword">const</span> { geometry } = f;
+  <span class="hljs-keyword">if</span> (geometry) {
+    <span class="hljs-title function_">helper</span>(geometry.<span class="hljs-property">coordinates</span>);
+  }
+
+  <span class="hljs-keyword">return</span> box;
+}
+</code></pre>
+<p>函数入参 <code>GeoJSONFeature</code> 没有被精确的定义，只是根据一些数据实例抽象出的定义（假设你是这么做的）。</p>
+<p>最好使用 <code>GeoJSON</code> 官方的标准定义。</p>
+<blockquote>
+<p>GeoJSON is also known as RFC 7946. The very readable spec is at <a href="http://geojson.org">http://geojson.org</a>.</p>
+</blockquote>
+<pre><code class="language-shell"><span class="hljs-meta">$ </span><span class="language-bash">npm install --save-dev @types/geojson</span>
++ @types/geojson@7946.0.7
+</code></pre>
+<p>现在使用官方定义的 Types 替换自己写的类型，TypeScript 马上就报错了：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Feature</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;geojson&quot;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">calculateBoundingBox</span>(<span class="hljs-params">f: Feature</span>): <span class="hljs-title class_">BoundingBox</span> | <span class="hljs-literal">null</span> {
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">box</span>: <span class="hljs-title class_">BoundingBox</span> | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span>;
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">helper</span> = (<span class="hljs-params">coords: <span class="hljs-built_in">any</span>[]</span>) =&gt; {
+    <span class="hljs-comment">// ...</span>
+  };
+
+  <span class="hljs-keyword">const</span> { geometry } = f;
+  <span class="hljs-keyword">if</span> (geometry) {
+    <span class="hljs-title function_">helper</span>(geometry.<span class="hljs-property">coordinates</span>);
+    <span class="hljs-comment">// ~~~~~~~~~~~</span>
+    <span class="hljs-comment">// Property &#x27;coordinates&#x27; does not exist on type &#x27;Geometry&#x27;</span>
+    <span class="hljs-comment">//   Property &#x27;coordinates&#x27; does not exist on type</span>
+    <span class="hljs-comment">//   &#x27;GeometryCollection&#x27;</span>
+  }
+
+  <span class="hljs-keyword">return</span> box;
+}
+</code></pre>
+<p>问题是因为代码假设 <code>geometry</code> 一定会有 <code>coordinates</code> 属性，对大多数情况来说是这样的（for many geometries, including points, lines, and polygons），但是 <code>GeometryCollection</code> 就没有 <code>coordinates</code> 属性。如果函数入参正好是 <code>GeometryCollection</code>，就会出现 bug。</p>
+<p>可以这样简单处理：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> { geometry } = f;
+<span class="hljs-keyword">if</span> (geometry) {
+  <span class="hljs-keyword">if</span> (geometry.<span class="hljs-property">type</span> === <span class="hljs-string">&quot;GeometryCollection&quot;</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;GeometryCollections are not supported.&quot;</span>);
+  }
+  <span class="hljs-title function_">helper</span>(geometry.<span class="hljs-property">coordinates</span>); <span class="hljs-comment">// OK</span>
+}
+</code></pre>
+<p>更好的处理是让你的函数能真正支持所有的 geometry 类型：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title function_">geometryHelper</span> = (<span class="hljs-params">g: Geometry</span>) =&gt; {
+  <span class="hljs-keyword">if</span> (geometry.<span class="hljs-property">type</span> === <span class="hljs-string">&quot;GeometryCollection&quot;</span>) {
+    geometry.<span class="hljs-property">geometries</span>.<span class="hljs-title function_">forEach</span>(geometryHelper);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-title function_">helper</span>(geometry.<span class="hljs-property">coordinates</span>); <span class="hljs-comment">// OK</span>
+  }
+};
+
+<span class="hljs-keyword">const</span> { geometry } = f;
+<span class="hljs-keyword">if</span> (geometry) {
+  <span class="hljs-title function_">geometryHelper</span>(geometry);
+}
+</code></pre>
+<h2 id="自动生成精确的-types">自动生成精确的 Types</h2>
+<p>GraphQL 是一个用于 API 的查询语言，是一个使用基于类型系统来执行查询的服务端运行时（类型系统由你的数据定义）。</p>
+<p>使用 GraphQL 写一个获取信息的接口可能像是这样的：</p>
+<pre><code>query {
+  repository(owner: &quot;Microsoft&quot;, name: &quot;TypeScript&quot;) {
+    createdAt
+    description
+  }
+}
+</code></pre>
+<p>结果是：</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;repository&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;createdAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2014-06-17T15:28:39Z&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;TypeScript is a superset of JavaScript that compiles to JavaScript.&quot;</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>TypeScript 的 Types 可以和 GraphQL 的模板精确的对应起来。</p>
+<p>下面是一个获取公共许可的 GraphQL 接口定义：</p>
+<pre><code>query getLicense($owner:String!, $name:String!){
+  repository(owner:$owner, name:$name) {
+    description
+    licenseInfo {
+      spdxId
+      name
+    }
+  }
+}
+</code></pre>
+<p>这些信息已经足够构建出 TypeScript 的 Types 了。有很多工具可以帮助你根据 GraphQL 生成 TypeScript Types。以工具 <code>Apollo</code> 为例：</p>
+<pre><code class="language-shell"><span class="hljs-meta">$ </span><span class="language-bash">apollo client:codegen \
+    --endpoint https://api.github.com/graphql \
+    --includes license.graphql \
+    --target typescript</span>
+Loading Apollo Project
+Generating query files with &#x27;typescript&#x27; target - wrote 2 files
+</code></pre>
+<p>产出是这样的：</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> getLicense_repository_licenseInfo {
+  <span class="hljs-attr">__typename</span>: <span class="hljs-string">&quot;License&quot;</span>;
+  <span class="hljs-comment">/** Short identifier specified by &lt;https://spdx.org/licenses&gt; */</span>
+  <span class="hljs-attr">spdxId</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-comment">/** The license full name specified by &lt;https://spdx.org/licenses&gt; */</span>
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> getLicense_repository {
+  <span class="hljs-attr">__typename</span>: <span class="hljs-string">&quot;Repository&quot;</span>;
+  <span class="hljs-comment">/** The description of the repository. */</span>
+  <span class="hljs-attr">description</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-comment">/** The license associated with the repository */</span>
+  <span class="hljs-attr">licenseInfo</span>: getLicense_repository_licenseInfo | <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> getLicense {
+  <span class="hljs-comment">/** Lookup a given repository by the owner and repository name. */</span>
+  <span class="hljs-attr">repository</span>: getLicense_repository | <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> getLicenseVariables {
+  <span class="hljs-attr">owner</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+}
+</code></pre>
+<ul>
+<li>同时生成了请求的入参 <code>interface</code> 和请求结果 <code>interface</code></li>
+<li>精确指出了哪些是必须有的，哪些是可以有的属性（Nullability）</li>
+<li>自动添加注解</li>
+</ul>
+<p>如果查询改变，Types 自动改变，如果 GraphQL 模板改变，Types 也会自动改变。</p>
+<h2 id="没有官方的定义和-graphql-schema？">没有官方的定义和 GraphQL schema？</h2>
+<p>那你只能从 data 中“抽象”出类型了。有一些工具，例如 <code>quicktype</code>(<a href="https://quicktype.io/">https://quicktype.io/</a>) 可以帮助你做这件事，但是要注意，无论是自己写还是工具帮助，从 data 中生成类型总是会可能漏掉一些边界情况。</p>
+<p>即使你没有注意到，其实你已经开始使用官方定义的接口了，例如 <code>browser DOM API </code>。</p>
+
+  </body>
+</html>

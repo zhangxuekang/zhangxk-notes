@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <h2 id="快排序">快排序</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">quickSort</span>(<span class="hljs-params">arr: <span class="hljs-built_in">any</span>[]</span>) {
+  <span class="hljs-keyword">const</span> len = arr.<span class="hljs-property">length</span>;
+  <span class="hljs-keyword">if</span> (len &lt;= <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> arr;
+  }
+  <span class="hljs-keyword">const</span> middle = arr[<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(len / <span class="hljs-number">2</span>)];
+  <span class="hljs-keyword">const</span> left = [];
+  <span class="hljs-keyword">const</span> right = [];
+  <span class="hljs-keyword">const</span> same = [];
+  arr.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (v &lt; middle) {
+      left.<span class="hljs-title function_">push</span>(v);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (v &gt; middle) {
+      right.<span class="hljs-title function_">push</span>(v);
+    } <span class="hljs-keyword">else</span> {
+      same.<span class="hljs-title function_">push</span>(v);
+    }
+  });
+  <span class="hljs-keyword">return</span> [...<span class="hljs-title function_">quickSort</span>(left), ...<span class="hljs-title function_">quickSort</span>(same), ...<span class="hljs-title function_">quickSort</span>(right)];
+}
+</code></pre>
+<h2 id="打印树节点路径">打印树节点路径</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">binaryTreePaths</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">const</span> paths = [];
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">help</span> = (<span class="hljs-params">node, path</span>) =&gt; {
+    <span class="hljs-keyword">if</span> (node) {
+      path += node.<span class="hljs-property">val</span>.<span class="hljs-title function_">toString</span>();
+      <span class="hljs-keyword">if</span> (node.<span class="hljs-property">left</span> === <span class="hljs-literal">null</span> &amp;&amp; node.<span class="hljs-property">right</span> === <span class="hljs-literal">null</span>) {
+        <span class="hljs-comment">// 当前节点是叶子节点</span>
+        paths.<span class="hljs-title function_">push</span>(path); <span class="hljs-comment">// 把路径加入到答案中</span>
+      } <span class="hljs-keyword">else</span> {
+        path += <span class="hljs-string">&quot;-&gt;&quot;</span>; <span class="hljs-comment">// 当前节点不是叶子节点，继续递归遍历</span>
+        <span class="hljs-title function_">help</span>(node.<span class="hljs-property">left</span>, path);
+        <span class="hljs-title function_">help</span>(node.<span class="hljs-property">right</span>, path);
+      }
+    }
+  };
+  <span class="hljs-title function_">help</span>(root, <span class="hljs-string">&quot;&quot;</span>);
+  <span class="hljs-keyword">return</span> paths;
+}
+</code></pre>
+<h2 id="二叉树的深度">二叉树的深度</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">maxDepth</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">if</span> (!root) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-title function_">maxDepth</span>(root.<span class="hljs-property">left</span>), <span class="hljs-title function_">maxDepth</span>(root.<span class="hljs-property">right</span>)) + <span class="hljs-number">1</span>;
+  }
+}
+</code></pre>
+<h2 id="判断二叉搜索树">判断二叉搜索树</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">isValidBST</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">helper</span>(root, -<span class="hljs-title class_">Infinity</span>, <span class="hljs-title class_">Infinity</span>);
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">helper</span>(<span class="hljs-params">node, lower, upper</span>) {
+    <span class="hljs-keyword">if</span> (node === <span class="hljs-literal">null</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+    <span class="hljs-keyword">if</span> (node.<span class="hljs-property">val</span> &lt;= lower || node.<span class="hljs-property">val</span> &gt;= upper) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">return</span> (
+      <span class="hljs-title function_">helper</span>(node.<span class="hljs-property">left</span>, lower, node.<span class="hljs-property">val</span>) &amp;&amp; <span class="hljs-title function_">helper</span>(node.<span class="hljs-property">right</span>, node.<span class="hljs-property">val</span>, upper)
+    );
+  }
+}
+</code></pre>
+<h2 id="给数字字符串加逗号">给数字字符串加逗号</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">addComma</span>(<span class="hljs-params">str: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-keyword">return</span> str.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/(\d)(?=(?:\d{3})+$)/g</span>, <span class="hljs-string">&quot;$1,&quot;</span>);
+}
+</code></pre>
+<h2 id="判断是不是对称二叉树">判断是不是对称二叉树</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">isSymmetric</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">check</span>(<span class="hljs-params">left, right</span>) {
+    <span class="hljs-keyword">if</span> (!left &amp;&amp; !right) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+    <span class="hljs-keyword">if</span> (!left || !right) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">return</span> (
+      left.<span class="hljs-property">value</span> === right.<span class="hljs-property">value</span> &amp;&amp;
+      <span class="hljs-title function_">check</span>(left.<span class="hljs-property">left</span>, right.<span class="hljs-property">right</span>) &amp;&amp;
+      <span class="hljs-title function_">check</span>(left.<span class="hljs-property">right</span>, right.<span class="hljs-property">left</span>)
+    );
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">check</span>(root, root);
+}
+</code></pre>
+<h2 id="全排列">全排列</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fullPermutation</span>(<span class="hljs-params">str: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">const</span> len = str.<span class="hljs-property">length</span>;
+  <span class="hljs-keyword">if</span> (len === <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">return</span> [];
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (len === <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> [str];
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) {
+      <span class="hljs-keyword">const</span> target = str[i];
+      <span class="hljs-keyword">const</span> rest = str.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, i) + str.<span class="hljs-title function_">substring</span>(i + <span class="hljs-number">1</span>, len);
+      <span class="hljs-keyword">const</span> restPermutation = <span class="hljs-title function_">fullPermutation</span>(rest);
+      restPermutation.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> {
+        result.<span class="hljs-title function_">push</span>(v + target);
+      });
+      <span class="hljs-keyword">return</span> result;
+    }
+  }
+}
+</code></pre>
+<h2 id="合并有序链表">合并有序链表</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">mergeList</span>(<span class="hljs-params">l1, l2</span>) {
+  <span class="hljs-keyword">if</span> (l1 === <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">return</span> l2;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (l2 === <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">return</span> l1;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (l1.<span class="hljs-property">value</span> &gt; l2.<span class="hljs-property">value</span>) {
+    l2.<span class="hljs-property">next</span> = <span class="hljs-title function_">mergeList</span>(l1, l2.<span class="hljs-property">next</span>);
+    <span class="hljs-keyword">return</span> l2;
+  } <span class="hljs-keyword">else</span> {
+    l1.<span class="hljs-property">next</span> = <span class="hljs-title function_">mergeList</span>(l1.<span class="hljs-property">next</span>, l2);
+  }
+}
+</code></pre>
+<h2 id="反转链表">反转链表</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">reverseList</span>(<span class="hljs-params">head</span>) {
+  <span class="hljs-keyword">if</span> (head === <span class="hljs-literal">null</span> || head.<span class="hljs-property">next</span> === <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">return</span> head;
+  }
+  <span class="hljs-keyword">const</span> newHead = <span class="hljs-title function_">reverseList</span>(head.<span class="hljs-property">next</span>);
+  head.<span class="hljs-property">next</span>.<span class="hljs-property">next</span> = head;
+  head.<span class="hljs-property">next</span> = <span class="hljs-literal">null</span>;
+
+  <span class="hljs-keyword">return</span> newHead;
+}
+</code></pre>
+<h2 id="最大的连续子序列">最大的连续子序列</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">maxSubArray</span>(<span class="hljs-params">nums: <span class="hljs-built_in">number</span>[]</span>) {
+  <span class="hljs-keyword">let</span> pre = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> maxAns = nums[<span class="hljs-number">0</span>];
+  nums.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">n</span>) =&gt;</span> {
+    pre = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(pre + n, n);
+    maxAns = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(maxAns, pre);
+  });
+
+  <span class="hljs-keyword">return</span> maxAns;
+}
+</code></pre>
+<h2 id="有效的括号">有效的括号</h2>
+<pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">isValidBracket1</span>(<span class="hljs-params">str: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-keyword">const</span> n = str.<span class="hljs-property">length</span>;
+  <span class="hljs-comment">// 奇数肯定不对</span>
+  <span class="hljs-keyword">if</span> (n % <span class="hljs-number">2</span> === <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  }
+  <span class="hljs-keyword">const</span> pairs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([
+    [<span class="hljs-string">&quot;)&quot;</span>, <span class="hljs-string">&quot;(&quot;</span>],
+    [<span class="hljs-string">&quot;]&quot;</span>, <span class="hljs-string">&quot;[&quot;</span>],
+    [<span class="hljs-string">&quot;}&quot;</span>, <span class="hljs-string">&quot;{&quot;</span>],
+  ]);
+  <span class="hljs-keyword">const</span> stk = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ch <span class="hljs-keyword">of</span> str) {
+    <span class="hljs-keyword">if</span> (pairs.<span class="hljs-title function_">has</span>(ch)) {
+      <span class="hljs-keyword">if</span> (stk.<span class="hljs-property">length</span> === <span class="hljs-number">0</span> || stk[stk.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] !== pairs.<span class="hljs-title function_">get</span>(ch)) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+      }
+      stk.<span class="hljs-title function_">pop</span>();
+    } <span class="hljs-keyword">else</span> {
+      stk.<span class="hljs-title function_">push</span>(ch);
+    }
+  }
+  <span class="hljs-keyword">return</span> !stk.<span class="hljs-property">length</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">isValidBracket2</span>(<span class="hljs-params">str: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-keyword">const</span> n = str.<span class="hljs-property">length</span>;
+  <span class="hljs-comment">// 奇数肯定不对</span>
+  <span class="hljs-keyword">if</span> (n % <span class="hljs-number">2</span> === <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  }
+
+  <span class="hljs-keyword">const</span> regExp = <span class="hljs-regexp">/(\(\))|(\[\])|(\{\})/g</span>;
+
+  <span class="hljs-keyword">while</span> (regExp.<span class="hljs-title function_">test</span>(str)) {
+    str = str.<span class="hljs-title function_">replace</span>(regExp, <span class="hljs-string">&quot;&quot;</span>);
+  }
+  <span class="hljs-keyword">return</span> str.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>;
+}
+</code></pre>
+
+  </body>
+</html>

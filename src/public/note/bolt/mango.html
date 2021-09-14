@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+    />
+    <title>${title}</title>
+  </head>
+  <body>
+    <ul>
+<li><a href="#web-%E5%BD%95%E5%88%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">web 录制解决方案</a><ul>
+<li><a href="#%E8%A7%86%E9%A2%91%E6%B5%81">视频流</a></li>
+<li><a href="#%E4%BA%8B%E4%BB%B6%E6%B5%81">事件流</a></li>
+</ul>
+</li>
+<li><a href="#rrweb-%E5%8E%9F%E7%90%86">rrweb 原理</a><ul>
+<li><a href="#%E8%AE%B0%E5%BD%95">记录</a></li>
+<li><a href="#%E5%9B%9E%E6%94%BE">回放</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="web-录制解决方案">web 录制解决方案</h2>
+<h3 id="视频流">视频流</h3>
+<ul>
+<li>MediaRecorder Api 浏览器录屏 api,媒体流数据</li>
+<li>HTML to Canvas 固定频率截图,模拟录制</li>
+</ul>
+<p>优点:</p>
+<p>支持复杂元素,canvas,video
+支持多标签</p>
+<p>缺点:</p>
+<p>消耗高
+只能录制屏幕显示数据
+用户操作成本高(授权等)
+兼容性差(ie,安卓)</p>
+<h3 id="事件流">事件流</h3>
+<ul>
+<li>user event record 录制用户操作事件,沙箱模拟回放</li>
+<li>UI event record 录制浏览器信息变更(dom css),沙箱模拟回放</li>
+</ul>
+<p>优点:</p>
+<p>产物体积小
+性能消耗小,用户无感知
+支持窗口最大化,最小化,全屏等</p>
+<p>缺点:</p>
+<p>复杂元素差
+tab 页面刷新后录制中断</p>
+<h2 id="rrweb-原理">rrweb 原理</h2>
+<h3 id="记录">记录</h3>
+<ul>
+<li>将 dom 及其状态转化为可序列化的数据结构 snapshot dom-vdom<ul>
+<li>html-json</li>
+<li>表单值写成 html 属性</li>
+<li>script 标签改成 noscript,避免意外执行 js</li>
+<li>样式内联</li>
+<li>...</li>
+</ul>
+</li>
+<li>监听增量更新<ul>
+<li>类型<ul>
+<li>dom mutation</li>
+<li>input event<ul>
+<li>不记录 password</li>
+</ul>
+</li>
+<li>mouse event</li>
+<li>window event</li>
+<li>...</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>数据存储</li>
+</ul>
+<h3 id="回放">回放</h3>
+<ul>
+<li>实例化<ul>
+<li>div 模拟鼠标</li>
+<li>canvas 模拟鼠标轨迹</li>
+</ul>
+</li>
+<li>rebuild dom</li>
+<li>应用增量更新</li>
+</ul>
+
+  </body>
+</html>
