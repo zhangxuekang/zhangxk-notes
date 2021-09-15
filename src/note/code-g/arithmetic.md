@@ -221,4 +221,73 @@ function isValidBracket2(str: string) {
   }
   return str.length === 0;
 }
+
+```
+## 遍历二叉树
+
+```ts
+
+/* 遍历二叉树,先左后右的通用模板 */
+function traversal(root) {
+  const stack = [];
+  while (root || stack.length) {
+    while (root) {
+      stack.push(root);
+      root = root.left;
+    }
+    root = stack.pop();
+    root = root.right;
+  }
+}
+
+/* 具体前序遍历代码 */
+function preorderTraversal(root) {
+  // 初始化数据
+  const result = [];
+  const stack = [];
+  while (root || stack.length) {
+    while (root) {
+      stack.push(root);
+      result.push(root.val);
+      root = root.left;
+    }
+    root = stack.pop();
+    root = root.right;
+  }
+  return result;
+}
+
+/* 具体中序遍历代码 */
+function inorderTraversal(root) {
+  // 初始化数据
+  const result = [];
+  const stack = [];
+  while (root || stack.length) {
+    while (root) {
+      stack.push(root);
+      root = root.left;
+    }
+    root = stack.pop();
+    result.push(root.val);
+    root = root.right;
+  }
+  return result;
+}
+
+/* 具体后序遍历代码 */
+function postorderTraversal(root) {
+  // 初始化数据
+  const res = [];
+  const stack = [];
+  while (root || stack.length) {
+    while (root) {
+      stack.push(root);
+      res.unshift(root.val);
+      root = root.right;
+    }
+    root = stack.pop();
+    root = root.left;
+  }
+  return res;
+}
 ```
