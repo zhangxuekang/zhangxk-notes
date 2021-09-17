@@ -4,44 +4,123 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
-    />
-    <link rel="stylesheet" href="src/index.css" />
-    <title>${title}</title>
+    <title>Document</title>
     <style>
       html,
       body,
+      div,
+      p,
+      h2,
+      a,
       ul,
       li,
-      ol,
-      dl,
-      dd,
-      dt,
-      p,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      form,
-      fieldset,
-      legend,
       img {
-        margin: 0;
-        padding: 0;
+        margin: 0px;
+        padding: 0px;
       }
-
       body {
-        width: 60%;
-        margin-left: 20%;
+        font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue,
+          PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC,
+          WenQuanYi Micro Hei, sans-serif;
+        color: #121212;
+        -webkit-tap-highlight-color: rgba(18, 18, 18, 0);
+      }
+      .head-img {
+        width: 100%;
+        padding-bottom: 33.3%;
+        background-size: cover;
+        background-position: 50%;
+        background-color: antiquewhite;
+        background-image: url("https://source.unsplash.com/random/1024x360");
+      }
+      article {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+      header {
+        display: block;
+        overflow: hidden;
+        width: 690px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 22px;
+        line-height: 1.4;
+        margin-bottom: 14px;
+      }
+      #meta_content {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 22px;
+        line-height: 20px;
+        font-size: 0;
+        word-wrap: break-word;
+        -webkit-hyphens: auto;
+        -ms-hyphens: auto;
+        hyphens: auto;
+        display: flex;
+        align-items: center;
+      }
+      #copyright-logo {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 4px;
+        font-size: 12px;
+        line-height: 1.67;
+        border-radius: 2px;
+        width: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+        max-width: 70%;
+        font-style: normal;
+        letter-spacing: normal;
+        background: rgba(0, 0, 0, 0.05);
+        color: rgba(0, 0, 0, 0.3);
+        margin: 0 10px 10px 0;
+      }
+      .name,
+      #publish_time {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 10px 10px 0;
+        font-size: 15px;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        word-wrap: break-word;
+        hyphens: auto;
+      }
+      .container {
+        overflow: visible;
+        width: 690px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .content-time {
+        overflow: hidden;
+        width: 690px;
+        margin: 0 auto;
+        padding: 16px 0;
+        font-size: 14px;
+        color: #8590a6;
       }
     </style>
   </head>
   <body>
-    <h1 id="思考如何设计好维护的前端组件">思考如何设计好维护的前端组件</h1>
+    <div class="head-img"></div>
+    <article>
+      <header>
+        <h1>${title}</h1>
+        <div id="meta_content">
+          <span id="copyright-logo">原创</span>
+          <span class="name"> zhangxk </span>
+
+          <em id="publish_time">${time}</em>
+        </div>
+      </header>
+      <div class="container"><h1 id="思考如何设计好维护的前端组件">思考如何设计好维护的前端组件</h1>
 <p>在写平时工作写业务代码的时候，为了开发效率而忽略了前端组件的合理设计。导致后期需求迭代和修改 bug 的时候，维护困难，更不用说维护代码的人可能并不是代码的开发者。思考了一下如何设计出更好维护的前端组件，适用于 react 和 vue。以下只是我个人的粗浅观点，分享出来大家一起交流。</p>
 <ol>
 <li>写下任何代码前画出整个业务组件设计的 UML 图，显示每个组件的 state、props、methods 和其他组件的关系。即使不写下来，也要在大脑中有清晰的图示。这些工作强制让你思考一个组件的渲染需要哪些外部数据（props），自身应该拥有的功能属性（state），和组件可能有的动作（methods）。这些思考对接下来的写代码很重要。</li>
@@ -50,6 +129,8 @@
 <li>降低耦合度，好的组件只需要关心自己收的到 props 和传递给子组件的 props。降低耦合度的好处不只是体现在重用性上，功能模块的解耦使整个业务逻辑更加清晰，降低了维护成本。尽可能将相对独立的功能模块单独处理成组件。不要什么功能都写在一个大组件里，文件变得特别大，维护起来真是一言难尽。抽离组件肯定会花费部分时间和精力，但是比之后维护混乱的逻辑容易的多。</li>
 <li>未完待补充</li>
 </ol>
-
+</div>
+      <footer></footer>
+    </article>
   </body>
 </html>

@@ -4,44 +4,123 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
-    />
-    <link rel="stylesheet" href="src/index.css" />
-    <title>${title}</title>
+    <title>Document</title>
     <style>
       html,
       body,
+      div,
+      p,
+      h2,
+      a,
       ul,
       li,
-      ol,
-      dl,
-      dd,
-      dt,
-      p,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      form,
-      fieldset,
-      legend,
       img {
-        margin: 0;
-        padding: 0;
+        margin: 0px;
+        padding: 0px;
       }
-
       body {
-        width: 60%;
-        margin-left: 20%;
+        font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue,
+          PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC,
+          WenQuanYi Micro Hei, sans-serif;
+        color: #121212;
+        -webkit-tap-highlight-color: rgba(18, 18, 18, 0);
+      }
+      .head-img {
+        width: 100%;
+        padding-bottom: 33.3%;
+        background-size: cover;
+        background-position: 50%;
+        background-color: antiquewhite;
+        background-image: url("https://source.unsplash.com/random/1024x360");
+      }
+      article {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+      header {
+        display: block;
+        overflow: hidden;
+        width: 690px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 22px;
+        line-height: 1.4;
+        margin-bottom: 14px;
+      }
+      #meta_content {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 22px;
+        line-height: 20px;
+        font-size: 0;
+        word-wrap: break-word;
+        -webkit-hyphens: auto;
+        -ms-hyphens: auto;
+        hyphens: auto;
+        display: flex;
+        align-items: center;
+      }
+      #copyright-logo {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 4px;
+        font-size: 12px;
+        line-height: 1.67;
+        border-radius: 2px;
+        width: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+        max-width: 70%;
+        font-style: normal;
+        letter-spacing: normal;
+        background: rgba(0, 0, 0, 0.05);
+        color: rgba(0, 0, 0, 0.3);
+        margin: 0 10px 10px 0;
+      }
+      .name,
+      #publish_time {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 10px 10px 0;
+        font-size: 15px;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        word-wrap: break-word;
+        hyphens: auto;
+      }
+      .container {
+        overflow: visible;
+        width: 690px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .content-time {
+        overflow: hidden;
+        width: 690px;
+        margin: 0 auto;
+        padding: 16px 0;
+        font-size: 14px;
+        color: #8590a6;
       }
     </style>
   </head>
   <body>
-    <h1 id="记录鼠标轨迹-生成-svg-路径">记录鼠标轨迹, 生成 svg 路径</h1>
+    <div class="head-img"></div>
+    <article>
+      <header>
+        <h1>${title}</h1>
+        <div id="meta_content">
+          <span id="copyright-logo">原创</span>
+          <span class="name"> zhangxk </span>
+
+          <em id="publish_time">${time}</em>
+        </div>
+      </header>
+      <div class="container"><h1 id="记录鼠标轨迹-生成-svg-路径">记录鼠标轨迹, 生成 svg 路径</h1>
 <p>&emsp;&emsp;业务上遇到了这样的问题, 在浏览器中, 使元素沿着用户画出的路径移动. 因为让元素沿着 svg 路径移动已经实现了, 所以需要做的是用鼠标画出路径. 鼠标方法只能获取鼠标在页面中的实时坐标, 是离散的坐标点, 如何将这些坐标点转化成平滑的路径是问题的关键.</p>
 <p><img src="https://zhangxuekang.github.io/src/blog/mouse-svg/svg.png" alt="三次贝塞尔曲线"> &emsp;&emsp;svg 的三次贝塞尔曲线需要定义一个点和两个控制点, 所以用 C 命令创建三次贝塞尔曲线, 需要设置三组坐标参数(c dx1 dy1, dx2 dy2, dx dy). <em><a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial/Paths#Curve_commands">这里的最后一个坐标(dx, dy)表示的是曲线的终点, 另外两个坐标是控制点, (dx1, dy1)是起点的控制点, (dx2, dy2)是终点的控制点</a></em>. 终点的坐标点好说, 也就是获取的鼠标位置点, 难的是如何得到两个控制点.</p>
 <p>&emsp;&emsp;网上搜索解决办法, 在百度文库上发现了一篇文章介绍控制点的确定方法(<em><a href="https://wenku.baidu.com/view/c790f8d46bec0975f565e211.html">贝塞尔曲线控制点确定的方法</a></em>). 现在来尝试下用这个方法转化坐标.</p>
@@ -87,6 +166,8 @@
 }
 </code></pre>
 <p><em><a href="https://zhangxuekang.github.io/mouse-svg/">查看在线 demo</a></em></p>
-
+</div>
+      <footer></footer>
+    </article>
   </body>
 </html>

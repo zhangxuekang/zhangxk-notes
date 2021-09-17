@@ -4,44 +4,123 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
-    />
-    <link rel="stylesheet" href="src/index.css" />
-    <title>${title}</title>
+    <title>Document</title>
     <style>
       html,
       body,
+      div,
+      p,
+      h2,
+      a,
       ul,
       li,
-      ol,
-      dl,
-      dd,
-      dt,
-      p,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      form,
-      fieldset,
-      legend,
       img {
-        margin: 0;
-        padding: 0;
+        margin: 0px;
+        padding: 0px;
       }
-
       body {
-        width: 60%;
-        margin-left: 20%;
+        font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue,
+          PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC,
+          WenQuanYi Micro Hei, sans-serif;
+        color: #121212;
+        -webkit-tap-highlight-color: rgba(18, 18, 18, 0);
+      }
+      .head-img {
+        width: 100%;
+        padding-bottom: 33.3%;
+        background-size: cover;
+        background-position: 50%;
+        background-color: antiquewhite;
+        background-image: url("https://source.unsplash.com/random/1024x360");
+      }
+      article {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+      header {
+        display: block;
+        overflow: hidden;
+        width: 690px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 22px;
+        line-height: 1.4;
+        margin-bottom: 14px;
+      }
+      #meta_content {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 22px;
+        line-height: 20px;
+        font-size: 0;
+        word-wrap: break-word;
+        -webkit-hyphens: auto;
+        -ms-hyphens: auto;
+        hyphens: auto;
+        display: flex;
+        align-items: center;
+      }
+      #copyright-logo {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 4px;
+        font-size: 12px;
+        line-height: 1.67;
+        border-radius: 2px;
+        width: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+        max-width: 70%;
+        font-style: normal;
+        letter-spacing: normal;
+        background: rgba(0, 0, 0, 0.05);
+        color: rgba(0, 0, 0, 0.3);
+        margin: 0 10px 10px 0;
+      }
+      .name,
+      #publish_time {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 10px 10px 0;
+        font-size: 15px;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        word-wrap: break-word;
+        hyphens: auto;
+      }
+      .container {
+        overflow: visible;
+        width: 690px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .content-time {
+        overflow: hidden;
+        width: 690px;
+        margin: 0 auto;
+        padding: 16px 0;
+        font-size: 14px;
+        color: #8590a6;
       }
     </style>
   </head>
   <body>
-    <p>声明提升，相同的函数会覆盖上一个函数，并且函数声明优先于变量声明。</p>
+    <div class="head-img"></div>
+    <article>
+      <header>
+        <h1>${title}</h1>
+        <div id="meta_content">
+          <span id="copyright-logo">原创</span>
+          <span class="name"> zhangxk </span>
+
+          <em id="publish_time">${time}</em>
+        </div>
+      </header>
+      <div class="container"><p>声明提升，相同的函数会覆盖上一个函数，并且函数声明优先于变量声明。</p>
 <hr>
 <p>箭头函数其实是没有 this 的，this 在箭头函数里就是个普通变量，取的是最近的非箭头函数环境的 this 值。</p>
 <hr>
@@ -141,6 +220,64 @@
 <li>跳过空的阶段，进入 check 阶段，执行 setImmediate 回调</li>
 </ol>
 <hr>
-
+<h2 id="垃圾回收">垃圾回收</h2>
+<h3 id="引用计数">引用计数</h3>
+<p>此算法把“对象是否不再需要”简化定义为“对象有没有其他对象引用到它”。如果没有引用指向该对象（零引用），对象将被垃圾回收机制回收。</p>
+<p>限制：无法处理循环引用的事例。</p>
+<h3 id="标记清除">标记清除</h3>
+<p>这个算法把“对象是否不再需要”简化定义为“对象是否可以获得”。这个算法假定设置一个叫做根（root）的对象（在 Javascript 里，根是全局对象）。垃圾回收器将定期从根开始，找所有从根开始引用的对象，然后找这些对象引用的对象……从根开始，垃圾回收器将找到所有可以获得的对象和收集所有不能获得的对象。</p>
+<p>从 2012 年起，所有现代浏览器都使用了标记-清除垃圾回收算法。</p>
+<p>限制: 那些无法从根对象查询到的对象都将被清除</p>
+<p>尽管这是一个限制，但实践中我们很少会碰到类似的情况，所以开发者不太会去关心垃圾回收机制。</p>
+<hr>
+<h2 id="osi-模型">OSI 模型</h2>
+<p>开放式系统互联模型（英语：Open System Interconnection Model，缩写：OSI；简称为 OSI 模型）是一种概念模型，由国际标准化组织提出，一个试图使各种计算机在世界范围内互连为网络的标准框架。</p>
+<table>
+<thead>
+<tr>
+<th>层数</th>
+<th>说明</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第七层 应用层</td>
+<td>应用层提供为应用软件而设计的接口，以设置与另一应用软件之间的通信。</td>
+<td>HTTP、HTTPS、FTP、Telnet、SSH、SMTP、POP3</td>
+</tr>
+<tr>
+<td>第六层 表示层</td>
+<td>表示层把数据转换为能与接收者的系统格式兼容并适合传输的格式。</td>
+<td>-</td>
+</tr>
+<tr>
+<td>第五层 会话层</td>
+<td>会话层负责在数据传输中设置和维护计算机网络中两台计算机之间的通信连接</td>
+<td>-</td>
+</tr>
+<tr>
+<td>第四层 传输层</td>
+<td>传输层把传输表头加至数据以形成数据包。传输表头包含了所使用的协议等发送信息。</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>第三层 网络层</td>
+<td>网络层决定数据的路径选择和转寄，将网络表头加至数据包，以形成分组。</td>
+<td>IP</td>
+</tr>
+<tr>
+<td>第二层 数据链路层</td>
+<td>数据链路层负责网络寻址、错误侦测和改错</td>
+<td>-</td>
+</tr>
+<tr>
+<td>第一层 物理层</td>
+<td>物理层在局部局域网上发送数据帧，它负责管理电脑通信设备和网络媒体之间的互通。</td>
+<td>针脚、电压、线缆规范、集线器、中继器、网卡、主机接口卡</td>
+</tr>
+</tbody></table>
+</div>
+      <footer></footer>
+    </article>
   </body>
 </html>

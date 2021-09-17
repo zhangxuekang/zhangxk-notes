@@ -4,44 +4,123 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
-    />
-    <link rel="stylesheet" href="src/index.css" />
-    <title>${title}</title>
+    <title>Document</title>
     <style>
       html,
       body,
+      div,
+      p,
+      h2,
+      a,
       ul,
       li,
-      ol,
-      dl,
-      dd,
-      dt,
-      p,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      form,
-      fieldset,
-      legend,
       img {
-        margin: 0;
-        padding: 0;
+        margin: 0px;
+        padding: 0px;
       }
-
       body {
-        width: 60%;
-        margin-left: 20%;
+        font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue,
+          PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC,
+          WenQuanYi Micro Hei, sans-serif;
+        color: #121212;
+        -webkit-tap-highlight-color: rgba(18, 18, 18, 0);
+      }
+      .head-img {
+        width: 100%;
+        padding-bottom: 33.3%;
+        background-size: cover;
+        background-position: 50%;
+        background-color: antiquewhite;
+        background-image: url("https://source.unsplash.com/random/1024x360");
+      }
+      article {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+      header {
+        display: block;
+        overflow: hidden;
+        width: 690px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 22px;
+        line-height: 1.4;
+        margin-bottom: 14px;
+      }
+      #meta_content {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 22px;
+        line-height: 20px;
+        font-size: 0;
+        word-wrap: break-word;
+        -webkit-hyphens: auto;
+        -ms-hyphens: auto;
+        hyphens: auto;
+        display: flex;
+        align-items: center;
+      }
+      #copyright-logo {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 4px;
+        font-size: 12px;
+        line-height: 1.67;
+        border-radius: 2px;
+        width: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+        max-width: 70%;
+        font-style: normal;
+        letter-spacing: normal;
+        background: rgba(0, 0, 0, 0.05);
+        color: rgba(0, 0, 0, 0.3);
+        margin: 0 10px 10px 0;
+      }
+      .name,
+      #publish_time {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 10px 10px 0;
+        font-size: 15px;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        word-wrap: break-word;
+        hyphens: auto;
+      }
+      .container {
+        overflow: visible;
+        width: 690px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .content-time {
+        overflow: hidden;
+        width: 690px;
+        margin: 0 auto;
+        padding: 16px 0;
+        font-size: 14px;
+        color: #8590a6;
       }
     </style>
   </head>
   <body>
-    <h1 id="从两个需求说起-svg-路径动画">从两个需求说起 svg 路径动画</h1>
+    <div class="head-img"></div>
+    <article>
+      <header>
+        <h1>${title}</h1>
+        <div id="meta_content">
+          <span id="copyright-logo">原创</span>
+          <span class="name"> zhangxk </span>
+
+          <em id="publish_time">${time}</em>
+        </div>
+      </header>
+      <div class="container"><h1 id="从两个需求说起-svg-路径动画">从两个需求说起 svg 路径动画</h1>
 <h1 id="一、从一次需求说起">一、从一次需求说起</h1>
 <p>在做一个在线课件的项目，类似于 web 端在线的 ppt 制作工具。制作课件避免不了各种进入退出动画，ppt 有的，公司工具也必须有。各种淡入淡出，从上、下、左、右方向飞出飞入，css3 动画安排上！正在我写的不亦乐乎，觉得微软入场动画也不过如此的时候，产品经理来了。“ppt 有的动画咱们工具必须有，ppt 没有的动画，咱么也要有！我们要让老师自定义动画，制作课件的时候用鼠标画出路径，然后保存路径数据，播放的时候元素沿着路径飞进来。” <img alt="飞入曲线" src="https://zhangxuekang.github.io/src/blog/path-animation/fly-path.png" width="40%"> 在我意识到产品经理不是在开玩笑的时候，我断然拒绝了接需求。当产品经理带着老板又来提这个需求的时候，我感觉到事情没这么简单······</p>
 <p>最终还是我妥协了，自认为我还是刚不过老板的。</p>
@@ -154,6 +233,8 @@ pathEl.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-
 <h1 id="总结">总结</h1>
 <p>这次需求涉及到的数学知识很多，如何拟合曲线、路程时间速度计算、相似三角形、求函数表达式（二元一次方程组求解）、求曲线切线斜率。不过还好，都是初高中学到的，还不算超纲。</p>
 <p>掌握 SVGPathElement 接口的两个方法 getTotalLength()、getPointAtLength()，能实现无比复杂的移动动画。</p>
-
+</div>
+      <footer></footer>
+    </article>
   </body>
 </html>
