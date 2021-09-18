@@ -1,3 +1,14 @@
+---
+title: 从两个需求说起 svg 路径动画
+date: 2019-03-30 15:46:25
+categories:
+  - todo
+tags:
+  - 1
+  - 2
+  - 3
+---
+
 # 从两个需求说起 svg 路径动画
 
 # 一、从一次需求说起
@@ -25,9 +36,9 @@
 ```js
 // 首先构建出path元素
 const path =
-  'M182,171 C183.25,171,185,171,187,171 C189,171,188.75,170.75,190,171 ......';
-const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-pathEl.setAttribute('d', path);
+  "M182,171 C183.25,171,185,171,187,171 C189,171,188.75,170.75,190,171 ......";
+const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+pathEl.setAttribute("d", path);
 // 记录总时长，总长度和起始时间
 const duration = 2000; // ms
 const totalLength = pathEl.getTotalLength(); // 总长
@@ -92,8 +103,8 @@ function getControl(from, to) {
 
 ```js
 const path = `M${from.x} ${from.y} Q ${control.x} ${control.y} ${to.x} ${to.y}`;
-const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-pathEl.setAttribute('d', path);
+const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+pathEl.setAttribute("d", path);
 ```
 
 路径出来，再根据动效老师给的动画时间 duration，效果就实现了！
