@@ -19,11 +19,16 @@ routes.forEach((route) => {
   generateDeepPath(deepRoutes);
 });
 
-const indexData = fs.readFileSync(path.join(__dirname, "../README.md"), "utf8");
+const indexData = fs.readFileSync(path.join(__dirname, "../MAIN.md"), "utf8");
 const indexHtml = md2html(indexData);
 fs.writeFileSync(
   path.join(__dirname, "../index.html"),
-  template.replace(/\$\{body\}/, indexHtml)
+  template.replace(
+    /\$\{body\}/,
+    indexHtml
+      .replace(/<a href="src\//g, '<a href="src/public/')
+      .replace(/\.md">/g, '.html">')
+  )
 );
 log("生成文件: index.html");
 
@@ -41,7 +46,10 @@ function generateDeepPath(deepRoutes) {
         if (!fs.existsSync(newName)) {
           mkdir(newName);
         }
-        fs.writeFileSync(newName, template.replace(/\$\{body\}/, html));
+        fs.writeFileSync(
+          newName,
+          template.replace(/\$\{body\}/, html.replace(/\.md">/g, '.html">'))
+        );
         log("生成文件: " + newName);
       }
     }
