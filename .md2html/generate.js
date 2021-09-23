@@ -1,3 +1,6 @@
+/**
+ * 整理目录,产出文档
+ */
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
@@ -10,12 +13,21 @@ const template = fs.readFileSync(
   "utf8"
 );
 // 目录配置表
-const routes = ["../src/blogs/", "../src/note/"];
+const routes = ["../src/blogs/", "../src/note/", "../src/demo/"];
 routes.forEach((route) => {
   const deepRoutes = deepDir(route);
   generateDeepPath(deepRoutes);
 });
 
+const indexData = fs.readFileSync(path.join(__dirname, "../README.md"), "utf8");
+const indexHtml = md2html(indexData);
+fs.writeFileSync(
+  path.join(__dirname, "../index.html"),
+  template.replace(/\$\{body\}/, indexHtml)
+);
+log("生成文件: index.html");
+
+/* 递归生成新目录 */
 function generateDeepPath(deepRoutes) {
   deepRoutes.forEach((deepRoute) => {
     const { name, child } = deepRoute;
@@ -43,6 +55,7 @@ function transformPath(route) {
   return route.replace("zhangxk-notes/src", "zhangxk-notes/src/public");
 }
 
+/* 获取目录树 */
 function deepDir(d) {
   const result = [];
   function help(dir, list) {
@@ -63,6 +76,7 @@ function deepDir(d) {
   return result;
 }
 
+/* 新建文件 */
 function mkdir(filePath) {
   const arr = filePath
     .split("/")

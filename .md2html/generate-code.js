@@ -1,3 +1,6 @@
+/**
+ * 将 ts 或者 js 文件转化成 md 文件
+ */
 const fs = require("fs");
 const chalk = require("chalk");
 const log = (content) => {

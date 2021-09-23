@@ -1,3 +1,6 @@
+/**
+ * 将 md 文件转化为 html 文件
+ */
 const marked = require("marked");
 
 marked.setOptions({

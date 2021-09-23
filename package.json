@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "node ./generate-note.js && git add .",
-    "md2html": "node ./.md2html/generate.js"
+    "generate": "node ./.md2html/generate-code.js && node ./.md2html/generate.js && git add ."
   },
   "repository": {
     "type": "git",
