@@ -5,13 +5,16 @@ const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
 const md2html = require("./md2html");
-const log = (content) => {
-  console.log(chalk.green(content));
-};
-const template = fs.readFileSync(
+const minify = require("html-minifier").minify;
+
+// 取出模板
+let template = fs.readFileSync(
   path.join(__dirname, "../src/index.html"),
   "utf8"
 );
+const style = fs.readFileSync(path.join(__dirname, "../src/index.css"), "utf8");
+template = template.replace(/<style>\s*?<\/style>/, `<style>${style}</style>`);
+
 // 目录配置表
 const routes = ["../src/blogs/", "../src/note/", "../src/demo/"];
 routes.forEach((route) => {
@@ -23,11 +26,13 @@ const indexData = fs.readFileSync(path.join(__dirname, "../MAIN.md"), "utf8");
 const indexHtml = md2html(indexData);
 fs.writeFileSync(
   path.join(__dirname, "../index.html"),
-  template.replace(
-    /\$\{body\}/,
-    indexHtml
-      .replace(/<a href="src\//g, '<a href="src/public/')
-      .replace(/\.md">/g, '.html">')
+  mini(
+    template.replace(
+      /\$\{body\}/,
+      indexHtml
+        .replace(/<a href="src\//g, '<a href="src/public/')
+        .replace(/\.md">/g, '.html">')
+    )
   )
 );
 log("生成文件: index.html");
@@ -48,7 +53,9 @@ function generateDeepPath(deepRoutes) {
         }
         fs.writeFileSync(
           newName,
-          template.replace(/\$\{body\}/, html.replace(/\.md">/g, '.html">'))
+          mini(
+            template.replace(/\$\{body\}/, html.replace(/\.md">/g, '.html">'))
+          )
         );
         log("生成文件: " + newName);
       }
@@ -98,4 +105,19 @@ function mkdir(filePath) {
       fs.mkdirSync(dir);
     }
   }
+}
+
+/* 输出日志 */
+function log(content) {
+  console.log(chalk.green(content));
+}
+
+/* 压缩内容 */
+function mini(data) {
+  return minify(data, {
+    removeComments: true,
+    collapseWhitespace: true,
+    minifyJS: true,
+    minifyCSS: true,
+  });
 }
