@@ -39,3 +39,16 @@ meta.setAttribute('content', `width=device-width, user-scalable=no, initial-scal
 动态初始缩放、最大缩放、最小缩放比例
 
 ---
+
+## 如何实现 css 高度根据宽度变化
+
+如果 padding 属性的值是百分比值，这个值是根据父元素的宽度(X 轴属性)计算的，即使是 Y 轴上的 padding(padding-top,padding-bottom)也是如此。根据这个特性，可以实现 Y 轴尺寸和 X 轴尺寸相关联的效果。
+
+```css
+.el {
+  width: 50%;
+  height: 0;
+  padding-bottom: 50%;
+  background-color: black;
+}
+```
