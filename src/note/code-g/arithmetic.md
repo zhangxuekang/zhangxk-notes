@@ -227,6 +227,20 @@ function isValidBracket2(str: string) {
 
 ```ts
 
+/* 递归遍历实现 */
+function traversal1(root) {
+  if (root) {
+    // 先序
+    console.log(root);
+    traversal1(root.left);
+    // 中序
+    // console.log(root);
+    traversal1(root.right);
+    // 后序
+    // console.log(root);
+  }
+}
+
 /* 遍历二叉树,先左后右的通用模板 */
 function traversal(root) {
   const stack = [];

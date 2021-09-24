@@ -169,6 +169,20 @@
   <span class="hljs-keyword">return</span> str.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>;
 }
 </code></pre><h2 id="遍历二叉树">遍历二叉树</h2><pre><code class="language-ts">
+<span class="hljs-comment">/* 递归遍历实现 */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">traversal1</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">if</span> (root) {
+    <span class="hljs-comment">// 先序</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(root);
+    <span class="hljs-title function_">traversal1</span>(root.<span class="hljs-property">left</span>);
+    <span class="hljs-comment">// 中序</span>
+    <span class="hljs-comment">// console.log(root);</span>
+    <span class="hljs-title function_">traversal1</span>(root.<span class="hljs-property">right</span>);
+    <span class="hljs-comment">// 后序</span>
+    <span class="hljs-comment">// console.log(root);</span>
+  }
+}
+
 <span class="hljs-comment">/* 遍历二叉树,先左后右的通用模板 */</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">traversal</span>(<span class="hljs-params">root</span>) {
   <span class="hljs-keyword">const</span> stack = [];
