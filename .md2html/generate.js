@@ -1,5 +1,5 @@
 /**
- * 整理目录,产出文档
+ * 整理目录,产出文档.  md 转 html 文件
  */
 const fs = require("fs");
 const path = require("path");
@@ -22,6 +22,7 @@ routes.forEach((route) => {
   generateDeepPath(deepRoutes);
 });
 
+// 生成入口文件
 const indexData = fs.readFileSync(path.join(__dirname, "../MAIN.md"), "utf8");
 const indexHtml = md2html(indexData);
 fs.writeFileSync(
@@ -45,7 +46,13 @@ function generateDeepPath(deepRoutes) {
       const namePath = path.join(__dirname, name);
       const isFile = fs.statSync(namePath).isFile();
       if (isFile) {
-        const data = fs.readFileSync(namePath, "utf8");
+        // 读取 md 文件内容，顺手将资源连接地址改了
+        const data = fs
+          .readFileSync(namePath, "utf8")
+          .replace(
+            /\!\[(.*?)\]\(.*?\/assets\/(.*?)\)/g,
+            "![$1](https://zhangxuekang.com/src/assets/$2)"
+          );
         const html = md2html(data);
         const newName = transformPath(namePath).replace(/\.md$/, ".html");
         if (!fs.existsSync(newName)) {
