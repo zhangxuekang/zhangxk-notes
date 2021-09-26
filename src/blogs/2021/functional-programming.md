@@ -1,3 +1,15 @@
+---
+title: 从两个需求说起svg路径动画
+date: 2019-08-16 16:00:51
+categories:
+  - javascript
+tags:
+  - javascript
+  - 动画
+  - svg
+header_image: https://source.unsplash.com/random
+---
+
 # 函数式编程
 
 什么是函数式编程？
