@@ -269,3 +269,49 @@ function postorderTraversal(root) {
   }
   return res;
 }
+
+/** 数组的包含关系 **/
+function containArray(arrA: number[], arrB: number[]) {
+  const arrMap = new Map();
+  arrA.forEach((v) => {
+    if (arrMap.has(v)) {
+      arrMap.set(v, arrMap.get(v) + 1);
+    } else {
+      arrMap.set(v, 1);
+    }
+  });
+  arrB.forEach((v) => {
+    if (arrMap.has(v)) {
+      arrMap.set(v, arrMap.get(v) - 1);
+    } else {
+      arrMap.set(v, -1);
+    }
+  });
+
+  let an = 0;
+  let bn = 0;
+  for (let value of arrMap.values()) {
+    if (value > 0) {
+      an++;
+    }
+    if (value < 0) {
+      bn++;
+    }
+  }
+  // 相等
+  if (!an && !bn) {
+    return 0;
+  }
+  // 互相不包含
+  if (an && bn) {
+    return -1;
+  }
+  // A 包 B
+  if (an && !bn) {
+    return 1;
+  }
+  // B 包 A
+  if (!an && bn) {
+    return 2;
+  }
+}

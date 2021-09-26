@@ -246,4 +246,48 @@
   }
   <span class="hljs-keyword">return</span> res;
 }
+</code></pre><h2 id="数组的包含关系">数组的包含关系</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">containArray</span>(<span class="hljs-params">arrA: <span class="hljs-built_in">number</span>[], arrB: <span class="hljs-built_in">number</span>[]</span>) {
+  <span class="hljs-keyword">const</span> arrMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  arrA.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (arrMap.<span class="hljs-title function_">has</span>(v)) {
+      arrMap.<span class="hljs-title function_">set</span>(v, arrMap.<span class="hljs-title function_">get</span>(v) + <span class="hljs-number">1</span>);
+    } <span class="hljs-keyword">else</span> {
+      arrMap.<span class="hljs-title function_">set</span>(v, <span class="hljs-number">1</span>);
+    }
+  });
+  arrB.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (arrMap.<span class="hljs-title function_">has</span>(v)) {
+      arrMap.<span class="hljs-title function_">set</span>(v, arrMap.<span class="hljs-title function_">get</span>(v) - <span class="hljs-number">1</span>);
+    } <span class="hljs-keyword">else</span> {
+      arrMap.<span class="hljs-title function_">set</span>(v, -<span class="hljs-number">1</span>);
+    }
+  });
+
+  <span class="hljs-keyword">let</span> an = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> bn = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> value <span class="hljs-keyword">of</span> arrMap.<span class="hljs-title function_">values</span>()) {
+    <span class="hljs-keyword">if</span> (value &gt; <span class="hljs-number">0</span>) {
+      an++;
+    }
+    <span class="hljs-keyword">if</span> (value &lt; <span class="hljs-number">0</span>) {
+      bn++;
+    }
+  }
+  <span class="hljs-comment">// 相等</span>
+  <span class="hljs-keyword">if</span> (!an &amp;&amp; !bn) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  }
+  <span class="hljs-comment">// 互相不包含</span>
+  <span class="hljs-keyword">if</span> (an &amp;&amp; bn) {
+    <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+  }
+  <span class="hljs-comment">// A 包 B</span>
+  <span class="hljs-keyword">if</span> (an &amp;&amp; !bn) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+  }
+  <span class="hljs-comment">// B 包 A</span>
+  <span class="hljs-keyword">if</span> (!an &amp;&amp; bn) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;
+  }
+}
 </code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
