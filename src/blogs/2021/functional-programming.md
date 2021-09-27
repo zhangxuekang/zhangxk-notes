@@ -1,8 +1,6 @@
 ---
 title: 从两个需求说起svg路径动画
-date: 2019-08-16 16:00:51
-categories:
-  - javascript
+date: 2019-08-16
 tags:
   - javascript
   - 动画

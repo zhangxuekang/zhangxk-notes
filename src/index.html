@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="${KEYWORDS}" />
     <link
       rel="shortcut icon"
       href="https://zhangxuekang.github.io/src/zhangxk.ico"
@@ -20,19 +21,21 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
       <header class="inner">
-        <h1 id="project_title">zhangxk-notes</h1>
-        <h2 id="project_tagline"></h2>
+        <h1 id="project_title">${TITLE}</h1>
+        <p id="project_tagline">${TAGS}</p>
+        <p id="project_time">${DATE}</p>
       </header>
     </div>
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">${body}</section>
+      <section id="main_content" class="inner">${BODY}</section>
     </div>
 
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
+        <p class="update-time">${UPDATE_TIME}</p>
         <p class="copyright">
           zhangxk-notes maintained by
           <a href="https://github.com/zhangxuekang">zhangxuekang</a>

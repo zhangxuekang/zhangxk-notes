@@ -329,12 +329,27 @@ kbd {
   text-shadow: #111 0px 0px 10px;
 }
 #project_tagline {
-  color: #fff;
-  font-size: 24px;
+  color: #222;
   font-weight: 300;
   background: none;
   text-shadow: #111 0px 0px 10px;
   border-bottom: none;
+}
+#project_tagline span {
+  display: inline-block;
+  height: 33px;
+  font-size: 13px;
+  line-height: 33px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  padding: 0 12px;
+  border-radius: 100px;
+  background: rgba(242, 242, 242, 0.5);
+}
+#project_time {
+  color: #fff;
+  text-shadow: #111 0px 0px 10px;
 }
 #main_content_wrap {
   background: #f2f2f2;

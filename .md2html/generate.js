@@ -46,14 +46,20 @@ function generateDeepPath(deepRoutes) {
       const namePath = path.join(__dirname, name);
       const isFile = fs.statSync(namePath).isFile();
       if (isFile) {
-        // 读取 md 文件内容，顺手将资源连接地址改了
-        const data = fs
-          .readFileSync(namePath, "utf8")
+        // 读取 md 文件内容
+        const mdData = fs.readFileSync(namePath, "utf8");
+        // 获取文章信息
+        const pageInfo = getPageInfo(mdData);
+        // 删除 md 文章信息数据
+        const mdDataRemoveInfo = mdData.replace(/^---[\s\S]*?---\n/, "");
+        // 替换链接
+        const mdDataRemoveInfoReplaceUrl = mdDataRemoveInfo
           .replace(
             /\!\[(.*?)\]\(.*?\/assets\/(.*?)\)/g,
             "![$1](https://zhangxuekang.com/src/assets/$2)"
-          );
-        const html = md2html(data);
+          )
+          .replace(/\.md">/g, '.html">');
+        const html = md2html(mdDataRemoveInfoReplaceUrl);
         const newName = transformPath(namePath).replace(/\.md$/, ".html");
         if (!fs.existsSync(newName)) {
           mkdir(newName);
@@ -61,7 +67,30 @@ function generateDeepPath(deepRoutes) {
         fs.writeFileSync(
           newName,
           mini(
-            template.replace(/\$\{body\}/, html.replace(/\.md">/g, '.html">'))
+            template
+              .replace(/\$\{BODY\}/, html)
+              .replace(/\$\{TITLE\}/, pageInfo.title || "zhangxk-notes")
+              .replace(
+                /\$\{DATE\}/,
+                pageInfo.date ? "发布于 " + pageInfo.date : ""
+              )
+              .replace(/\$\{UPDATE_TIME\}/, "更新于 " + getNow())
+              .replace(
+                /\$\{TAGS\}/,
+                pageInfo.tags
+                  ? pageInfo.tags
+                      .map((tag) => {
+                        return `<span>${tag}</span>`;
+                      })
+                      .reduce((acc, v) => acc + v, "")
+                  : ""
+              )
+              .replace(
+                /\$\{KEYWORDS\}/,
+                pageInfo.tags
+                  ? pageInfo.tags.concat("zhangxuekang", "zhangxk").join(",")
+                  : "zhangxuekang,zhangxk"
+              )
           )
         );
         log("生成文件: " + newName);
@@ -71,6 +100,17 @@ function generateDeepPath(deepRoutes) {
       generateDeepPath(child);
     }
   });
+}
+
+function getNow() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const mouth = now.getMonth() + 1;
+  const date = now.getDate();
+
+  return `${year}-${mouth < 10 ? "0" + mouth : mouth}-${
+    date < 10 ? "0" + date : date
+  }`;
 }
 
 function transformPath(route) {
@@ -127,4 +167,45 @@ function mini(data) {
     minifyJS: true,
     minifyCSS: true,
   });
+}
+
+/* 获取文章信息 */
+function getPageInfo(data) {
+  const info = {
+    title: null,
+    date: null,
+    categories: null,
+    tags: null,
+    header_image: null,
+  };
+  let infoStr = "";
+  const matchStr = data.match(/^---[\s\S]*?---\n/);
+  if (matchStr) {
+    infoStr = matchStr[0];
+  }
+  let r = null;
+  let match = null;
+
+  Object.keys(info).forEach((key) => {
+    switch (key) {
+      case "categories":
+      case "tags":
+        r = new RegExp(`${key}:([\\s\\S]*?)(?=(\\n\\w+:)|(\\n---\\n))`);
+        match = infoStr.match(r);
+        if (match) {
+          info[key] = match[1]
+            .split("-")
+            .map((v) => v.trim())
+            .filter((v) => v);
+        }
+        break;
+      default:
+        r = new RegExp(`${key}:(.*?)\\n`);
+        match = infoStr.match(r);
+        if (match) {
+          info[key] = match[1].trim();
+        }
+    }
+  });
+  return info;
 }
