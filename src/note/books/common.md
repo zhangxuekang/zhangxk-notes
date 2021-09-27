@@ -319,3 +319,13 @@ CDN 是将源站内容分发至全国所有的节点，从而缩短用户查看�
 - shouldComponentUpdate
 - componentDidUpdate
 - componentWillUnmount
+
+## tree shaking 的原理是什么?
+
+ES6 Module 引入进行静态分析，故而编译的时候正确判断到底加载了那些模块，静态分析程序流，判断那些模块和变量未被使用或者引用，进而删除对应代码。
+
+1. CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
+2. CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。
+3. CommonJs 是单个值导出，ES6 Module 可以导出多个
+4. CommonJs 是动态语法可以写在判断里，ES6 Module 静态语法只能写在顶层
+5. CommonJs 的 this 是当前模块，ES6 Module 的 this 是 undefined
