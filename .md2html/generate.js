@@ -24,15 +24,20 @@ routes.forEach((route) => {
 
 // 生成入口文件
 const indexData = fs.readFileSync(path.join(__dirname, "../MAIN.md"), "utf8");
+// 获取文章信息
+const indexPageInfo = getPageInfo(indexData);
 const indexHtml = md2html(indexData);
 fs.writeFileSync(
   path.join(__dirname, "../index.html"),
   mini(
     template.replace(
-      /\$\{body\}/,
-      indexHtml
-        .replace(/<a href="src\//g, '<a href="src/public/')
-        .replace(/\.md">/g, '.html">')
+      /\$\{BODY\}/,
+      transforAnchor(
+        indexHtml
+          .replace(/<a href="src\//g, '<a href="src/public/')
+          .replace(/\.md">/g, '.html">'),
+        indexPageInfo
+      )
     )
   )
 );
@@ -64,35 +69,7 @@ function generateDeepPath(deepRoutes) {
         if (!fs.existsSync(newName)) {
           mkdir(newName);
         }
-        fs.writeFileSync(
-          newName,
-          mini(
-            template
-              .replace(/\$\{BODY\}/g, html)
-              .replace(/\$\{TITLE\}/g, pageInfo.title || "zhangxk-notes")
-              .replace(
-                /\$\{DATE\}/g,
-                pageInfo.date ? "发布于 " + pageInfo.date : ""
-              )
-              .replace(/\$\{UPDATE_TIME\}/g, "更新于 " + getNow())
-              .replace(
-                /\$\{TAGS\}/g,
-                pageInfo.tags
-                  ? pageInfo.tags
-                      .map((tag) => {
-                        return `<span>${tag}</span>`;
-                      })
-                      .reduce((acc, v) => acc + v, "")
-                  : ""
-              )
-              .replace(
-                /\$\{KEYWORDS\}/g,
-                pageInfo.tags
-                  ? pageInfo.tags.concat("zhangxuekang", "zhangxk").join(",")
-                  : "zhangxuekang,zhangxk"
-              )
-          )
-        );
+        fs.writeFileSync(newName, mini(transforAnchor(template, pageInfo)));
         log("生成文件: " + newName);
       }
     }
@@ -100,6 +77,30 @@ function generateDeepPath(deepRoutes) {
       generateDeepPath(child);
     }
   });
+}
+
+function transforAnchor(html, pageInfo) {
+  return html
+    .replace(/\$\{BODY\}/g, html)
+    .replace(/\$\{TITLE\}/g, pageInfo.title || "zhangxk-notes")
+    .replace(/\$\{DATE\}/g, pageInfo.date ? "发布于 " + pageInfo.date : "")
+    .replace(/\$\{UPDATE_TIME\}/g, "更新于 " + getNow())
+    .replace(
+      /\$\{TAGS\}/g,
+      pageInfo.tags
+        ? pageInfo.tags
+            .map((tag) => {
+              return `<span>${tag}</span>`;
+            })
+            .reduce((acc, v) => acc + v, "")
+        : ""
+    )
+    .replace(
+      /\$\{KEYWORDS\}/g,
+      pageInfo.tags
+        ? pageInfo.tags.concat("zhangxuekang", "zhangxk").join(",")
+        : "zhangxuekang,zhangxk"
+    );
 }
 
 function getNow() {
