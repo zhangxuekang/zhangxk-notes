@@ -56,13 +56,14 @@ function generateDeepPath(deepRoutes) {
         // 删除 md 文章信息数据
         const mdDataRemoveInfo = mdData.replace(/^---[\s\S]*?---\n/, "");
         // 替换链接
-        const mdDataRemoveInfoReplaceUrl = mdDataRemoveInfo
-          .replace(
-            /\!\[(.*?)\]\(.*?\/assets\/(.*?)\)/g,
-            "![$1](https://zhangxuekang.com/src/assets/$2)"
-          )
-          .replace(/\.md">/g, '.html">');
-        const html = md2html(mdDataRemoveInfoReplaceUrl);
+        const mdDataRemoveInfoReplaceUrl = mdDataRemoveInfo.replace(
+          /\!\[(.*?)\]\(.*?\/assets\/(.*?)\)/g,
+          "![$1](https://zhangxuekang.com/src/assets/$2)"
+        );
+        const html = md2html(mdDataRemoveInfoReplaceUrl).replace(
+          /\.md">/g,
+          '.html">'
+        );
         const newName = transformPath(namePath).replace(/\.md$/, ".html");
         if (!fs.existsSync(newName)) {
           mkdir(newName);
