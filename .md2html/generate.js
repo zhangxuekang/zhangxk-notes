@@ -33,6 +33,7 @@ fs.writeFileSync(
     template.replace(
       /\$\{BODY\}/,
       transforAnchor(
+        template,
         indexHtml
           .replace(/<a href="src\//g, '<a href="src/public/')
           .replace(/\.md">/g, '.html">'),
@@ -69,7 +70,10 @@ function generateDeepPath(deepRoutes) {
         if (!fs.existsSync(newName)) {
           mkdir(newName);
         }
-        fs.writeFileSync(newName, mini(transforAnchor(template, pageInfo)));
+        fs.writeFileSync(
+          newName,
+          mini(transforAnchor(template, html, pageInfo))
+        );
         log("生成文件: " + newName);
       }
     }
@@ -79,8 +83,8 @@ function generateDeepPath(deepRoutes) {
   });
 }
 
-function transforAnchor(html, pageInfo) {
-  return html
+function transforAnchor(template, html, pageInfo) {
+  return template
     .replace(/\$\{BODY\}/g, html)
     .replace(/\$\{TITLE\}/g, pageInfo.title || "zhangxk-notes")
     .replace(/\$\{DATE\}/g, pageInfo.date ? "发布于 " + pageInfo.date : "")
