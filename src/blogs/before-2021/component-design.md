@@ -1,6 +1,6 @@
 ---
 title: 思考如何设计好维护的前端组件
-date: before 2021
+date: 2021
 tags:
   - 前端组件
 header_image: https://source.unsplash.com/random

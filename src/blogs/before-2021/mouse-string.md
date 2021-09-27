@@ -1,6 +1,6 @@
 ---
 title: 简单实现的鼠标跟随效果
-date: before 2021
+date: 2021
 tags:
   - javascript
   - 动画

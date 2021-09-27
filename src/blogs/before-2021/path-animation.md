@@ -1,6 +1,6 @@
 ---
 title: 从两个需求说起 svg 路径动画
-date: before 2021
+date: 2021
 tags:
   - javascript
   - svg
