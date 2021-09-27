@@ -1,6 +1,6 @@
 ---
 title: 每天一个命令行
-date: before 2021
+date: 2020
 tags:
   - 命令行
 header_image: https://source.unsplash.com/random

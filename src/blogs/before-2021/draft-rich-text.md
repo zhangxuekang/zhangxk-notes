@@ -1,6 +1,6 @@
 ---
 title: 使用 draft.js 构建富文本编辑器
-date: before 2021
+date: 2020
 tags:
   - draft.js
   - 富文本
