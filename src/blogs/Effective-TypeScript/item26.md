@@ -1,3 +1,11 @@
+---
+title: Effective TypeScript Item 26
+date: 2021
+tags:
+  - TypeScript
+header_image: https://source.unsplash.com/random
+---
+
 - [上下文对类型推导的影响](#上下文对类型推导的影响)
 - [更多例子](#更多例子)
   - [Tuple Types](#tuple-types)

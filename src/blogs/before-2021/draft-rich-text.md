@@ -1,4 +1,12 @@
-# 使用 draft.js 构建富文本编辑器
+---
+title: 使用 draft.js 构建富文本编辑器
+date: before 2021
+tags:
+  - draft.js
+  - 富文本
+  - react
+header_image: https://source.unsplash.com/random
+---
 
 [Draft.js](https://draftjs.org/)是一个构建富文本编辑器的 React 框架, 它不是一个富文本编辑器的组件库. draft.js 提供构建编辑器的工具, 如何实现, 需要开发者自己去设计. 砖头和水泥都有了, 就差个程序员去盖房子了.
 
@@ -24,9 +32,9 @@ yarn add draft-js react react-dom
 ### 基础使用
 
 ```js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Editor, EditorState } from 'draft-js';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Editor, EditorState } from "draft-js";
 
 class MyEditor extends React.Component {
   constructor(props) {
@@ -41,7 +49,7 @@ class MyEditor extends React.Component {
   }
 }
 
-ReactDOM.render(<MyEditor />, document.getElementById('container'));
+ReactDOM.render(<MyEditor />, document.getElementById("container"));
 ```
 
 如果配置正常的话, 应该能看到一个可输入区域.
@@ -72,9 +80,9 @@ class MyEditor extends React.Component {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       this.onChange(newState);
-      return 'handled';
+      return "handled";
     }
-    return 'not-handled';
+    return "not-handled";
   }
   render() {
     return (
@@ -133,7 +141,7 @@ function myKeyBindingFn(e: SyntheticKeyboardEvent): string {
 class MyEditor extends React.Component {
   // …
   handleBoldClick() {
-    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
+    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, "BOLD"));
   }
   render() {
     return (
@@ -229,7 +237,7 @@ class EditorWithFancyBlockquotes extends React.Component {
 ```css
 .superFancyBlockquote {
   color: #999;
-  font-family: 'Hoefler Text', Georgia, serif;
+  font-family: "Hoefler Text", Georgia, serif;
   font-style: italic;
   text-align: center;
 }

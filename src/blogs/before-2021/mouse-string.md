@@ -1,4 +1,12 @@
-# js 简单实现的鼠标跟随效果
+---
+title: 简单实现的鼠标跟随效果
+date: before 2021
+tags:
+  - javascript
+  - 动画
+  - 鼠标
+header_image: https://source.unsplash.com/random
+---
 
 &emsp;&emsp;记得早年风靡装饰非主流 QQ 空间, 各种克隆空间的网站大行其道. 如果复制了某个狂拽酷炫的空间(必须有 DJ 背景音乐, 必须有轮播的视频图片, 配色必须黑底花字, 最好有鼠标跟随特效...)那么感觉自己就像是这条街最帅的仔了. 现在回忆起往事, 感慨万千, 时光一去不复返, 如果能穿越回去, 我一定扇死自己:)
 
@@ -9,8 +17,8 @@
 &emsp;&emsp;来看下代码, 先 creat 个相对于 body 绝对定位的元素:
 
 ```js
-const $follow = document.createElement('div');
-$follow.setAttribute('class', 'follow');
+const $follow = document.createElement("div");
+$follow.setAttribute("class", "follow");
 $body.appendChild($follow);
 ```
 
@@ -26,11 +34,11 @@ $body.appendChild($follow);
 &emsp;&emsp;元素已经有了, 现在添加事件:
 
 ```js
-window.addEventListener('mousemove', (e) => {
+window.addEventListener("mousemove", (e) => {
   const x = parseFloat(e.clientX);
   const y = parseFloat(e.clientY);
-  $follow.style.left = x + 'px';
-  $follow.style.top = y + 'px';
+  $follow.style.left = x + "px";
+  $follow.style.top = y + "px";
 });
 ```
 
@@ -46,11 +54,11 @@ window.addEventListener('mousemove', (e) => {
 &emsp;&emsp;然后在事件中设置显示. 为了看起来更和谐, 将元素定位在鼠标的右边 20px 和下边 20px 处.
 
 ```js
-window.addEventListener('mousemove', (e) => {
+window.addEventListener("mousemove", (e) => {
   // ...
-  $follow.style.display = 'block';
-  $follow.style.left = x + 20 + 'px';
-  $follow.style.top = y + 20 + 'px';
+  $follow.style.display = "block";
+  $follow.style.left = x + 20 + "px";
+  $follow.style.top = y + 20 + "px";
 });
 ```
 

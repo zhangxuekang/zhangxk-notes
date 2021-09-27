@@ -1,15 +1,12 @@
 ---
 title: 从两个需求说起 svg 路径动画
-date: 2019-03-30 15:46:25
-categories:
-  - todo
+date: before 2021
 tags:
-  - 1
-  - 2
-  - 3
+  - javascript
+  - svg
+  - 动画
+header_image: https://source.unsplash.com/random
 ---
-
-# 从两个需求说起 svg 路径动画
 
 # 一、从一次需求说起
 

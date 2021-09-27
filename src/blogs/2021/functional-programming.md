@@ -1,10 +1,9 @@
 ---
-title: 从两个需求说起svg路径动画
-date: 2019-08-16
+title: 函数式编程笔记
+date: 2021
 tags:
   - javascript
-  - 动画
-  - svg
+  - 函数式编程
 header_image: https://source.unsplash.com/random
 ---
 

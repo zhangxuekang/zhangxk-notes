@@ -1,3 +1,11 @@
+---
+title: Effective TypeScript Item 35
+date: 2021
+tags:
+  - TypeScript
+header_image: https://source.unsplash.com/random
+---
+
 - [不要根据数据自己写 Types，而是使用官方 Types](#不要根据数据自己写-types而是使用官方-types)
 - [自动生成精确的 Types](#自动生成精确的-types)
 - [没有官方的定义和 GraphQL schema？](#没有官方的定义和-graphql-schema)

@@ -1,3 +1,11 @@
+---
+title: Effective TypeScript Item 17
+date: 2021
+tags:
+  - TypeScript
+header_image: https://source.unsplash.com/random
+---
+
 - [什么时候使用 `readonly`](#什么时候使用-readonly)
 - [使用 `readonly` 后的影响](#使用-readonly-后的影响)
 - [`readonly` is shallow](#readonly-is-shallow)

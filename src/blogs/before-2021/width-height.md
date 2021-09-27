@@ -1,4 +1,11 @@
-# 使元素的高度根据宽度变化的一种实现方式
+---
+title: 使元素的高度根据宽度变化的一种实现方式
+date: before 2021
+tags:
+  - css
+  - 前端
+header_image: https://source.unsplash.com/random
+---
 
 如果 padding 属性的值是百分比值,这个值是根据父元素的宽度(X 周属性)计算的,即使是 Y 轴上的 padding(padding-top,padding-bottom)也是如此,根据这个特性,可以实现 Y 轴尺寸和 X 轴尺寸相关联的效果.
 

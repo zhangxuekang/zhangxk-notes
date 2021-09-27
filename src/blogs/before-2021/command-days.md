@@ -1,3 +1,11 @@
+---
+title: 每天一个命令行
+date: before 2021
+tags:
+  - 命令行
+header_image: https://source.unsplash.com/random
+---
+
 - [git](#git)
   - [撤销工作区的修改](#撤销工作区的修改)
   - [撤销 commit](#撤销-commit)

@@ -68,15 +68,15 @@ function generateDeepPath(deepRoutes) {
           newName,
           mini(
             template
-              .replace(/\$\{BODY\}/, html)
-              .replace(/\$\{TITLE\}/, pageInfo.title || "zhangxk-notes")
+              .replace(/\$\{BODY\}/g, html)
+              .replace(/\$\{TITLE\}/g, pageInfo.title || "zhangxk-notes")
               .replace(
-                /\$\{DATE\}/,
+                /\$\{DATE\}/g,
                 pageInfo.date ? "发布于 " + pageInfo.date : ""
               )
-              .replace(/\$\{UPDATE_TIME\}/, "更新于 " + getNow())
+              .replace(/\$\{UPDATE_TIME\}/g, "更新于 " + getNow())
               .replace(
-                /\$\{TAGS\}/,
+                /\$\{TAGS\}/g,
                 pageInfo.tags
                   ? pageInfo.tags
                       .map((tag) => {
@@ -86,7 +86,7 @@ function generateDeepPath(deepRoutes) {
                   : ""
               )
               .replace(
-                /\$\{KEYWORDS\}/,
+                /\$\{KEYWORDS\}/g,
                 pageInfo.tags
                   ? pageInfo.tags.concat("zhangxuekang", "zhangxk").join(",")
                   : "zhangxuekang,zhangxk"

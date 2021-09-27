@@ -1,3 +1,12 @@
+---
+title: 不可变数据简介
+date: 2021
+tags:
+  - javascript
+  - 不可变数据
+header_image: https://source.unsplash.com/random
+---
+
 - [不可变数据简介](#不可变数据简介)
 - [优势](#优势)
 - [弊端](#弊端)

@@ -1,3 +1,13 @@
+---
+title: 霍夫曼编码(Huffman coding)简介
+date: 2019-08-16
+tags:
+  - javascript
+  - 动画
+  - svg
+header_image: https://source.unsplash.com/random
+---
+
 - [霍夫曼编码(Huffman coding)简介](#霍夫曼编码huffman-coding简介)
 - [编码过程](#编码过程)
   - [示例](#示例)

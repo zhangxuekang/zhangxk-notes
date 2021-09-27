@@ -1,3 +1,11 @@
+---
+title: Effective TypeScript Item 9
+date: 2021
+tags:
+  - TypeScript
+header_image: https://source.unsplash.com/random
+---
+
 - [使用类型声明而不是类型断言](#使用类型声明而不是类型断言)
 - [在箭头函数中如何使用类型声明](#在箭头函数中如何使用类型声明)
 - [什么时候用类型断言](#什么时候用类型断言)

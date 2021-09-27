@@ -1,4 +1,12 @@
-# 记录鼠标轨迹, 生成 svg 路径
+---
+title: 记录鼠标轨迹, 生成 svg 路径
+date: before 2021
+tags:
+  - javascript
+  - svg
+  - 路径
+header_image: https://source.unsplash.com/random
+---
 
 &emsp;&emsp;业务上遇到了这样的问题, 在浏览器中, 使元素沿着用户画出的路径移动. 因为让元素沿着 svg 路径移动已经实现了, 所以需要做的是用鼠标画出路径. 鼠标方法只能获取鼠标在页面中的实时坐标, 是离散的坐标点, 如何将这些坐标点转化成平滑的路径是问题的关键.
 
