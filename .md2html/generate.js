@@ -30,15 +30,12 @@ const indexHtml = md2html(indexData);
 fs.writeFileSync(
   path.join(__dirname, "../index.html"),
   mini(
-    template.replace(
-      /\$\{BODY\}/,
-      transforAnchor(
-        template,
-        indexHtml
-          .replace(/<a href="src\//g, '<a href="src/public/')
-          .replace(/\.md">/g, '.html">'),
-        indexPageInfo
-      )
+    transforAnchor(
+      template,
+      indexHtml
+        .replace(/<a href="src\//g, '<a href="src/public/')
+        .replace(/\.md">/g, '.html">'),
+      indexPageInfo
     )
   )
 );
