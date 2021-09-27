@@ -1,6 +1,6 @@
 ---
 title: 记录鼠标轨迹, 生成 svg 路径
-date: 2021
+date: before 2021
 tags:
   - javascript
   - svg
