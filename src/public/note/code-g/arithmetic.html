@@ -107,6 +107,7 @@
     <span class="hljs-keyword">return</span> l2;
   } <span class="hljs-keyword">else</span> {
     l1.<span class="hljs-property">next</span> = <span class="hljs-title function_">mergeList</span>(l1.<span class="hljs-property">next</span>, l2);
+    <span class="hljs-keyword">return</span> l1;
   }
 }
 </code></pre><h2 id="反转链表">反转链表</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">reverseList</span>(<span class="hljs-params">head</span>) {

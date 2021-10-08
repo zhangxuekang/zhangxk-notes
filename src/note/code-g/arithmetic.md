@@ -145,6 +145,7 @@ function mergeList(l1, l2) {
     return l2;
   } else {
     l1.next = mergeList(l1.next, l2);
+    return l1;
   }
 }
 
