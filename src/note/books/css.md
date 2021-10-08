@@ -27,6 +27,34 @@ padding: env(safe-area-inset-top) env(safe-area-inset-right) env(
 @keyframes
 animation 属性是 name 名称，duration 时长, timing-function 时间模式，delay 延迟，iteration-count 次数，direction 方向，fill-mode 结束状态
 
+keyframes 的写法
+
+```css
+@keyframes rainbow {
+  0% {
+    background: #c00;
+  }
+  50% {
+    background: orange;
+  }
+  100% {
+    background: yellowgreen;
+  }
+}
+
+@keyframes rainbow {
+  from {
+    background: #c00;
+  }
+  50% {
+    background: orange;
+  }
+  to {
+    background: yellowgreen;
+  }
+}
+```
+
 ---
 
 1 像素：
