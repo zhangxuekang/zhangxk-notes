@@ -106,8 +106,8 @@ function fullPermutation(str: string) {
       restPermutation.forEach((v) => {
         result.push(v + target);
       });
-      return result;
     }
+    return result;
   }
 }
 
