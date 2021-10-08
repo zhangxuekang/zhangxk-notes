@@ -153,8 +153,8 @@ parse、stringify `var newObj = JSON.parse(JSON.stringify(obj));` 。该方法�
 
 ```js
 function deepClone(obj) {
-  const result = Array.isArray(obj) ? [] : {};
   if (obj && typeof obj === "object") {
+    const result = Array.isArray(obj) ? [] : {};
     for (let key in obj) {
       if (obj.hasOwnProperty(key)) {
         if (obj[key] && typeof obj[key] === "object") {
@@ -164,8 +164,10 @@ function deepClone(obj) {
         }
       }
     }
+    return result;
+  } else {
+    return obj;
   }
-  return result;
 }
 ```
 

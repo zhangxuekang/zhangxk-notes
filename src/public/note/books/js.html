@@ -22,8 +22,8 @@
   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;setImmediate&quot;</span>);
 });
 </code></pre><p>// outer // setTimeout 和 setImmediate 顺序不定</p><ol><li>外层同步代码一次性全部执行完，遇到异步 API 就塞到对应的阶段</li><li>遇到 setTimeout，虽然设置的是 0 毫秒触发，但是被 node.js 强制改为 1 毫秒，塞入 times 阶段</li><li>遇到 setImmediate 塞入 check 阶段</li><li>同步代码执行完毕，进入 Event Loop</li><li>先进入 times 阶段，检查当前时间过去了 1 毫秒没有，如果过了 1 毫秒，满足 setTimeout 条件，执行回调，如果没过 1 毫秒，跳过</li><li>跳过空的阶段，进入 check 阶段，执行 setImmediate 回调</li></ol><hr><h2 id="垃圾回收">垃圾回收</h2><h3 id="引用计数">引用计数</h3><p>此算法把“对象是否不再需要”简化定义为“对象有没有其他对象引用到它”。如果没有引用指向该对象（零引用），对象将被垃圾回收机制回收。</p><p>限制：无法处理循环引用的事例。</p><h3 id="标记清除">标记清除</h3><p>这个算法把“对象是否不再需要”简化定义为“对象是否可以获得”。这个算法假定设置一个叫做根（root）的对象（在 Javascript 里，根是全局对象）。垃圾回收器将定期从根开始，找所有从根开始引用的对象，然后找这些对象引用的对象……从根开始，垃圾回收器将找到所有可以获得的对象和收集所有不能获得的对象。</p><p>从 2012 年起，所有现代浏览器都使用了标记-清除垃圾回收算法。</p><p>限制: 那些无法从根对象查询到的对象都将被清除</p><p>尽管这是一个限制，但实践中我们很少会碰到类似的情况，所以开发者不太会去关心垃圾回收机制。</p><h2 id="深浅拷贝">深浅拷贝</h2><h3 id="浅拷贝">浅拷贝</h3><p>Array 中存在一些可以实现浅拷贝的方法：slice、concat...</p><p>一般的对象可以用 Object 的方法：assign</p><p>也可以使用 ES6 提供的新的语法(对象和数组都可以使用)：&quot;...&quot;</p><h3 id="深拷贝">深拷贝</h3><p>parse、stringify <code>var newObj = JSON.parse(JSON.stringify(obj));</code> 。该方法会忽略 undefined、任意的函数、symbol 值，因为 JSON 不支持这些数据类型。</p><p>递归实现(极度简单)：</p><pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">deepClone</span>(<span class="hljs-params">obj</span>) {
-  <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(obj) ? [] : {};
   <span class="hljs-keyword">if</span> (obj &amp;&amp; <span class="hljs-keyword">typeof</span> obj === <span class="hljs-string">&quot;object&quot;</span>) {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(obj) ? [] : {};
     <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> obj) {
       <span class="hljs-keyword">if</span> (obj.<span class="hljs-title function_">hasOwnProperty</span>(key)) {
         <span class="hljs-keyword">if</span> (obj[key] &amp;&amp; <span class="hljs-keyword">typeof</span> obj[key] === <span class="hljs-string">&quot;object&quot;</span>) {
@@ -33,7 +33,9 @@
         }
       }
     }
+    <span class="hljs-keyword">return</span> result;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> obj;
   }
-  <span class="hljs-keyword">return</span> result;
 }
-</code></pre><h2 id="this-的指向">this 的指向</h2><ol><li>用 new 调用函数， this 指向新创建的对象。</li><li>使用 call，apply（bind）调用函数， this 指向绑定的的对象。</li><li>函数作为某对象的属性调用， this 指向这个对象。</li><li>其他情况下， this 指向全局对象（严格模式下指向 undefined）。</li></ol><p>补充： 如果第二条规则绑定的是 null 或者 undefined， 则执行第四条规则； 1-4 条规则优先级递减。</p><h2 id="new-操作符做的事情">new 操作符做的事情</h2><ol><li>新生成一个新对象</li><li>链接到原型</li><li>绑定 <code>this</code></li><li>返回新对象</li></ol></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-09-27</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
+</code></pre><h2 id="this-的指向">this 的指向</h2><ol><li>用 new 调用函数， this 指向新创建的对象。</li><li>使用 call，apply（bind）调用函数， this 指向绑定的的对象。</li><li>函数作为某对象的属性调用， this 指向这个对象。</li><li>其他情况下， this 指向全局对象（严格模式下指向 undefined）。</li></ol><p>补充： 如果第二条规则绑定的是 null 或者 undefined， 则执行第四条规则； 1-4 条规则优先级递减。</p><h2 id="new-操作符做的事情">new 操作符做的事情</h2><ol><li>新生成一个新对象</li><li>链接到原型</li><li>绑定 <code>this</code></li><li>返回新对象</li></ol></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-08</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
