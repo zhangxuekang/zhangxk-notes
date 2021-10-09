@@ -291,4 +291,74 @@
     <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;
   }
 }
-</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-08</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
+</code></pre><h2 id="只出现过一次的数字">只出现过一次的数字</h2><pre><code class="language-ts">
+<span class="hljs-comment">/* 除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。 */</span>
+<span class="hljs-comment">/*
+a^a=0；自己和自己异或等于0
+a^0=a；任何数字和0异或还等于他自己
+a^b^c=a^c^b；异或运算具有交换律
+*/</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">singleNumber</span>(<span class="hljs-params">nums: <span class="hljs-built_in">number</span>[]</span>) {
+  <span class="hljs-keyword">let</span> result = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-property">length</span>; i++) {
+    result ^= nums[i];
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+</code></pre><h2 id="搜索二维矩阵">搜索二维矩阵</h2><pre><code class="language-ts">
+<span class="hljs-comment">/*
+搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+
+每行的元素从左到右升序排列。
+每列的元素从上到下升序排列。
+*/</span>
+
+<span class="hljs-comment">/* 该二维数组类似于一棵排序二叉树，对于每个数来说，上方的数都小于它，右方的数都大于它，所以把左下角作为根节点开始比较 */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">searchMatrix</span>(<span class="hljs-params">matrix: <span class="hljs-built_in">number</span>[][], target: <span class="hljs-built_in">number</span></span>) {
+  <span class="hljs-keyword">const</span> n = matrix[<span class="hljs-number">0</span>].<span class="hljs-property">length</span>;
+  <span class="hljs-keyword">let</span> row = matrix.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">let</span> col = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (row &gt;= <span class="hljs-number">0</span> &amp;&amp; col &lt;= n - <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">const</span> t = matrix[row][col];
+    <span class="hljs-keyword">if</span> (t === target) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+    <span class="hljs-keyword">if</span> (t &gt; target) {
+      row--;
+    }
+    <span class="hljs-keyword">if</span> (t &lt; target) {
+      col++;
+    }
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+</code></pre><h2 id="合并两个有序数组">合并两个有序数组</h2><pre><code class="language-ts">
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">merge</span>(<span class="hljs-params">nums1: <span class="hljs-built_in">number</span>[], m: <span class="hljs-built_in">number</span>, nums2: <span class="hljs-built_in">number</span>[], n: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">void</span> {
+  <span class="hljs-keyword">const</span> temp = [];
+  <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> j = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (i &lt; m &amp;&amp; j &lt; n) {
+    <span class="hljs-keyword">const</span> n1 = nums1[i];
+    <span class="hljs-keyword">const</span> n2 = nums2[j];
+    <span class="hljs-keyword">if</span> (n1 &lt;= n2) {
+      temp.<span class="hljs-title function_">push</span>(n1);
+      i++;
+    } <span class="hljs-keyword">else</span> {
+      temp.<span class="hljs-title function_">push</span>(n2);
+      j++;
+    }
+  }
+  <span class="hljs-keyword">while</span> (i &lt; m) {
+    temp.<span class="hljs-title function_">push</span>(nums1[i]);
+    i++;
+  }
+  <span class="hljs-keyword">while</span> (j &lt; n) {
+    temp.<span class="hljs-title function_">push</span>(nums2[j]);
+    j++;
+  }
+  temp.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v, i</span>) =&gt;</span> {
+    nums1[i] = v;
+  });
+}
+</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-09</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>

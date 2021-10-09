@@ -316,3 +316,79 @@ function containArray(arrA: number[], arrB: number[]) {
     return 2;
   }
 }
+
+/** 只出现过一次的数字 **/
+
+/* 除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。 */
+/*
+a^a=0；自己和自己异或等于0
+a^0=a；任何数字和0异或还等于他自己
+a^b^c=a^c^b；异或运算具有交换律
+*/
+
+function singleNumber(nums: number[]) {
+  let result = 0;
+  for (let i = 0; i < nums.length; i++) {
+    result ^= nums[i];
+  }
+  return result;
+}
+
+/** 搜索二维矩阵 **/
+
+/*
+搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+
+每行的元素从左到右升序排列。
+每列的元素从上到下升序排列。
+*/
+
+/* 该二维数组类似于一棵排序二叉树，对于每个数来说，上方的数都小于它，右方的数都大于它，所以把左下角作为根节点开始比较 */
+function searchMatrix(matrix: number[][], target: number) {
+  const n = matrix[0].length;
+  let row = matrix.length - 1;
+  let col = 0;
+  while (row >= 0 && col <= n - 1) {
+    const t = matrix[row][col];
+    if (t === target) {
+      return true;
+    }
+    if (t > target) {
+      row--;
+    }
+    if (t < target) {
+      col++;
+    }
+  }
+  return false;
+}
+
+/** 合并两个有序数组 **/
+
+function merge(nums1: number[], m: number, nums2: number[], n: number): void {
+  const temp = [];
+  let i = 0;
+  let j = 0;
+  while (i < m && j < n) {
+    const n1 = nums1[i];
+    const n2 = nums2[j];
+    if (n1 <= n2) {
+      temp.push(n1);
+      i++;
+    } else {
+      temp.push(n2);
+      j++;
+    }
+  }
+  while (i < m) {
+    temp.push(nums1[i]);
+    i++;
+  }
+  while (j < n) {
+    temp.push(nums2[j]);
+    j++;
+  }
+  temp.forEach((v, i) => {
+    nums1[i] = v;
+  });
+}
