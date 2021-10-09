@@ -329,3 +329,11 @@ ES6 Module 引入进行静态分析，故而编译的时候正确判断到底加
 3. CommonJs 是单个值导出，ES6 Module 可以导出多个
 4. CommonJs 是动态语法可以写在判断里，ES6 Module 静态语法只能写在顶层
 5. CommonJs 的 this 是当前模块，ES6 Module 的 this 是 undefined
+
+禁止 Babel 将 ES6 编译到 CommonJS。
+
+webpack4 的 mode 集成了多个优化项，在 produciton 模式下默认开启了 Tree Shaking。
+
+sideEffects 可以配置文件导出默认都是无副作用的，在项目中启用后可以减少打包体积。
+
+按需导入。
