@@ -361,4 +361,33 @@ a^b^c=a^c^b；异或运算具有交换律
     nums1[i] = v;
   });
 }
-</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-09</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
+</code></pre><h2 id="二维数组【顺序】排列组合">二维数组【顺序】排列组合</h2><pre><code class="language-ts">
+<span class="hljs-comment">/* 给定任意二维数组，输出所有的排列组合项。
+比如 [[&#x27;A&#x27;,&#x27;B&#x27;], [&#x27;a&#x27;,&#x27;b&#x27;], [1, 2]]，输出 [&#x27;Aa1&#x27;,&#x27;Aa2&#x27;,&#x27;Ab1&#x27;,&#x27;Ab2&#x27;,&#x27;Ba1&#x27;,&#x27;Ba2&#x27;,&#x27;Bb1’,&#x27;Bb2’]
+PS: 其中二维数组的长度和二维数组中任意一维数组的长度都是不固定的。 */</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fn</span>(<span class="hljs-params">data</span>) {
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">const</span> one = data[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; one.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-title function_">help</span>(one[i].<span class="hljs-title function_">toString</span>(), <span class="hljs-number">1</span>);
+  }
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">help</span>(<span class="hljs-params">path, length</span>) {
+    <span class="hljs-keyword">if</span> (data[length]) {
+      <span class="hljs-keyword">const</span> target = data[length];
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; target.<span class="hljs-property">length</span>; i++) {
+        <span class="hljs-title function_">help</span>(path + target[i].<span class="hljs-title function_">toString</span>(), length + <span class="hljs-number">1</span>);
+      }
+    } <span class="hljs-keyword">else</span> {
+      result.<span class="hljs-title function_">push</span>(path);
+    }
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-title function_">fn</span>([
+  [<span class="hljs-string">&quot;A&quot;</span>, <span class="hljs-string">&quot;B&quot;</span>],
+  [<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>],
+  [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>],
+]);
+</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-10</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>

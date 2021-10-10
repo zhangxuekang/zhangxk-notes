@@ -439,4 +439,38 @@ function merge(nums1: number[], m: number, nums2: number[], n: number): void {
     nums1[i] = v;
   });
 }
+
+```
+## 二维数组【顺序】排列组合
+
+```ts
+
+/* 给定任意二维数组，输出所有的排列组合项。
+比如 [['A','B'], ['a','b'], [1, 2]]，输出 ['Aa1','Aa2','Ab1','Ab2','Ba1','Ba2','Bb1’,'Bb2’]
+PS: 其中二维数组的长度和二维数组中任意一维数组的长度都是不固定的。 */
+
+function fn(data) {
+  const result = [];
+  const one = data[0];
+  for (let i = 0; i < one.length; i++) {
+    help(one[i].toString(), 1);
+  }
+  function help(path, length) {
+    if (data[length]) {
+      const target = data[length];
+      for (let i = 0; i < target.length; i++) {
+        help(path + target[i].toString(), length + 1);
+      }
+    } else {
+      result.push(path);
+    }
+  }
+  return result;
+}
+
+fn([
+  ["A", "B"],
+  ["a", "b"],
+  [1, 2],
+]);
 ```
