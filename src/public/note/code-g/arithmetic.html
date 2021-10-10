@@ -372,11 +372,11 @@ PS: 其中二维数组的长度和二维数组中任意一维数组的长度都�
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; one.<span class="hljs-property">length</span>; i++) {
     <span class="hljs-title function_">help</span>(one[i].<span class="hljs-title function_">toString</span>(), <span class="hljs-number">1</span>);
   }
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">help</span>(<span class="hljs-params">path, length</span>) {
-    <span class="hljs-keyword">if</span> (data[length]) {
-      <span class="hljs-keyword">const</span> target = data[length];
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">help</span>(<span class="hljs-params">path, n</span>) {
+    <span class="hljs-keyword">if</span> (data[n]) {
+      <span class="hljs-keyword">const</span> target = data[n];
       <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; target.<span class="hljs-property">length</span>; i++) {
-        <span class="hljs-title function_">help</span>(path + target[i].<span class="hljs-title function_">toString</span>(), length + <span class="hljs-number">1</span>);
+        <span class="hljs-title function_">help</span>(path + target[i].<span class="hljs-title function_">toString</span>(), n + <span class="hljs-number">1</span>);
       }
     } <span class="hljs-keyword">else</span> {
       result.<span class="hljs-title function_">push</span>(path);

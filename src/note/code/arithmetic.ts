@@ -405,11 +405,11 @@ function fn(data) {
   for (let i = 0; i < one.length; i++) {
     help(one[i].toString(), 1);
   }
-  function help(path, length) {
-    if (data[length]) {
-      const target = data[length];
+  function help(path, n) {
+    if (data[n]) {
+      const target = data[n];
       for (let i = 0; i < target.length; i++) {
-        help(path + target[i].toString(), length + 1);
+        help(path + target[i].toString(), n + 1);
       }
     } else {
       result.push(path);
