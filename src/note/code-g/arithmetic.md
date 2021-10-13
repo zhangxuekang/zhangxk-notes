@@ -473,4 +473,36 @@ fn([
   ["a", "b"],
   [1, 2],
 ]);
+
+```
+## 加起来和为目标值的所有组合
+
+```ts
+function combinationSum(arr, target) {
+  const result = [];
+  arr = arr.sort((a, b) => a - b);
+  const map = new Map();
+  function dfs(target, combine, idx) {
+    if (target === 0) {
+      // 去重
+      const combineStr = combine.join();
+      if (!map.has(combineStr)) {
+        result.push(combine);
+        map.set(combineStr, 1);
+      }
+      return;
+    }
+    if (idx === arr.length) {
+      return;
+    }
+    // 直接跳过当前的数字
+    dfs(target, [...combine], idx + 1);
+    // 使用当前数字
+    if (target - arr[idx] >= 0) {
+      dfs(target - arr[idx], [...combine, arr[idx]], idx + 1);
+    }
+  }
+  dfs(target, [], 0);
+  return result;
+}
 ```

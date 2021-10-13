@@ -390,4 +390,31 @@ PS: 其中二维数组的长度和二维数组中任意一维数组的长度都�
   [<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>],
   [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>],
 ]);
-</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-10</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
+</code></pre><h2 id="加起来和为目标值的所有组合">加起来和为目标值的所有组合</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">combinationSum</span>(<span class="hljs-params">arr, target</span>) {
+  <span class="hljs-keyword">const</span> result = [];
+  arr = arr.<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a - b);
+  <span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">dfs</span>(<span class="hljs-params">target, combine, idx</span>) {
+    <span class="hljs-keyword">if</span> (target === <span class="hljs-number">0</span>) {
+      <span class="hljs-comment">// 去重</span>
+      <span class="hljs-keyword">const</span> combineStr = combine.<span class="hljs-title function_">join</span>();
+      <span class="hljs-keyword">if</span> (!map.<span class="hljs-title function_">has</span>(combineStr)) {
+        result.<span class="hljs-title function_">push</span>(combine);
+        map.<span class="hljs-title function_">set</span>(combineStr, <span class="hljs-number">1</span>);
+      }
+      <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">if</span> (idx === arr.<span class="hljs-property">length</span>) {
+      <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-comment">// 直接跳过当前的数字</span>
+    <span class="hljs-title function_">dfs</span>(target, [...combine], idx + <span class="hljs-number">1</span>);
+    <span class="hljs-comment">// 使用当前数字</span>
+    <span class="hljs-keyword">if</span> (target - arr[idx] &gt;= <span class="hljs-number">0</span>) {
+      <span class="hljs-title function_">dfs</span>(target - arr[idx], [...combine, arr[idx]], idx + <span class="hljs-number">1</span>);
+    }
+  }
+  <span class="hljs-title function_">dfs</span>(target, [], <span class="hljs-number">0</span>);
+  <span class="hljs-keyword">return</span> result;
+}
+</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-13</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
