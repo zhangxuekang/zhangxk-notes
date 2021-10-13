@@ -14,7 +14,7 @@ key 是给每一个 vnode 的唯一 id,可以依靠 key,更准确, 更快的拿�
 - 都具有基于**组件**的结构
 - 提供了**响应式** (Reactive) 和组件化 (Composable) 的视图组件。
 - 将注意力集中保持在核心库，而将其他功能如路由和全局状态管理交给相关的库。
-- 单向数据流，所有的状态改变(mutation)可追溯，（用函数式来说，保证了组件就是无副作用的纯函数），不至于造成状态总被意外修改而导致难以维护的情况。
+- 单向数据流，所有的状态改变(mutation)可追溯，（用函数式来说，保证了组件就是无副作用的纯函数），不至于造成状态总被意外修改而导致难以维护的情况。bug 的排查范围被大大缩减了。
 
 ### 使用场景
 
@@ -32,6 +32,8 @@ Vue 最适合解决短期的小型的问题，快速迭代的项目。它的体�
 > 更抽象一点来看，我们可以把组件区分为两类：一类是偏视图表现的 (presentational)，一类则是偏逻辑的 (logical)。我们推荐在前者中使用模板，在后者中使用 JSX 或渲染函数。
 
 React 是在组件 JS 代码中，通过原生 JS 实现模板中的常见语法，比如插值，条件，循环等，都是通过 JS 语法实现的，更加纯粹更加原生。而 Vue 是在和组件 JS 代码分离的单独的模板中，通过指令来实现的，比如条件语句就需要 v-if 来实现对这一点，这样的做法显得有些独特，会把 HTML 弄得很乱。
+
+React 中没有“槽”（slot）这一概念的限制，你可以将任何东西作为 props 进行传递。Vue 使用“槽”，定义了槽的使用规则。
 
 ### 样式
 
@@ -63,7 +65,7 @@ Vue 通过 getter/setter 以及一些函数的劫持，能精确知道数据变�
 ### HoC 和 mixins
 
 - Vue 组合不同功能的方式是通过 mixin。
-- React 组合不同功能的方式是通过 HoC(高阶组件），高阶组件本质就是高阶函数，React 的组件是一个纯粹的函数，所以高阶函数对 React 来说非常简单。
+- React 组合不同功能的方式是通过 HoC(高阶组件），高阶组件本质就是高阶函数，React 的组件是一个纯粹的函数，所以高阶函数对 React 来说非常简单。组件可以接受任意 props，包括基本数据类型，React 元素以及函数。
 
 ### 事件
 
@@ -96,3 +98,23 @@ react 自己定了一个 event 对象，存放着 onClick 回调们，在用户�
 - shouldComponentUpdate
 - componentDidUpdate
 - componentWillUnmount
+
+## 为什么不可变性在 React 中非常重要
+
+- 容易实现撤销和恢复功能
+- 跟踪到数据的改变。跟踪数据的改变需要可变对象可以与改变之前的版本进行对比，这样整个对象树都需要被遍历一次。
+  跟踪不可变数据的变化相对来说就容易多了。如果发现对象变成了一个新对象，那么我们就可以说对象发生改变了。
+- 确定在 React 中何时重新渲染。帮助我们在 `React` 中创建 `pure components`。
+
+## JSX
+
+`Babel` 会把 `JSX` 转译成一个名为 `React.createElement()` 函数调用。`React.createElement(type, props, children)`
+
+## React 中 setState
+
+- 由 `React` 控制的事件处理程序，以及生命周期函数调用 `setState` 不会同步更新 `state` 。
+- `React` 控制之外的事件中调用 `setState` 是同步更新的。比如原生 `js` 绑定的事件，`setTimeout/setInterval` 等。
+
+原因： 在 `React` 的 `setState` 函数实现中，会根据一个变量 `isBatchingUpdates` 判断是直接更新 `this.state` 还是放到队列中回头再说，而 `isBatchingUpdates` 默认是 `false`，也就表示 `setState` 会同步更新 `this.state`，但是，有一个函数 `batchedUpdates`，这个函数会把 `isBatchingUpdates` 修改为 `true，而当` `React` 在调用事件处理函数之前就会调用这个 `batchedUpdates`，造成的后果，就是由 `React` 控制的事件处理过程 `setState` 不会同步更新 `this.state`。
+
+好处：可以通过避免不必要的重新渲染来提升性能。
