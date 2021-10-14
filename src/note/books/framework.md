@@ -118,3 +118,13 @@ react 自己定了一个 event 对象，存放着 onClick 回调们，在用户�
 原因： 在 `React` 的 `setState` 函数实现中，会根据一个变量 `isBatchingUpdates` 判断是直接更新 `this.state` 还是放到队列中回头再说，而 `isBatchingUpdates` 默认是 `false`，也就表示 `setState` 会同步更新 `this.state`，但是，有一个函数 `batchedUpdates`，这个函数会把 `isBatchingUpdates` 修改为 `true，而当` `React` 在调用事件处理函数之前就会调用这个 `batchedUpdates`，造成的后果，就是由 `React` 控制的事件处理过程 `setState` 不会同步更新 `this.state`。
 
 好处：可以通过避免不必要的重新渲染来提升性能。
+
+## 跨级传递数据的能力
+
+React：Context 提供了一个无需为每层组件手动添加 props，就能在组件树间进行数据传递的方法。
+
+Vue：provide 选项允许我们指定我们想要提供给后代组件的数据/方法，然后在任何后代组件里，我们都可以使用 inject 选项来接收指定的我们想要添加在这个实例上的 property。
+
+## React 中的错误边界
+
+如果一个 class 组件中定义了 `static getDerivedStateFromError()` 或 `componentDidCatch()` 这两个生命周期方法中的任意一个（或两个）时，那么它就变成一个错误边界。当抛出错误后，请使用 `static getDerivedStateFromError()` 渲染备用 `UI` ，使用 `componentDidCatch()` 打印错误信息。

@@ -153,6 +153,7 @@ function mergeList(l1, l2) {
 ## 反转链表
 
 ```ts
+// 递归
 function reverseList(head) {
   if (head === null || head.next === null) {
     return head;
@@ -162,6 +163,19 @@ function reverseList(head) {
   head.next = null;
 
   return newHead;
+}
+
+// 循环
+function reverseList2(head) {
+  let prev = null;
+  let curr = head;
+  while (curr) {
+    const next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
+  }
+  return prev;
 }
 
 ```
@@ -504,5 +518,84 @@ function combinationSum(arr, target) {
   }
   dfs(target, [], 0);
   return result;
+}
+
+```
+## 判断链表是否有环
+
+```ts
+
+// 快慢指针
+function hasCycle(head): boolean {
+  if (!head) return false;
+
+  let slow = head;
+  let fast = head;
+  while (fast && fast.next) {
+    fast = fast.next.next;
+    slow = slow.next;
+    if (slow === fast) return true;
+  }
+  return false;
+}
+
+// hashMap
+function hasCycle2(head): boolean {
+  if (!head || !head.next) return false;
+
+  const set = new Set();
+  while (head) {
+    if (set.has(head)) {
+      return true;
+    }
+    set.add(head);
+    head = head.next;
+  }
+  return false;
+}
+
+```
+## 二叉树的最近公共祖先
+
+```ts
+// 递归
+function lowestCommonAncestor(root, p, q) {
+  if (root == null || root == p || root == q) {
+    return root;
+  }
+  const left = lowestCommonAncestor(root.left, p, q);
+  const right = lowestCommonAncestor(root.right, p, q);
+  if (!left && !right) return null;
+  if (!left) return right;
+  if (!right) return left;
+  return root;
+}
+
+// hashmap
+function lowestCommonAncestor2(root, p, q) {
+  const map = new Map();
+  function dfs(root) {
+    if (root.left) {
+      map.set(root.left.value, root);
+      dfs(root.left);
+    }
+    if (root.right) {
+      map.set(root.right.value, root);
+      dfs(root.right);
+    }
+  }
+  dfs(root);
+  const set = new Set();
+  while (p) {
+    set.add(p);
+    p = map.get(p.value);
+  }
+  while (q) {
+    if (set.has(q)) {
+      return q;
+    }
+    q = map.get(q.value);
+  }
+  return null;
 }
 ```

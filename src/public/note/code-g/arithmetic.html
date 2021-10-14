@@ -110,7 +110,8 @@
     <span class="hljs-keyword">return</span> l1;
   }
 }
-</code></pre><h2 id="反转链表">反转链表</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">reverseList</span>(<span class="hljs-params">head</span>) {
+</code></pre><h2 id="反转链表">反转链表</h2><pre><code class="language-ts"><span class="hljs-comment">// 递归</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reverseList</span>(<span class="hljs-params">head</span>) {
   <span class="hljs-keyword">if</span> (head === <span class="hljs-literal">null</span> || head.<span class="hljs-property">next</span> === <span class="hljs-literal">null</span>) {
     <span class="hljs-keyword">return</span> head;
   }
@@ -119,6 +120,19 @@
   head.<span class="hljs-property">next</span> = <span class="hljs-literal">null</span>;
 
   <span class="hljs-keyword">return</span> newHead;
+}
+
+<span class="hljs-comment">// 循环</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reverseList2</span>(<span class="hljs-params">head</span>) {
+  <span class="hljs-keyword">let</span> prev = <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">let</span> curr = head;
+  <span class="hljs-keyword">while</span> (curr) {
+    <span class="hljs-keyword">const</span> next = curr.<span class="hljs-property">next</span>;
+    curr.<span class="hljs-property">next</span> = prev;
+    prev = curr;
+    curr = next;
+  }
+  <span class="hljs-keyword">return</span> prev;
 }
 </code></pre><h2 id="最大的连续子序列">最大的连续子序列</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">maxSubArray</span>(<span class="hljs-params">nums: <span class="hljs-built_in">number</span>[]</span>) {
   <span class="hljs-keyword">let</span> pre = <span class="hljs-number">0</span>;
@@ -417,4 +431,73 @@ PS: 其中二维数组的长度和二维数组中任意一维数组的长度都�
   <span class="hljs-title function_">dfs</span>(target, [], <span class="hljs-number">0</span>);
   <span class="hljs-keyword">return</span> result;
 }
-</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-13</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
+</code></pre><h2 id="判断链表是否有环">判断链表是否有环</h2><pre><code class="language-ts">
+<span class="hljs-comment">// 快慢指针</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">hasCycle</span>(<span class="hljs-params">head</span>): <span class="hljs-built_in">boolean</span> {
+  <span class="hljs-keyword">if</span> (!head) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+  <span class="hljs-keyword">let</span> slow = head;
+  <span class="hljs-keyword">let</span> fast = head;
+  <span class="hljs-keyword">while</span> (fast &amp;&amp; fast.<span class="hljs-property">next</span>) {
+    fast = fast.<span class="hljs-property">next</span>.<span class="hljs-property">next</span>;
+    slow = slow.<span class="hljs-property">next</span>;
+    <span class="hljs-keyword">if</span> (slow === fast) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-comment">// hashMap</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">hasCycle2</span>(<span class="hljs-params">head</span>): <span class="hljs-built_in">boolean</span> {
+  <span class="hljs-keyword">if</span> (!head || !head.<span class="hljs-property">next</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+  <span class="hljs-keyword">const</span> set = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-keyword">while</span> (head) {
+    <span class="hljs-keyword">if</span> (set.<span class="hljs-title function_">has</span>(head)) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+    set.<span class="hljs-title function_">add</span>(head);
+    head = head.<span class="hljs-property">next</span>;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+</code></pre><h2 id="二叉树的最近公共祖先">二叉树的最近公共祖先</h2><pre><code class="language-ts"><span class="hljs-comment">// 递归</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">lowestCommonAncestor</span>(<span class="hljs-params">root, p, q</span>) {
+  <span class="hljs-keyword">if</span> (root == <span class="hljs-literal">null</span> || root == p || root == q) {
+    <span class="hljs-keyword">return</span> root;
+  }
+  <span class="hljs-keyword">const</span> left = <span class="hljs-title function_">lowestCommonAncestor</span>(root.<span class="hljs-property">left</span>, p, q);
+  <span class="hljs-keyword">const</span> right = <span class="hljs-title function_">lowestCommonAncestor</span>(root.<span class="hljs-property">right</span>, p, q);
+  <span class="hljs-keyword">if</span> (!left &amp;&amp; !right) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">if</span> (!left) <span class="hljs-keyword">return</span> right;
+  <span class="hljs-keyword">if</span> (!right) <span class="hljs-keyword">return</span> left;
+  <span class="hljs-keyword">return</span> root;
+}
+
+<span class="hljs-comment">// hashmap</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">lowestCommonAncestor2</span>(<span class="hljs-params">root, p, q</span>) {
+  <span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">dfs</span>(<span class="hljs-params">root</span>) {
+    <span class="hljs-keyword">if</span> (root.<span class="hljs-property">left</span>) {
+      map.<span class="hljs-title function_">set</span>(root.<span class="hljs-property">left</span>.<span class="hljs-property">value</span>, root);
+      <span class="hljs-title function_">dfs</span>(root.<span class="hljs-property">left</span>);
+    }
+    <span class="hljs-keyword">if</span> (root.<span class="hljs-property">right</span>) {
+      map.<span class="hljs-title function_">set</span>(root.<span class="hljs-property">right</span>.<span class="hljs-property">value</span>, root);
+      <span class="hljs-title function_">dfs</span>(root.<span class="hljs-property">right</span>);
+    }
+  }
+  <span class="hljs-title function_">dfs</span>(root);
+  <span class="hljs-keyword">const</span> set = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-keyword">while</span> (p) {
+    set.<span class="hljs-title function_">add</span>(p);
+    p = map.<span class="hljs-title function_">get</span>(p.<span class="hljs-property">value</span>);
+  }
+  <span class="hljs-keyword">while</span> (q) {
+    <span class="hljs-keyword">if</span> (set.<span class="hljs-title function_">has</span>(q)) {
+      <span class="hljs-keyword">return</span> q;
+    }
+    q = map.<span class="hljs-title function_">get</span>(q.<span class="hljs-property">value</span>);
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+}
+</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-14</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
