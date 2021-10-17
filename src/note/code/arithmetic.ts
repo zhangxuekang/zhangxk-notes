@@ -164,6 +164,22 @@ function maxSubArray(nums: number[]) {
   return maxAns;
 }
 
+/** 乘积最大子数组 **/
+function maxProduct(nums) {
+  let maxf = nums[0]; // 维护一个最大乘积
+  let minf = nums[0]; // 维护一个最小乘积
+  let res = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    const mx = maxf;
+    const mn = minf;
+    const n = nums[i];
+    maxf = Math.max(mx * n, Math.max(n, n * mn)); // 最小乘下一个可能就成了最大，因为负负得正
+    minf = Math.min(mn * n, Math.min(n, n * mx)); // 计算这个最小乘积，需要考虑用最大乘下一个数，因为负正得负
+    res = Math.max(res, maxf);
+  }
+  return res;
+}
+
 /** 有效的括号 **/
 function isValidBracket1(str: string) {
   const n = str.length;
@@ -538,4 +554,30 @@ function lowestCommonAncestor2(root, p, q) {
     q = map.get(q.value);
   }
   return null;
+}
+
+/** 四数相加 II **/
+
+/*
+四个整数数组 nums1、nums2、nums3 和 nums4 ，数组长度都是 n ，计算有多少个元组 (i, j, k, l) 能满足：
+0 <= i, j, k, l < n
+nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0
+*/
+function fourSumCount(nums1, nums2, nums3, nums4) {
+  let n = 0;
+  const map = new Map();
+  nums1.forEach((v1, i1) => {
+    nums2.forEach((v2, i2) => {
+      map.set(v1 + v2, (map.get(v1 + v2) || 0) + 1);
+    });
+  });
+
+  nums3.forEach((v3, i3) => {
+    nums4.forEach((v4, i4) => {
+      if (map.has(-v3 - v4)) {
+        n += map.get(-v3 - v4);
+      }
+    });
+  });
+  return n;
 }

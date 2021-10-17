@@ -128,3 +128,56 @@ Vue：provide 选项允许我们指定我们想要提供给后代组件的数据
 ## React 中的错误边界
 
 如果一个 class 组件中定义了 `static getDerivedStateFromError()` 或 `componentDidCatch()` 这两个生命周期方法中的任意一个（或两个）时，那么它就变成一个错误边界。当抛出错误后，请使用 `static getDerivedStateFromError()` 渲染备用 `UI` ，使用 `componentDidCatch()` 打印错误信息。
+
+# node.js
+
+## 跟踪回调路径
+
+```js
+import { AsyncLocalStorage } from 'async_hooks';
+const traceContext = new AsyncLocalStorage<string>();
+export default traceContext;
+
+// 起始函数中，注入 traceId
+traceContext.run(traceId, next);
+
+// 在回调中获取 traceId
+export function getTraceId() {
+  return traceContext.getStore();
+}
+```
+
+## nest.js
+
+### 优点
+
+- 层层处理，一定程度上可以约束代码结构，比如何时使用中间件、何时需要使用 guards 守卫等。（洋葱模型）
+- 依赖注入以及模块化的思想，使得代码结构清晰，便于维护
+- 使用装饰器和注解，代码简洁
+- 完美的支持 typescript,因此可以使用日益繁荣的 ts 生态工具
+- 兼容 express 中间件，因为 express 是最早出现的轻量级的 node server 端框架，nestjs 能够利用所有 express 的中间件，使其生态完善
+- 完美支持 rxjs
+
+### 生命周期
+
+一般来说，一个请求流经中间件、守卫与拦截器，然后到达管道，并最终回到拦截器中的返回路径中（从而产生响应）。
+
+- 收到请求
+- 全局绑定的中间件
+- 模块绑定的中间件
+- 全局守卫
+- 控制层守卫
+- 路由守卫
+- 全局拦截器（控制器之前）
+- 控制器层拦截器 （控制器之前）
+- 路由拦截器 （控制器之前）
+- 全局管道
+- 控制器管道
+- 路由管道
+- 路由参数管道
+- 控制器（方法处理器）
+- 路由拦截器（请求之后）
+- 控制器拦截器 （请求之后）
+- 全局拦截器 （请求之后）
+- 异常过滤器 （路由，之后是控制器，之后是全局）
+- 服务器响应

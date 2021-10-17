@@ -144,6 +144,20 @@
 
   <span class="hljs-keyword">return</span> maxAns;
 }
+</code></pre><h2 id="乘积最大子数组">乘积最大子数组</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">maxProduct</span>(<span class="hljs-params">nums</span>) {
+  <span class="hljs-keyword">let</span> maxf = nums[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 维护一个最大乘积</span>
+  <span class="hljs-keyword">let</span> minf = nums[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 维护一个最小乘积</span>
+  <span class="hljs-keyword">let</span> res = nums[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt; nums.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">const</span> mx = maxf;
+    <span class="hljs-keyword">const</span> mn = minf;
+    <span class="hljs-keyword">const</span> n = nums[i];
+    maxf = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(mx * n, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(n, n * mn)); <span class="hljs-comment">// 最小乘下一个可能就成了最大，因为负负得正</span>
+    minf = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(mn * n, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(n, n * mx)); <span class="hljs-comment">// 计算这个最小乘积，需要考虑用最大乘下一个数，因为负正得负</span>
+    res = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(res, maxf);
+  }
+  <span class="hljs-keyword">return</span> res;
+}
 </code></pre><h2 id="有效的括号">有效的括号</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">isValidBracket1</span>(<span class="hljs-params">str: <span class="hljs-built_in">string</span></span>) {
   <span class="hljs-keyword">const</span> n = str.<span class="hljs-property">length</span>;
   <span class="hljs-comment">// 奇数肯定不对</span>
@@ -500,4 +514,28 @@ PS: 其中二维数组的长度和二维数组中任意一维数组的长度都�
   }
   <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
 }
-</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-15</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
+</code></pre><h2 id="四数相加-ii">四数相加 II</h2><pre><code class="language-ts">
+<span class="hljs-comment">/*
+四个整数数组 nums1、nums2、nums3 和 nums4 ，数组长度都是 n ，计算有多少个元组 (i, j, k, l) 能满足：
+0 &lt;= i, j, k, l &lt; n
+nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0
+*/</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fourSumCount</span>(<span class="hljs-params">nums1, nums2, nums3, nums4</span>) {
+  <span class="hljs-keyword">let</span> n = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  nums1.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v1, i1</span>) =&gt;</span> {
+    nums2.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v2, i2</span>) =&gt;</span> {
+      map.<span class="hljs-title function_">set</span>(v1 + v2, (map.<span class="hljs-title function_">get</span>(v1 + v2) || <span class="hljs-number">0</span>) + <span class="hljs-number">1</span>);
+    });
+  });
+
+  nums3.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v3, i3</span>) =&gt;</span> {
+    nums4.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v4, i4</span>) =&gt;</span> {
+      <span class="hljs-keyword">if</span> (map.<span class="hljs-title function_">has</span>(-v3 - v4)) {
+        n += map.<span class="hljs-title function_">get</span>(-v3 - v4);
+      }
+    });
+  });
+  <span class="hljs-keyword">return</span> n;
+}
+</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time">更新于 2021-10-17</p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
