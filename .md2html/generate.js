@@ -82,27 +82,29 @@ function generateDeepPath(deepRoutes) {
 }
 
 function transforAnchor(template, html, pageInfo) {
-  return template
-    .replace(/\$\{BODY\}/g, html)
-    .replace(/\$\{TITLE\}/g, pageInfo.title || "zhangxk-notes")
-    .replace(/\$\{DATE\}/g, pageInfo.date ? "发布于 " + pageInfo.date : "")
-    .replace(/\$\{UPDATE_TIME\}/g, "更新于 " + getNow())
-    .replace(
-      /\$\{TAGS\}/g,
-      pageInfo.tags
-        ? pageInfo.tags
-            .map((tag) => {
-              return `<span>${tag}</span>`;
-            })
-            .reduce((acc, v) => acc + v, "")
-        : ""
-    )
-    .replace(
-      /\$\{KEYWORDS\}/g,
-      pageInfo.tags
-        ? pageInfo.tags.concat("zhangxuekang", "zhangxk").join(",")
-        : "zhangxuekang,zhangxk"
-    );
+  return (
+    template
+      .replace(/\$\{BODY\}/g, html)
+      .replace(/\$\{TITLE\}/g, pageInfo.title || "zhangxk-notes")
+      .replace(/\$\{DATE\}/g, pageInfo.date ? "发布于 " + pageInfo.date : "")
+      // .replace(/\$\{UPDATE_TIME\}/g, "更新于 " + getNow())
+      .replace(
+        /\$\{TAGS\}/g,
+        pageInfo.tags
+          ? pageInfo.tags
+              .map((tag) => {
+                return `<span>${tag}</span>`;
+              })
+              .reduce((acc, v) => acc + v, "")
+          : ""
+      )
+      .replace(
+        /\$\{KEYWORDS\}/g,
+        pageInfo.tags
+          ? pageInfo.tags.concat("zhangxuekang", "zhangxk").join(",")
+          : "zhangxuekang,zhangxk"
+      )
+  );
 }
 
 function getNow() {

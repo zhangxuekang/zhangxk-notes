@@ -129,7 +129,7 @@ JSONP 使用简单且兼容性不错，但是只限于 get 请求。
 
 ### CORS
 
-当你使用 ` XMLHttpRequest ` 发送请求时，浏览器发现该请求不符合同源策略，会给该请求加一个请求头：`Origin`，后台进行一系列处理，如果确定接受请求则在返回结果中加入一个响应头：`Access-Control-Allow-Origin`;  浏览器判断该相应头中是否包含 ` Origin ` 的值，如果有则浏览器会处理响应，我们就可以拿到响应数据。
+当你使用 `XMLHttpRequest` 发送请求时，浏览器发现该请求不符合同源策略，会给该请求加一个请求头：`Origin`，后台进行一系列处理，如果确定接受请求则在返回结果中加入一个响应头：`Access-Control-Allow-Origin`;  浏览器判断该相应头中是否包含 `Origin` 的值，如果有则浏览器会处理响应，我们就可以拿到响应数据。
 
 服务端设置 `Access-Control-Allow-Origin` 就可以开启 `CORS`。
 
@@ -197,6 +197,14 @@ loader 让 webpack 能够去处理那些非 JavaScript 文件（webpack 自身�
 ### Plugin
 
 loader 被用于转换某些类型的模块,而插件则可以用于执行范围更广的任务。插件的范围包括,从打包优化和压缩,一直到重新定义环境中的变量。插件接口功能极其强大,可以用来处理各种各样的任务。
+
+#### 常用插件
+
+- DefinePlugin：编译时创建全局对象，是一个 webpack 内置的插件，不需要安装
+- HtmlWebpackPlugin：在打包结束后，动态生成 html 文件，并把打包生成的 js 模块引到该 html 中。
+- HotModuleReplacementPlugin：模块热更新插件。依赖于 webpack-dev-server，后者是在打包文件改变时更新打包文件或者 reload 刷新整个页面，HRM 是只更新修改的部分。
+- clean-webpack-plugin：用于在打包前清理上一次项目生成的 bundle 文件，它会根据 output.path 自动清理文件夹
+- terser-webpack-plugin：用来对 js 文件进行压缩，从而减小 js 文件的大小，加速 load 速度
 
 ### 构建流程
 
