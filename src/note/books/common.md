@@ -250,3 +250,22 @@ webpack4 的 mode 集成了多个优化项，在 produciton 模式下默认开�
 sideEffects 可以配置文件导出默认都是无副作用的，在项目中启用后可以减少打包体积。
 
 按需导入。
+
+## 路由 hash 模式和 history 模式的区别
+
+hash 模式 url 带#号，history 模式不带#号。
+
+hash 模式：hash 虽然出现在 URL 中，但不会被包括在 HTTP 请求中，对后端完全没有影响，因此改变 hash 不会重新加载页面。监听 window.onhashchange 事件。带#号不美观。对外分享链接的时候，#后边的内容可能会丢失。
+
+history 模式：利用了 HTML5 History Interface 中新增的 pushState() 和 replaceState() 方法。这两个方法应用于浏览器的历史记录栈，在当前已有的 back()、forward()、go() 方法的基础之上，这两个方法提供了对历史记录进行修改的功能。当这两个方法执行修改时，只能改变当前地址栏的 URL，但浏览器不会向后端发送请求，也不会触发 popstate 事件的执行。但是页面刷新会重新请求，可能会导致页面 404，需要后端配合支持（nginx 路由转发重定向等）。
+
+## 兼容性问题
+
+- 对一行文字设置了 line-height 等于 height 垂直居中，但是在 Android 的浏览器上会偏上一点。
+  - 将字体、高度放大一倍后缩小，transform: scale(0.5)
+  - 使用 vertical-align 属性居中
+  - （百度）安卓手机 line-height 设置比 height 大 1px
+- click 事件 300ms 延迟。为了监听是否是双击缩放事件。
+  - 禁用缩放
+  - 用 touchstart 代替
+- iphone x 上判断滚动到底， scrollTop + clientHeight !== scrollHeight，差一像素。
