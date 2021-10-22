@@ -87,6 +87,7 @@ function transforAnchor(template, html, pageInfo) {
       .replace(/\$\{BODY\}/g, html)
       .replace(/\$\{TITLE\}/g, pageInfo.title || "zhangxk-notes")
       .replace(/\$\{DATE\}/g, pageInfo.date ? "发布于 " + pageInfo.date : "")
+      .replace(/\$\{UPDATE_TIME\}/g, "")
       // .replace(/\$\{UPDATE_TIME\}/g, "更新于 " + getNow())
       .replace(
         /\$\{TAGS\}/g,
