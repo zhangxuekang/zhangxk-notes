@@ -46,6 +46,8 @@ nextTick 和 Promise 同时出现时，肯定是 nextTick 先执行，原因是 
    3. RAF 队列中当前 task 中产生的 RAF 会在每一轮 loop 执行完毕，嵌套的 RAF 则在下一帧之前执行。
 
 3. RAF 回调的执行与 task 和 microtask 无关，而是与浏览器是否渲染相关联的；
+   1. 渲染前会执行 resize 和 scroll 事件回调
+   2. 渲染前执行 RAF
 
 ### 宏任务:
 
