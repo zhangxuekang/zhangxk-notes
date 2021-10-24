@@ -1,14 +1,3 @@
-## 移动端 click 事件 300ms 的延迟响应
-
-1. 禁用缩放
-
-```html
-<meta name="viewport" content="user-scalable=no" />
-<meta name="viewport" content="initial-scale=1,maximum-scale=1" />
-```
-
-2. touchstart 代替
-
 ## 性能优化：
 
 1. 减少请求
