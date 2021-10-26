@@ -164,7 +164,7 @@ function myFlag(arr: any[], n?: number) {
   n = n === undefined ? 1 : n;
   return arr.reduce((acc, cur) => {
     if (Array.isArray(cur) && n > 1) {
-      acc.concat(myFlag(cur, n - 1));
+      return acc.concat(myFlag(cur, n - 1));
     } else {
       return acc.concat(cur);
     }

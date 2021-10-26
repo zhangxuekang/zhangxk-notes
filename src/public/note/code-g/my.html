@@ -149,7 +149,7 @@
   n = n === <span class="hljs-literal">undefined</span> ? <span class="hljs-number">1</span> : n;
   <span class="hljs-keyword">return</span> arr.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, cur</span>) =&gt;</span> {
     <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(cur) &amp;&amp; n &gt; <span class="hljs-number">1</span>) {
-      acc.<span class="hljs-title function_">concat</span>(<span class="hljs-title function_">myFlag</span>(cur, n - <span class="hljs-number">1</span>));
+      <span class="hljs-keyword">return</span> acc.<span class="hljs-title function_">concat</span>(<span class="hljs-title function_">myFlag</span>(cur, n - <span class="hljs-number">1</span>));
     } <span class="hljs-keyword">else</span> {
       <span class="hljs-keyword">return</span> acc.<span class="hljs-title function_">concat</span>(cur);
     }

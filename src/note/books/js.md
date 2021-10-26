@@ -198,3 +198,30 @@ function deepClone(obj) {
 2. 链接到原型
 3. 绑定 `this`
 4. 返回新对象
+
+## node 读写大文件
+
+流是一种抽象的数据结构。想象水流，当在水管中流动时，就可以从某个地方（例如自来水厂）源源不断地到达另一个地方（比如你家的洗手池）。有些流用来读取数据，比如从文件读取数据时，可以打开一个文件流，然后从文件流中不断地读取数据。在 Node.js 中，流也是一个对象，我们只需要响应流的事件就可以了：data 事件表示流的数据已经可以读取了，end 事件表示这个流已经到末尾了，没有数据可以读取了，error 事件表示出错了。
+
+流读取数据：
+
+```js
+var fs = require("fs");
+
+// 打开一个流:
+var rs = fs.createReadStream("sample.txt", "utf-8");
+
+// data事件可能会有多次，每次传递的chunk是流的一部分数据。
+rs.on("data", function (chunk) {
+  console.log("DATA:");
+  console.log(chunk);
+});
+
+rs.on("end", function () {
+  console.log("END");
+});
+
+rs.on("error", function (err) {
+  console.log("ERROR: " + err);
+});
+```

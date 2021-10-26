@@ -38,4 +38,22 @@
     <span class="hljs-keyword">return</span> obj;
   }
 }
-</code></pre><h2 id="this-的指向">this 的指向</h2><ol><li>用 new 调用函数， this 指向新创建的对象。</li><li>使用 call，apply（bind）调用函数， this 指向绑定的的对象。</li><li>函数作为某对象的属性调用， this 指向这个对象。</li><li>其他情况下， this 指向全局对象（严格模式下指向 undefined）。</li></ol><p>补充： 如果第二条规则绑定的是 null 或者 undefined， 则执行第四条规则； 1-4 条规则优先级递减。</p><h2 id="new-操作符做的事情">new 操作符做的事情</h2><ol><li>新生成一个新对象</li><li>链接到原型</li><li>绑定 <code>this</code></li><li>返回新对象</li></ol></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time"></p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
+</code></pre><h2 id="this-的指向">this 的指向</h2><ol><li>用 new 调用函数， this 指向新创建的对象。</li><li>使用 call，apply（bind）调用函数， this 指向绑定的的对象。</li><li>函数作为某对象的属性调用， this 指向这个对象。</li><li>其他情况下， this 指向全局对象（严格模式下指向 undefined）。</li></ol><p>补充： 如果第二条规则绑定的是 null 或者 undefined， 则执行第四条规则； 1-4 条规则优先级递减。</p><h2 id="new-操作符做的事情">new 操作符做的事情</h2><ol><li>新生成一个新对象</li><li>链接到原型</li><li>绑定 <code>this</code></li><li>返回新对象</li></ol><h2 id="node-读写大文件">node 读写大文件</h2><p>流是一种抽象的数据结构。想象水流，当在水管中流动时，就可以从某个地方（例如自来水厂）源源不断地到达另一个地方（比如你家的洗手池）。有些流用来读取数据，比如从文件读取数据时，可以打开一个文件流，然后从文件流中不断地读取数据。在 Node.js 中，流也是一个对象，我们只需要响应流的事件就可以了：data 事件表示流的数据已经可以读取了，end 事件表示这个流已经到末尾了，没有数据可以读取了，error 事件表示出错了。</p><p>流读取数据：</p><pre><code class="language-js"><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;fs&quot;</span>);
+
+<span class="hljs-comment">// 打开一个流:</span>
+<span class="hljs-keyword">var</span> rs = fs.<span class="hljs-title function_">createReadStream</span>(<span class="hljs-string">&quot;sample.txt&quot;</span>, <span class="hljs-string">&quot;utf-8&quot;</span>);
+
+<span class="hljs-comment">// data事件可能会有多次，每次传递的chunk是流的一部分数据。</span>
+rs.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;data&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">chunk</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;DATA:&quot;</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(chunk);
+});
+
+rs.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;end&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;END&quot;</span>);
+});
+
+rs.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;ERROR: &quot;</span> + err);
+});
+</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time"></p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
