@@ -225,3 +225,176 @@ rs.on("error", function (err) {
   console.log("ERROR: " + err);
 });
 ```
+
+## 箭头函数
+
+1. 箭头函数没有自己的 `this` 对象
+2. 不可以当作构造函数，也就是说，不可以对箭头函数使用 `new` 命令，否则会抛出一个错误。
+3. 不可以使用 `arguments` 对象，该对象在函数体内不存在。
+4. 不可以使用 `yield` 命令，因此箭头函数不能用作 `Generator` 函数
+
+对于普通函数来说，内部的 `this` 指向函数运行时所在的对象，但是这一点对箭头函数不成立。它没有自己的 `this` 对象，内部的 `this` 就是**定义时**上层作用域中的 `this`。也就是说，箭头函数内部的 `this` 指向是固定的，相比之下，普通函数的 `this` 指向是可变的。
+
+```js
+function foo() {
+  setTimeout(() => {
+    console.log("id:", this.id); // 这个 this 是函数 foo 里的 this
+  }, 100);
+}
+
+var id = 21;
+
+foo.call({ id: 42 }); // id: 42
+
+function bar() {
+  setTimeout(function () {
+    console.log("id:", this.id); // 这个 this 在运行的时候会指向 window
+  }, 100);
+}
+
+var id = 24;
+
+bar.call({ id: 42 });
+```
+
+Babel 转箭头函数产生的 ES5 代码：
+
+```js
+// ES6
+function foo() {
+  setTimeout(() => {
+    console.log("id:", this.id);
+  }, 100);
+}
+
+// ES5
+function foo() {
+  var _this = this;
+
+  setTimeout(function () {
+    console.log("id:", _this.id);
+  }, 100);
+}
+```
+
+需要注意，函数中才有 `this`，`Object` 中没有 `this`，`this` 的指向是 `Object`：
+
+```js
+// ES6
+const cat = {
+  lives: 9,
+  jumps: () => {
+    this.lives--; // 指向了全局
+  },
+};
+
+// ES5
+var _this = this;
+var cat = {
+  lives: 9,
+  jumps: function () {
+    _this.lives--;
+  },
+};
+```
+
+ES6 的 `Class` 本质也是函数，所以里边的箭头函数指向了该 `Class` 实例：
+
+```js
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  getX = () => {
+    console.log("arrow", this);
+    console.log(this.x);
+  };
+
+  getY() {
+    console.log("function", this);
+    console.log(this.y);
+  }
+}
+
+const point = new Point(1, 2);
+
+// 作为实例属性调用，都指向实例
+point.getX();
+// arrow Point {x: 1, y: 2, getX: ƒ}
+// 1
+point.getY();
+// function Point {x: 1, y: 2, getX: ƒ}
+// 2
+
+// 作为单独的函数调用，箭头函数的指向不变，依然是实例，普通函数指向 undefined
+const { getX, getY } = point;
+getX();
+// arrow Point {x: 1, y: 2, getX: ƒ}
+// 1
+getY();
+// function undefined
+// Uncaught TypeError: Cannot read properties of undefined (reading 'y')
+```
+
+箭头函数属性和普通函数属性在类中的继承细节：
+
+```js
+class B {
+  print = () => {
+    // 函数1
+    console.log("print b");
+  };
+}
+
+class D extends B {
+  print() {
+    // 函数2
+    super.print();
+    console.log("print d");
+  }
+}
+
+const d = new D();
+// 实际上只会运行一次函数1，函数2不运行
+d.print(); // print b
+```
+
+常规的写法中，类的非静态属性都是定义在类的原型对象上，而不是类的实例上的。但箭头函数不一样，通过箭头函数定义的方法时绑定在 `this` 上，而 `this` 是指向当前创建的类实例对象，而不是类的原型对象。
+
+可以查看类转换后的代码：
+
+```js
+var B = function B() {
+  _classCallCheck(this, B);
+
+  // 箭头函数绑定在了 this 上，不是原型上
+  this.print = function () {
+    console.log("print b");
+  };
+};
+
+function D() {
+  // 继承自 B
+  this.print = function () {
+    console.log("print b");
+  };
+}
+
+// 通过原型实现继承
+D.__proto__ = B;
+D.prototype.__proto__ === B.prototype;
+
+D.prototype.print = function () {
+  // 类 D 自身定义的 print 方法
+};
+
+const d = new D();
+// print 会先取实例中的属性，取到就不会在原型中找了。
+d.print(); // print b
+```
+
+延伸：ES6 的继承和 ES5 的继承有什么区别？
+
+> ES5 的继承，实质是先创造子类的实例对象 `this`，然后再将父类的方法添加到 `this` 上面（`Parent.apply(this)`）。ES6 的继承机制完全不同，实质是先将父类实例对象的属性和方法，加到 `this` 上面（所以必须先调用 `super` 方法），然后再用子类的构造函数修改 `this`。

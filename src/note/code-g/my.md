@@ -233,4 +233,48 @@ function ajax(url, method, body, headers) {
     req.send(body);
   });
 }
+
+```
+## reduce
+
+```ts
+(Array.prototype as any).myReduce = function (fn, initialValue) {
+  const arr = this;
+  // 判断调用对象是否为数组
+  if (!Array.isArray(arr)) {
+    throw new TypeError("not a array");
+  }
+  // 判断传入的第一个参数是否为函数
+  if (typeof fn !== "function") {
+    throw new TypeError(`${fn} is not a function`);
+  }
+
+  if (arr.length === 0) {
+    return initialValue;
+  }
+
+  // 第二步
+  // 回调函数参数初始化
+  let accumulator, currentValue, currentIndex;
+  if (initialValue) {
+    accumulator = initialValue;
+    currentIndex = 0;
+  } else {
+    accumulator = arr[0];
+    currentIndex = 1;
+  }
+
+  // 第三步
+  // 开始循环
+  while (currentIndex < arr.length) {
+    currentValue = arr[currentIndex];
+    accumulator = fn(accumulator, currentValue, currentIndex, arr);
+
+    currentIndex++;
+  }
+
+  // 第四步
+  // 返回结果
+  return accumulator;
+};
 ```

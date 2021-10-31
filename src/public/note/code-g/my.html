@@ -185,4 +185,43 @@
     req.<span class="hljs-title function_">send</span>(body);
   });
 }
+</code></pre><h2 id="reduce">reduce</h2><pre><code class="language-ts">(<span class="hljs-title class_">Array</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>).<span class="hljs-property">myReduce</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">fn, initialValue</span>) {
+  <span class="hljs-keyword">const</span> arr = <span class="hljs-variable language_">this</span>;
+  <span class="hljs-comment">// 判断调用对象是否为数组</span>
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(arr)) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&quot;not a array&quot;</span>);
+  }
+  <span class="hljs-comment">// 判断传入的第一个参数是否为函数</span>
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> fn !== <span class="hljs-string">&quot;function&quot;</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">`<span class="hljs-subst">${fn}</span> is not a function`</span>);
+  }
+
+  <span class="hljs-keyword">if</span> (arr.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">return</span> initialValue;
+  }
+
+  <span class="hljs-comment">// 第二步</span>
+  <span class="hljs-comment">// 回调函数参数初始化</span>
+  <span class="hljs-keyword">let</span> accumulator, currentValue, currentIndex;
+  <span class="hljs-keyword">if</span> (initialValue) {
+    accumulator = initialValue;
+    currentIndex = <span class="hljs-number">0</span>;
+  } <span class="hljs-keyword">else</span> {
+    accumulator = arr[<span class="hljs-number">0</span>];
+    currentIndex = <span class="hljs-number">1</span>;
+  }
+
+  <span class="hljs-comment">// 第三步</span>
+  <span class="hljs-comment">// 开始循环</span>
+  <span class="hljs-keyword">while</span> (currentIndex &lt; arr.<span class="hljs-property">length</span>) {
+    currentValue = arr[currentIndex];
+    accumulator = <span class="hljs-title function_">fn</span>(accumulator, currentValue, currentIndex, arr);
+
+    currentIndex++;
+  }
+
+  <span class="hljs-comment">// 第四步</span>
+  <span class="hljs-comment">// 返回结果</span>
+  <span class="hljs-keyword">return</span> accumulator;
+};
 </code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time"></p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>

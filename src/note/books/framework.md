@@ -147,6 +147,12 @@ Vue：provide 选项允许我们指定我们想要提供给后代组件的数据
 
 如果一个 class 组件中定义了 `static getDerivedStateFromError()` 或 `componentDidCatch()` 这两个生命周期方法中的任意一个（或两个）时，那么它就变成一个错误边界。当抛出错误后，请使用 `static getDerivedStateFromError()` 渲染备用 `UI` ，使用 `componentDidCatch()` 打印错误信息。
 
+## Effect Hook
+
+> 如果你熟悉 React class 的生命周期函数，你可以把 useEffect Hook 看做 componentDidMount，componentDidUpdate 和 componentWillUnmount 这三个函数的组合。
+
+在 React 更新 DOM 之后运行一些额外的代码（ effect 发生在“**渲染之后**”）。默认情况下，它在第一次渲染之后和每次更新之后都会执行。如果 effect 返回一个函数，React 将会在执行清除操作时调用它，用来解绑事件（组件卸载的时候）。第二个参数用数组，可以指定哪些数据变化后运行函数。如果想执行只运行一次的 effect（仅在组件挂载和卸载时执行），可以传递一个空数组（[]）作为第二个参数。
+
 # node.js
 
 ## 跟踪回调路径
@@ -199,3 +205,16 @@ export function getTraceId() {
 - 全局拦截器 （请求之后）
 - 异常过滤器 （路由，之后是控制器，之后是全局）
 - 服务器响应
+
+## diff 算法
+
+通过两个假设，将传统的 diff 算法的复杂度从 O(n^3)降至 O(n)。
+
+1. 两个不同类型的元素会产生出不同的树；
+2. 开发者可以通过设置 key 属性，来告知渲染哪些子元素在不同的渲染下可以保存不变；
+
+- 当对比两棵树时，首先比较两棵树的根节点，当根节点为不同类型的元素时，React 会拆卸原有的树并且建立起新的树。
+- 当对比两个相同类型的 React 元素时，React 会保留 DOM 节点，仅比对及更新有改变的属性。
+- 当一个组件更新时，组件实例会保持不变，因此可以在不同的渲染时保持 state 一致。
+- 默认情况下，当递归 DOM 节点的子元素时，React 会同时遍历两个子元素的列表；当产生差异时，生成一个 mutation。在子元素列表末尾新增元素时，更新开销比较小。如果只是简单的将新增元素插入到表头，那么更新开销会比较大。
+- 为了解决上述问题，React 引入了 key 属性。当子元素拥有 key 时，React 使用 key 来匹配原有树上的子元素以及最新树上的子元素。

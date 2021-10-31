@@ -538,4 +538,39 @@ nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0
   });
   <span class="hljs-keyword">return</span> n;
 }
+</code></pre><h2 id="是否数组中含有任意两项和为目标值">是否数组中含有任意两项和为目标值</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">findSum</span>(<span class="hljs-params">arr, target</span>) {
+  <span class="hljs-keyword">const</span> set = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; arr.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">const</span> searchVal = target - arr[i];
+    <span class="hljs-keyword">if</span> (set.<span class="hljs-title function_">has</span>(arr[i])) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    } <span class="hljs-keyword">else</span> {
+      set.<span class="hljs-title function_">add</span>(searchVal);
+    }
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+</code></pre><h2 id="买卖股票的最佳时机">买卖股票的最佳时机</h2><pre><code class="language-ts">
+<span class="hljs-comment">// 只能买卖一次</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">maxProfit1</span>(<span class="hljs-params">prices: <span class="hljs-built_in">number</span>[]</span>) {
+  <span class="hljs-keyword">let</span> max = <span class="hljs-number">0</span>; <span class="hljs-comment">// 最大收益</span>
+  <span class="hljs-keyword">let</span> minPrice = prices[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 截止当前的最小值</span>
+  prices.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> {
+    minPrice = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(v, minPrice);
+    max = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(max, v - minPrice);
+  });
+  <span class="hljs-keyword">return</span> max;
+}
+
+<span class="hljs-comment">// 可以多次买卖，只计算了结果，过程并不是实际买卖的过程(贪心算法)</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">maxProfit2</span>(<span class="hljs-params">prices: <span class="hljs-built_in">number</span>[]</span>) {
+  <span class="hljs-keyword">let</span> max = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt; prices.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">const</span> d = prices[i] - prices[i - <span class="hljs-number">1</span>];
+    <span class="hljs-keyword">if</span> (d &gt;= <span class="hljs-number">0</span>) {
+      max += d;
+    }
+  }
+  <span class="hljs-keyword">return</span> max;
+}
 </code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time"></p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>

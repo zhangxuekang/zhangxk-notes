@@ -646,4 +646,49 @@ function fourSumCount(nums1, nums2, nums3, nums4) {
   });
   return n;
 }
+
+```
+## 是否数组中含有任意两项和为目标值
+
+```ts
+function findSum(arr, target) {
+  const set = new Set();
+  for (let i = 0; i < arr.length; i++) {
+    const searchVal = target - arr[i];
+    if (set.has(arr[i])) {
+      return true;
+    } else {
+      set.add(searchVal);
+    }
+  }
+  return false;
+}
+
+```
+## 买卖股票的最佳时机
+
+```ts
+
+// 只能买卖一次
+function maxProfit1(prices: number[]) {
+  let max = 0; // 最大收益
+  let minPrice = prices[0]; // 截止当前的最小值
+  prices.forEach((v) => {
+    minPrice = Math.min(v, minPrice);
+    max = Math.max(max, v - minPrice);
+  });
+  return max;
+}
+
+// 可以多次买卖，只计算了结果，过程并不是实际买卖的过程(贪心算法)
+function maxProfit2(prices: number[]) {
+  let max = 0;
+  for (let i = 1; i < prices.length; i++) {
+    const d = prices[i] - prices[i - 1];
+    if (d >= 0) {
+      max += d;
+    }
+  }
+  return max;
+}
 ```

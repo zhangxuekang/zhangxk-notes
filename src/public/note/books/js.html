@@ -56,4 +56,134 @@ rs.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;
 rs.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) {
   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;ERROR: &quot;</span> + err);
 });
-</code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time"></p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
+</code></pre><h2 id="箭头函数">箭头函数</h2><ol><li>箭头函数没有自己的 <code>this</code> 对象</li><li>不可以当作构造函数，也就是说，不可以对箭头函数使用 <code>new</code> 命令，否则会抛出一个错误。</li><li>不可以使用 <code>arguments</code> 对象，该对象在函数体内不存在。</li><li>不可以使用 <code>yield</code> 命令，因此箭头函数不能用作 <code>Generator</code> 函数</li></ol><p>对于普通函数来说，内部的 <code>this</code> 指向函数运行时所在的对象，但是这一点对箭头函数不成立。它没有自己的 <code>this</code> 对象，内部的 <code>this</code> 就是<strong>定义时</strong>上层作用域中的 <code>this</code>。也就是说，箭头函数内部的 <code>this</code> 指向是固定的，相比之下，普通函数的 <code>this</code> 指向是可变的。</p><pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;id:&quot;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span>); <span class="hljs-comment">// 这个 this 是函数 foo 里的 this</span>
+  }, <span class="hljs-number">100</span>);
+}
+
+<span class="hljs-keyword">var</span> id = <span class="hljs-number">21</span>;
+
+foo.<span class="hljs-title function_">call</span>({ <span class="hljs-attr">id</span>: <span class="hljs-number">42</span> }); <span class="hljs-comment">// id: 42</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">bar</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;id:&quot;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span>); <span class="hljs-comment">// 这个 this 在运行的时候会指向 window</span>
+  }, <span class="hljs-number">100</span>);
+}
+
+<span class="hljs-keyword">var</span> id = <span class="hljs-number">24</span>;
+
+bar.<span class="hljs-title function_">call</span>({ <span class="hljs-attr">id</span>: <span class="hljs-number">42</span> });
+</code></pre><p>Babel 转箭头函数产生的 ES5 代码：</p><pre><code class="language-js"><span class="hljs-comment">// ES6</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;id:&quot;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span>);
+  }, <span class="hljs-number">100</span>);
+}
+
+<span class="hljs-comment">// ES5</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> _this = <span class="hljs-variable language_">this</span>;
+
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;id:&quot;</span>, _this.<span class="hljs-property">id</span>);
+  }, <span class="hljs-number">100</span>);
+}
+</code></pre><p>需要注意，函数中才有 <code>this</code>，<code>Object</code> 中没有 <code>this</code>，<code>this</code> 的指向是 <code>Object</code>：</p><pre><code class="language-js"><span class="hljs-comment">// ES6</span>
+<span class="hljs-keyword">const</span> cat = {
+  <span class="hljs-attr">lives</span>: <span class="hljs-number">9</span>,
+  <span class="hljs-attr">jumps</span>: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">lives</span>--; <span class="hljs-comment">// 指向了全局</span>
+  },
+};
+
+<span class="hljs-comment">// ES5</span>
+<span class="hljs-keyword">var</span> _this = <span class="hljs-variable language_">this</span>;
+<span class="hljs-keyword">var</span> cat = {
+  <span class="hljs-attr">lives</span>: <span class="hljs-number">9</span>,
+  <span class="hljs-attr">jumps</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    _this.<span class="hljs-property">lives</span>--;
+  },
+};
+</code></pre><p>ES6 的 <code>Class</code> 本质也是函数，所以里边的箭头函数指向了该 <code>Class</code> 实例：</p><pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">x, y</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">x</span> = x;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">y</span> = y;
+  }
+
+  getX = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;arrow&quot;</span>, <span class="hljs-variable language_">this</span>);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">x</span>);
+  };
+
+  <span class="hljs-title function_">getY</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;function&quot;</span>, <span class="hljs-variable language_">this</span>);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">y</span>);
+  }
+}
+
+<span class="hljs-keyword">const</span> point = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);
+
+<span class="hljs-comment">// 作为实例属性调用，都指向实例</span>
+point.<span class="hljs-title function_">getX</span>();
+<span class="hljs-comment">// arrow Point {x: 1, y: 2, getX: ƒ}</span>
+<span class="hljs-comment">// 1</span>
+point.<span class="hljs-title function_">getY</span>();
+<span class="hljs-comment">// function Point {x: 1, y: 2, getX: ƒ}</span>
+<span class="hljs-comment">// 2</span>
+
+<span class="hljs-comment">// 作为单独的函数调用，箭头函数的指向不变，依然是实例，普通函数指向 undefined</span>
+<span class="hljs-keyword">const</span> { getX, getY } = point;
+<span class="hljs-title function_">getX</span>();
+<span class="hljs-comment">// arrow Point {x: 1, y: 2, getX: ƒ}</span>
+<span class="hljs-comment">// 1</span>
+<span class="hljs-title function_">getY</span>();
+<span class="hljs-comment">// function undefined</span>
+<span class="hljs-comment">// Uncaught TypeError: Cannot read properties of undefined (reading &#x27;y&#x27;)</span>
+</code></pre><p>箭头函数属性和普通函数属性在类中的继承细节：</p><pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> {
+  print = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// 函数1</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;print b&quot;</span>);
+  };
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">D</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">B</span> {
+  <span class="hljs-title function_">print</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 函数2</span>
+    <span class="hljs-variable language_">super</span>.<span class="hljs-title function_">print</span>();
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;print d&quot;</span>);
+  }
+}
+
+<span class="hljs-keyword">const</span> d = <span class="hljs-keyword">new</span> <span class="hljs-title function_">D</span>();
+<span class="hljs-comment">// 实际上只会运行一次函数1，函数2不运行</span>
+d.<span class="hljs-title function_">print</span>(); <span class="hljs-comment">// print b</span>
+</code></pre><p>常规的写法中，类的非静态属性都是定义在类的原型对象上，而不是类的实例上的。但箭头函数不一样，通过箭头函数定义的方法时绑定在 <code>this</code> 上，而 <code>this</code> 是指向当前创建的类实例对象，而不是类的原型对象。</p><p>可以查看类转换后的代码：</p><pre><code class="language-js"><span class="hljs-keyword">var</span> B = <span class="hljs-keyword">function</span> <span class="hljs-title function_">B</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-title function_">_classCallCheck</span>(<span class="hljs-variable language_">this</span>, B);
+
+  <span class="hljs-comment">// 箭头函数绑定在了 this 上，不是原型上</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">print</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;print b&quot;</span>);
+  };
+};
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">D</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 继承自 B</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">print</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;print b&quot;</span>);
+  };
+}
+
+<span class="hljs-comment">// 通过原型实现继承</span>
+D.<span class="hljs-property">__proto__</span> = B;
+D.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">__proto__</span> === B.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>;
+
+D.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">print</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 类 D 自身定义的 print 方法</span>
+};
+
+<span class="hljs-keyword">const</span> d = <span class="hljs-keyword">new</span> <span class="hljs-title function_">D</span>();
+<span class="hljs-comment">// print 会先取实例中的属性，取到就不会在原型中找了。</span>
+d.<span class="hljs-title function_">print</span>(); <span class="hljs-comment">// print b</span>
+</code></pre><p>延伸：ES6 的继承和 ES5 的继承有什么区别？</p><blockquote><p>ES5 的继承，实质是先创造子类的实例对象 <code>this</code>，然后再将父类的方法添加到 <code>this</code> 上面（<code>Parent.apply(this)</code>）。ES6 的继承机制完全不同，实质是先将父类实例对象的属性和方法，加到 <code>this</code> 上面（所以必须先调用 <code>super</code> 方法），然后再用子类的构造函数修改 <code>this</code>。</p></blockquote></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time"></p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
