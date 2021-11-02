@@ -547,7 +547,8 @@ pre code {
 
 /* 黑色主题makedown代码结束 */
 /*makedown行间代码样式 */
-p > code {
+p > code,
+li > code {
   color: #c7254e;
   border: none !important;
   font-size: 1em !important;
