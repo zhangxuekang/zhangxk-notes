@@ -113,3 +113,73 @@ class myEvent {
     return this;
   }
 }
+
+/** 接口并发控制函数 **/
+
+function createNewFetch(getData, n) {
+  const cacheList = []; // 保存操作函数列表
+  let count = 0; // 记录当前的并发数
+
+  // 加入新函数，或者完成一个请求后运行
+  function next() {
+    if (count < n && cacheList.length) {
+      count++;
+      const fn = cacheList.shift();
+      if (fn) {
+        fn();
+      }
+    }
+  }
+
+  return function (url) {
+    return new Promise((resolve, reject) => {
+      cacheList.push(() => {
+        getData(url)
+          .then(resolve)
+          .catch(reject)
+          .finally(() => {
+            count--;
+            next();
+          });
+      });
+      next();
+    });
+  };
+}
+
+/** promiseAll 添加并发控制 **/
+function controlledPromiseAll(urls, n) {
+  return new Promise((resolve, reject) => {
+    const len = urls.length;
+    const result = new Array(len);
+    let count = 0; // 当前完成的数量
+    let m = 0; // 并发数
+    const fnList = []; // promise 函数列表
+
+    urls.forEach((url, i) => {
+      fnList.push(function () {
+        fetch(url)
+          .then((data) => {
+            count++;
+            m--;
+            result[i] = data;
+            if (count === len) {
+              resolve(result);
+            } else {
+              next();
+            }
+          })
+          .catch(reject);
+      });
+      next();
+    });
+
+    function next() {
+      if (m < n && fnList.length) {
+        m++;
+        const fn = fnList.shift();
+        fn();
+      }
+    }
+  });
+}

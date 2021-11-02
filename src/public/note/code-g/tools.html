@@ -104,4 +104,70 @@
     <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
   }
 }
+</code></pre><h2 id="接口并发控制函数">接口并发控制函数</h2><pre><code class="language-ts">
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createNewFetch</span>(<span class="hljs-params">getData, n</span>) {
+  <span class="hljs-keyword">const</span> cacheList = []; <span class="hljs-comment">// 保存操作函数列表</span>
+  <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>; <span class="hljs-comment">// 记录当前的并发数</span>
+
+  <span class="hljs-comment">// 加入新函数，或者完成一个请求后运行</span>
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">next</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">if</span> (count &lt; n &amp;&amp; cacheList.<span class="hljs-property">length</span>) {
+      count++;
+      <span class="hljs-keyword">const</span> fn = cacheList.<span class="hljs-title function_">shift</span>();
+      <span class="hljs-keyword">if</span> (fn) {
+        <span class="hljs-title function_">fn</span>();
+      }
+    }
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">url</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+      cacheList.<span class="hljs-title function_">push</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-title function_">getData</span>(url)
+          .<span class="hljs-title function_">then</span>(resolve)
+          .<span class="hljs-title function_">catch</span>(reject)
+          .<span class="hljs-title function_">finally</span>(<span class="hljs-function">() =&gt;</span> {
+            count--;
+            <span class="hljs-title function_">next</span>();
+          });
+      });
+      <span class="hljs-title function_">next</span>();
+    });
+  };
+}
+</code></pre><h2 id="promiseall-添加并发控制">promiseAll 添加并发控制</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">controlledPromiseAll</span>(<span class="hljs-params">urls, n</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> len = urls.<span class="hljs-property">length</span>;
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(len);
+    <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>; <span class="hljs-comment">// 当前完成的数量</span>
+    <span class="hljs-keyword">let</span> m = <span class="hljs-number">0</span>; <span class="hljs-comment">// 并发数</span>
+    <span class="hljs-keyword">const</span> fnList = []; <span class="hljs-comment">// promise 函数列表</span>
+
+    urls.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">url, i</span>) =&gt;</span> {
+      fnList.<span class="hljs-title function_">push</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+        <span class="hljs-title function_">fetch</span>(url)
+          .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+            count++;
+            m--;
+            result[i] = data;
+            <span class="hljs-keyword">if</span> (count === len) {
+              <span class="hljs-title function_">resolve</span>(result);
+            } <span class="hljs-keyword">else</span> {
+              <span class="hljs-title function_">next</span>();
+            }
+          })
+          .<span class="hljs-title function_">catch</span>(reject);
+      });
+      <span class="hljs-title function_">next</span>();
+    });
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">next</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">if</span> (m &lt; n &amp;&amp; fnList.<span class="hljs-property">length</span>) {
+        m++;
+        <span class="hljs-keyword">const</span> fn = fnList.<span class="hljs-title function_">shift</span>();
+        <span class="hljs-title function_">fn</span>();
+      }
+    }
+  });
+}
 </code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time"></p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>
