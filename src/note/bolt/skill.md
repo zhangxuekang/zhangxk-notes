@@ -114,3 +114,24 @@ tab 页面刷新后录制中断
 结果页的动画，使用到了 canvas 和 svg 路径动画。
 不同端的样式兼容（rem+flex+100%） 小组件整体结构保持一致 端不同页面布局不同。
 如何判断不同的设备，根据 `navigator.userAgent`
+
+## 富文本
+
+### 原生 js 实现富文本
+
+原生实现富文本的三个关键特性：
+
+1. 全局属性 `contenteditable` 是一个枚举属性，表示元素是否可被用户编辑。 如果可以，浏览器会修改元素的部件以允许编辑。
+2. `Window.getSelection` 返回一个 `Selection` 对象，表示用户选择的文本范围或光标的当前位置。
+3. 当一个 HTML 文档切换到设计模式时，`document` 暴露 `execCommand` 方法，该方法允许运行命令来操纵可编辑内容区域的元素。（特性已经被废弃，已经不建议使用）
+
+不使用 `execCommand` 的设计:
+
+1. 借助 HTMLcontenteditable，好处是配合已有的浏览器光标、选区方面的支持。
+2. 将输入的内容转换为内部文档模型（在 dom 层上进行一层抽象，利用 js 结构对象来描述视图和操作），防止直接操作 dom，影响性能。
+
+### Draft.js
+
+Draft.js 是 facebook 推出的用于 React 的富文本编辑器框架，是通过 Immutable.js 来保存数据的。不是一个开箱即用的富文本编辑器，而是一个构建自己的富文本编辑器的工具库，能实现什么功能，全靠自己动手扩展。
+
+> contenteditable 中 DOM = State ，这里的 State 指存储用户输入的内容，为 html 格式；从用户操作发起到数据修改整个过程都由浏览器控制，但是各浏览器存在实现差异，造成 State 的结果不一致，兼容性问题多。contenteditable 又有很多原生能力，速度快且支持所有的浏览器、如光标与选区、输入法事件等。最终 draft-js 通过自定义 State，抛弃掉原生提供的 html 形式的 State，通过 contenteditable 提供的能力负责文字排版与用户事件接收，定义一套 op(Operation) 来修改 State ，同时把数据模型通过 react 渲染到 html 中，达到 _controlled contenteditable_。
