@@ -573,4 +573,22 @@ nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0
   }
   <span class="hljs-keyword">return</span> max;
 }
+</code></pre><h2 id="无重复字符的最长子串长度">无重复字符的最长子串长度</h2><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">lengthOfLongestSubstring</span>(<span class="hljs-params">s: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-keyword">let</span> l = <span class="hljs-number">0</span>; <span class="hljs-comment">// 左指针</span>
+  <span class="hljs-keyword">let</span> r = <span class="hljs-number">0</span>; <span class="hljs-comment">// 右指针</span>
+  <span class="hljs-keyword">let</span> res = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">const</span> set = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>(); <span class="hljs-comment">// 保存无重复子串的 set</span>
+  <span class="hljs-comment">// 向右移动右指针，如果子串有重复，左指针移动，同时删除字符</span>
+  <span class="hljs-keyword">while</span> (r &lt; s.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">const</span> c = s[r];
+    <span class="hljs-keyword">while</span> (set.<span class="hljs-title function_">has</span>(c)) {
+      set.<span class="hljs-title function_">delete</span>(s[l]);
+      l++;
+    }
+    set.<span class="hljs-title function_">add</span>(c);
+    r++;
+    res = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(res, set.<span class="hljs-property">size</span>);
+  }
+  <span class="hljs-keyword">return</span> res;
+}
 </code></pre></section></div><div id="footer_wrap" class="outer"><footer class="inner"><p class="update-time"></p><p class="copyright">zhangxk-notes maintained by <a href="https://github.com/zhangxuekang">zhangxuekang</a></p></footer></div></body></html>

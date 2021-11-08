@@ -620,3 +620,23 @@ function maxProfit2(prices: number[]) {
   }
   return max;
 }
+
+/** 无重复字符的最长子串长度 **/
+function lengthOfLongestSubstring(s: string) {
+  let l = 0; // 左指针
+  let r = 0; // 右指针
+  let res = 0;
+  const set = new Set(); // 保存无重复子串的 set
+  // 向右移动右指针，如果子串有重复，左指针移动，同时删除字符
+  while (r < s.length) {
+    const c = s[r];
+    while (set.has(c)) {
+      set.delete(s[l]);
+      l++;
+    }
+    set.add(c);
+    r++;
+    res = Math.max(res, set.size);
+  }
+  return res;
+}
